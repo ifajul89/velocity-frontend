@@ -23,8 +23,8 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <Card className="w-full max-w-md p-7 sm:p-10 space-y-6 shadow-lg">
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <Card className="w-full max-w-md space-y-6 p-7 shadow-lg sm:p-10">
         <h1 className="text-3xl font-semibold tracking-tight">Sign In</h1>
 
         <CardContent className="p-0">
@@ -50,7 +50,9 @@ export default function SignIn() {
                 {...register("password", { required: "Password is required" })}
               />
               {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
@@ -60,9 +62,9 @@ export default function SignIn() {
           </form>
         </CardContent>
 
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-center text-sm">
           Don&apos;t have an account?{" "}
-          <Link to={'/register'} className="font-semibold underline">
+          <Link to={"/register"} className="font-semibold underline">
             Sign Up
           </Link>
         </p>

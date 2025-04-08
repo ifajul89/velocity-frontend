@@ -1,16 +1,23 @@
 import { Link } from "react-router";
 
-
 const Footer = () => {
   return (
     <footer className="bg-neutral-800 text-gray-300">
-      <div className="mx-auto max-w-screen-xl px-4 pb-6 pt-16 sm:px-6 lg:px-8 lg:pt-24">
+      <div className="mx-auto max-w-screen-xl px-4 pt-16 pb-6 sm:px-6 lg:px-8 lg:pt-24">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div>
-            <Link className="text-3xl lg:text-4xl   font-bold bg-gradient-to-r from-purple-600 via-purple-400 to-purple-700 bg-clip-text text-transparent text-center " to={'/'}>Velocity</Link>
+            <Link
+              className="bg-gradient-to-r from-purple-600 via-purple-400 to-purple-700 bg-clip-text text-center text-3xl font-bold text-transparent lg:text-4xl"
+              to={"/"}
+            >
+              Velocity
+            </Link>
 
             <p className="mt-6 max-w-md text-center leading-relaxed text-gray-300 sm:max-w-xs sm:text-left">
-            Discover a curated selection of high-end vehicles from top-tier dealers and private collectors. Whether you're acquiring your next luxury car or showcasing your prized model, experience an elevated standard of automotive excellence.
+              Discover a curated selection of high-end vehicles from top-tier
+              dealers and private collectors. Whether you're acquiring your next
+              luxury car or showcasing your prized model, experience an elevated
+              standard of automotive excellence.
             </p>
 
             <ul className="mt-8 flex justify-center gap-6 sm:justify-start md:gap-8">
@@ -78,7 +85,6 @@ const Footer = () => {
                   </svg>
                 </a>
               </li>
-
             </ul>
           </div>
 
@@ -150,9 +156,9 @@ const Footer = () => {
                   </a>
                 </li>
 
-                <li className=" text-center flex justify-center sm:justify-start">
+                <li className="flex justify-center text-center sm:justify-start">
                   <a
-                    className="group flex  gap-1.5 ltr:sm:justify-start rtl:sm:justify-end"
+                    className="group flex gap-1.5 ltr:sm:justify-start rtl:sm:justify-end"
                     href="#"
                   >
                     <span className="text-gray-300 transition group-hover:text-gray-300/75">
@@ -192,7 +198,9 @@ const Footer = () => {
                       />
                     </svg>
 
-                    <span className="flex-1 text-gray-300">velocity@mail.com</span>
+                    <span className="flex-1 text-gray-300">
+                      velocity@mail.com
+                    </span>
                   </a>
                 </li>
 
@@ -226,7 +234,7 @@ const Footer = () => {
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="size-5  text-gray-200"
+                      className="size-5 text-gray-200"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -244,11 +252,11 @@ const Footer = () => {
                       />
                     </svg>
 
-                    <span className="flex-1 text-gray-300">314 Uttara, Dhaka, Bangladesh</span>
+                    <span className="flex-1 text-gray-300">
+                      314 Uttara, Dhaka, Bangladesh
+                    </span>
                   </a>
                 </li>
-
-
               </ul>
             </div>
           </div>

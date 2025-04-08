@@ -89,11 +89,11 @@ export default function SignUp() {
           </form>
         </CardContent>
         <p className="text-center text-sm text-zinc-700 dark:text-zinc-300">
-          Already have an account? <Link to={'/login'} className="font-semibold underline">
+          Already have an account?{" "}
+          <Link to={"/login"} className="font-semibold underline">
             Sign In
           </Link>
         </p>
-        
       </Card>
     </div>
   );

@@ -34,9 +34,7 @@ const Product = () => {
       },
     ],
     colors: ["#c1121f", "#669bbc"],
-    description: {
-      
-    }
+    description: {},
   };
 
   return (
@@ -53,7 +51,7 @@ const Product = () => {
         <h3 className="text-4xl font-semibold">{carData.name}</h3>
 
         {/* Stock and Conditioin Status */}
-        <div className="grid  grid-cols-3 gap-5">
+        <div className="grid grid-cols-3 gap-5">
           <div
             className={`flex items-center gap-1 ${carData.stock ? "text-green-600" : "text-red-700"}`}
           >
