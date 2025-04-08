@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { User, Mail, Phone, MapPin, Building, Calendar, Edit2, Save } from "lucide-react"
 import { AppSidebar } from "@/components/app-sidebar"
 import {
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { Button } from "@/components/ui/button"
 
 interface ProfileSection {
   id: string
@@ -26,6 +27,8 @@ interface ProfileSection {
 
 export default function ProfilePage() {
   const [editing, setEditing] = useState<Record<string, boolean>>({})
+  const [hasChanges, setHasChanges] = useState(false)
+  const [originalData, setOriginalData] = useState({})
   const [formData, setFormData] = useState({
     fullName: "John Doe",
     email: "johndoe@example.com",
@@ -37,6 +40,11 @@ export default function ProfilePage() {
     department: "Engineering",
     bio: "Experienced professional with a passion for technology and innovation."
   })
+
+  // Store original data on initial load
+  useEffect(() => {
+    setOriginalData({...formData});
+  }, []);
 
   const profileSections: ProfileSection[] = [
     {
@@ -69,10 +77,24 @@ export default function ProfilePage() {
   }
 
   const handleChange = (fieldId: string, value: string) => {
-    setFormData({
+    const newFormData = {
       ...formData,
       [fieldId]: value
-    })
+    };
+    setFormData(newFormData);
+    
+    // Check if data has changed compared to original
+    setHasChanges(JSON.stringify(newFormData) !== JSON.stringify(originalData));
+  }
+
+  const handleSave = () => {
+    // Save the changes (this would normally connect to an API)
+    console.log("Saving changes:", formData);
+    setOriginalData({...formData});
+    setHasChanges(false);
+    
+    // Close any open edit fields
+    setEditing({});
   }
 
   return (
@@ -207,6 +229,18 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
+          </div>
+          
+          {/* Save Changes Button */}
+          <div className="mt-6 flex justify-end">
+            <Button 
+              disabled={!hasChanges}
+              onClick={handleSave}
+              className="flex items-center gap-2"
+            >
+              <Save className="h-4 w-4" />
+              Save Changes
+            </Button>
           </div>
         </div>
       </SidebarInset>
