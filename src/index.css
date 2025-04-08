@@ -122,3 +122,11 @@
 .container {
   @apply !mx-auto !max-w-[1400px] px-3 md:!px-5;
 }
+
+@theme {
+  --color-velo-red: #b90504;
+  --color-velo-maroon: #990100;
+  --color-velo-black: #333333;
+  --color-velo-gray: #e8e8e8;
+  --color-velo-white: #f6f6f6;
+}
