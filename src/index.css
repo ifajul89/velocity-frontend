@@ -1,6 +1,18 @@
+/* Custom Font */
+@import url(https://fonts.bunny.net/css?family=lexend:100,200,300,400,500,600,700,800,900);
+
+/* Tailwind */
 @import "tailwindcss";
 @import "tw-animate-css";
+@theme {
+  --color-velo-red: #b90504;
+  --color-velo-maroon: #990100;
+  --color-velo-black: #333333;
+  --color-velo-gray: #e8e8e8;
+  --color-velo-white: #f6f6f6;
+}
 
+/* ShadCN */
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -117,6 +129,12 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom CSS */
+
+body {
+  font-family: "Lexend", sans-serif;
 }
 
 .container {
