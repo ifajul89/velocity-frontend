@@ -63,7 +63,7 @@ export default function SignIn() {
         <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link to={'/register'} className="font-semibold underline">
-            Signup
+            Sign Up
           </Link>
         </p>
       </Card>

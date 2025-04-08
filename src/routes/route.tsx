@@ -16,11 +16,11 @@ const routes = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
+    path: "/sign-in",
     element: <SignIn />,
   },
   {
-    path: "/register",
+    path: "/sign-up",
     element: <SignUp />,
   },
 ]);
