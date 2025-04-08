@@ -23,20 +23,7 @@ const data = {
       url: "/track-order",
       items: [],
     },
-    {
-      title: "Update Order Status",
-      url: "#",
-      items: [
-        {
-          title: "Track My Order",
-          url: "/track-order",
-        },
-        {
-          title: "Reflect Updates",
-          url: "#",
-        },
-      ],
-    },
+   
     {
       title: "Admin: Orders Management",
       url: "/admin/orders",
