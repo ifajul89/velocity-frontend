@@ -3,7 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSignInMutation } from "@/redux/features/auth/authApi";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { toast } from 'sonner'
+
 
 type SignInFormData = {
   email: string;
@@ -11,15 +16,28 @@ type SignInFormData = {
 };
 
 export default function SignIn() {
+  const navigate = useNavigate()
+  const [SignIn] = useSignInMutation();
+  const dispatch = useAppDispatch()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignInFormData>();
 
-  const onSubmit = (data: SignInFormData) => {
-    console.log("Sign in data:", data);
+  const onSubmit = async (data: SignInFormData) => {
     // Call your API or auth logic here
+    const userData = {
+      email: data.email,
+      password: data.password
+    }
+    const res = await SignIn(userData);
+    if(res.data.status) {
+      dispatch(setUser({user: res.data.data.verifyUser, token: res.data.data.token}))
+      toast.success(res.data.message, {duration: 1000})
+      navigate('/')
+    }
+    
   };
 
   return (
