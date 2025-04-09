@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Home, User, Settings, ShoppingBag } from "lucide-react";
+import { useAppSelector } from "@/redux/hooks";
 
 import {
   Sidebar,
@@ -21,30 +22,46 @@ interface NavItem {
   title: string;
   url: string;
   items: NavItem[];
+  adminOnly?: boolean;
 }
 
-const data = {
-  navMain: [
-    {
-      title: "Track Order Status",
-      url: "/track-order",
-      items: [] as NavItem[],
-    },
+interface User {
+  id?: string;
+  email?: string;
+  role?: string;
+}
 
-    {
-      title: "Admin: Orders Management",
-      url: "/admin/orders",
-      items: [] as NavItem[],
-    },
-    {
-      title: "Manage Profile Settings",
-      url: "/profile",
-      items: [] as NavItem[],
-    },
-  ],
-};
+// Define navigation items with adminOnly flag
+const navItems: NavItem[] = [
+  {
+    title: "Track Order Status",
+    url: "/track-order",
+    items: [],
+    adminOnly: false,
+  },
+  {
+    title: "Admin: Orders Management",
+    url: "/admin/orders",
+    items: [],
+    adminOnly: true,
+  },
+  {
+    title: "Manage Profile Settings",
+    url: "/profile",
+    items: [],
+    adminOnly: false,
+  },
+];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAppSelector((state) => state.auth);
+  const isAdmin = user && (user as User).role === "admin";
+  
+  // Filter navigation items based on user role
+  const filteredNavItems = navItems.filter(item => 
+    !item.adminOnly || (item.adminOnly && isAdmin)
+  );
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -69,7 +86,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            {data.navMain.map((item) => (
+            {filteredNavItems.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
                   <Link
