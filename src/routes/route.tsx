@@ -29,6 +29,9 @@ const routes = createBrowserRouter([
       },
     ],
   },
+
+
+
   {
     path: "dashboard",
     element: <Dashboard />,
@@ -45,12 +48,15 @@ const routes = createBrowserRouter([
     path: "admin/orders",
     element: <OrdersManagementPage />,
   },
+
+
+  
   {
-    path: "/sign-in",
+    path: "/login",
     element: <SignIn />,
   },
   {
-    path: "/sign-up",
+    path: "/register",
     element: <SignUp />,
   },
 ]);
