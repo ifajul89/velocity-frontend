@@ -30,7 +30,7 @@ const Navbar = () => {
                   <li key={items?.path}>
                     <NavLink
                       to={items?.path}
-                      className={`px-4 py-2 rounded-lg text-base text-gray-800 transition ${location?.pathname === items.path && "bg-purple-600 font-medium text-white"}`}
+                      className={`rounded-lg px-4 py-2 text-base text-gray-800 transition ${location?.pathname === items.path && "bg-purple-600 font-medium text-white"}`}
                     >
                       {" "}
                       {items?.name}
