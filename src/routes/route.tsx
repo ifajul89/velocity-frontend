@@ -64,7 +64,7 @@ const routes = createBrowserRouter([
         path: "orders",
         element: <ProtectedRoute requireAdmin={true}><OrdersManagementPage /></ProtectedRoute>,
       },
-      // You can add more admin routes here
+
     ],
   },
 ]);

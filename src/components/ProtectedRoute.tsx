@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "@/redux/hooks";
 
-// Define user type to match what's in the authSlice
+// Define user type to match in authSlice
 interface User {
   id?: string;
   email?: string;

@@ -57,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAppSelector((state) => state.auth);
   const isAdmin = user && (user as User).role === "admin";
   
-  // Filter navigation items based on user role
+  // Filter navigation items based on role
   const filteredNavItems = navItems.filter(item => 
     !item.adminOnly || (item.adminOnly && isAdmin)
   );
