@@ -13,7 +13,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 z-10 w-full bg-white shadow-md">
+    <header className="w-full bg-white shadow-md">
       <div className="relative container mx-auto px-4 lg:px-0">
         <div className="flex h-16 items-center justify-between">
           <Link
