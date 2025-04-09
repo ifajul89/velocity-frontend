@@ -23,7 +23,7 @@ const Checkout = () => {
   
   // Order state
   const [quantity, setQuantity] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState('credit');
+  const [paymentMethod, setPaymentMethod] = useState('sslcommerz');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle quantity changes with stock validation
@@ -90,7 +90,14 @@ const Checkout = () => {
     // Simulating API call
     setTimeout(() => {
       setIsSubmitting(false);
-      alert('Order placed successfully!');
+      
+      if (paymentMethod === 'sslcommerz') {
+        // In a real implementation, this would redirect to SSLCommerz payment gateway
+        alert('Redirecting to SSLCommerz payment gateway...');
+      } else if (paymentMethod === 'cash') {
+        alert('Your cash on delivery order has been placed successfully!');
+      }
+      
       navigate('/');
     }, 1500);
   };
@@ -307,33 +314,18 @@ const Checkout = () => {
               <div className="space-y-3">
                 <div 
                   className={`flex items-center border rounded-md p-3 cursor-pointer ${
-                    paymentMethod === 'credit' ? 'border-purple-600 bg-purple-50' : 'border-gray-300'
+                    paymentMethod === 'sslcommerz' ? 'border-purple-600 bg-purple-50' : 'border-gray-300'
                   }`}
-                  onClick={() => handlePaymentMethodChange('credit')}
+                  onClick={() => handlePaymentMethodChange('sslcommerz')}
                 >
                   <div className="flex items-center justify-center w-5 h-5 rounded-full border border-gray-400 mr-3">
-                    {paymentMethod === 'credit' && (
+                    {paymentMethod === 'sslcommerz' && (
                       <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
                     )}
                   </div>
                   <div>
-                    <span className="font-medium">Credit Card</span>
-                  </div>
-                </div>
-                
-                <div 
-                  className={`flex items-center border rounded-md p-3 cursor-pointer ${
-                    paymentMethod === 'paypal' ? 'border-purple-600 bg-purple-50' : 'border-gray-300'
-                  }`}
-                  onClick={() => handlePaymentMethodChange('paypal')}
-                >
-                  <div className="flex items-center justify-center w-5 h-5 rounded-full border border-gray-400 mr-3">
-                    {paymentMethod === 'paypal' && (
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
-                    )}
-                  </div>
-                  <div>
-                    <span className="font-medium">PayPal</span>
+                    <span className="font-medium">SSLCommerz</span>
+                    <p className="text-sm text-gray-600">Secure online payment gateway</p>
                   </div>
                 </div>
                 
@@ -350,9 +342,18 @@ const Checkout = () => {
                   </div>
                   <div>
                     <span className="font-medium">Cash on Delivery</span>
+                    <p className="text-sm text-gray-600">Pay when you receive</p>
                   </div>
                 </div>
               </div>
+              
+              {paymentMethod === 'sslcommerz' && (
+                <div className="mt-4 rounded-lg bg-gray-50 p-4">
+                  <p className="text-sm">
+                    You will be redirected to SSLCommerz to complete your payment securely.
+                  </p>
+                </div>
+              )}
             </div>
             
             <Button 

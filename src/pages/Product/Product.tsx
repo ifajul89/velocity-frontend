@@ -9,10 +9,10 @@ const Product = () => {
   const carData = {
     id: 1,
     name: "Range Rover Vouge 2020",
-    stock: false,
+    stock: true,
     brandNew: true,
     price: 85000,
-    stockCount: 0,
+    stockCount: 1,
     carFeatures: [
       {
         feature: "Safety",
