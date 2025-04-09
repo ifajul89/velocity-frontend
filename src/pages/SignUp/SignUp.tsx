@@ -18,12 +18,12 @@ export default function SignUp() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<FormData>();
   const [SignUp] = useSignUpMutation();
   const navigate = useNavigate();
 
-  const onSubmit = async(data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     const userInfo = {
       name: data.name,
       email: data.email,
@@ -31,14 +31,14 @@ export default function SignUp() {
       // phone: '01319101783',
       // city: "Dhaka"
     };
-  
+
     // Add your API logic here
     const res = await SignUp(userInfo);
     console.log(res.data);
-    if(res.data.status) {
-      toast.success(res.data.message)
-      navigate('/login')
-      reset()
+    if (res.data.status) {
+      toast.success(res.data.message);
+      navigate("/login");
+      reset();
     }
   };
 
