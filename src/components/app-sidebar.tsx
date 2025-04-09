@@ -16,23 +16,29 @@ import {
 } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 
+interface NavItem {
+  title: string;
+  url: string;
+  items: NavItem[];
+}
+
 const data = {
   navMain: [
     {
       title: "Track Order Status",
       url: "/track-order",
-      items: [],
+      items: [] as NavItem[],
     },
 
     {
       title: "Admin: Orders Management",
       url: "/admin/orders",
-      items: [],
+      items: [] as NavItem[],
     },
     {
       title: "Manage Profile Settings",
       url: "/profile",
-      items: [],
+      items: [] as NavItem[],
     },
   ],
 };
