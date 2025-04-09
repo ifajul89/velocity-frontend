@@ -1,5 +1,5 @@
-import * as React from "react"
-import { Home, User, Settings, ShoppingBag } from "lucide-react"
+import * as React from "react";
+import { Home, User, Settings, ShoppingBag } from "lucide-react";
 
 import {
   Sidebar,
@@ -13,8 +13,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/ui/sidebar";
+import { Badge } from "@/components/ui/badge";
 
 const data = {
   navMain: [
@@ -23,7 +23,7 @@ const data = {
       url: "/track-order",
       items: [],
     },
-   
+
     {
       title: "Admin: Orders Management",
       url: "/admin/orders",
@@ -35,16 +35,20 @@ const data = {
       items: [],
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="flex items-center">
-          <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-md bg-primary text-white">V</div>
+          <div className="bg-primary mr-2 flex h-6 w-6 items-center justify-center rounded-md text-white">
+            V
+          </div>
           <span className="font-bold">Velocity</span>
-          <Badge variant="outline" className="ml-auto">v1.0.0</Badge>
+          <Badge variant="outline" className="ml-auto">
+            v1.0.0
+          </Badge>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -61,10 +65,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             {data.navMain.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url} className="flex items-center gap-2 font-medium">
-                    {item.title === "Track Order Status" && <ShoppingBag className="h-4 w-4" />}
-                    {item.title === "Manage Profile Settings" && <User className="h-4 w-4" />}
-                    {item.title === "Admin: Orders Management" && <Settings className="h-4 w-4" />}
+                  <a
+                    href={item.url}
+                    className="flex items-center gap-2 font-medium"
+                  >
+                    {item.title === "Track Order Status" && (
+                      <ShoppingBag className="h-4 w-4" />
+                    )}
+                    {item.title === "Manage Profile Settings" && (
+                      <User className="h-4 w-4" />
+                    )}
+                    {item.title === "Admin: Orders Management" && (
+                      <Settings className="h-4 w-4" />
+                    )}
                     {item.title}
                   </a>
                 </SidebarMenuButton>
@@ -86,5 +99,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

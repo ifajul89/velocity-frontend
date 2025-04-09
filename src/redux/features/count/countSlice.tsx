@@ -13,7 +13,7 @@ const countSlice = createSlice({
     },
     decrement(state) {
       state.value -= 1;
-    }
+    },
   },
 });
 
