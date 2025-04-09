@@ -1,12 +1,18 @@
 import CarImage from "@/assets/dummy/car-image.png";
 import { RiInformation2Line } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
+  const navigate = useNavigate();
+  
   const carData = {
+    id: 1,
     name: "Range Rover Vouge 2020",
     stock: false,
     brandNew: true,
+    price: 85000,
+    stockCount: 0,
     carFeatures: [
       {
         feature: "Safety",
@@ -35,6 +41,17 @@ const Product = () => {
     ],
     colors: ["#c1121f", "#669bbc"],
     description: {},
+  };
+
+  const handleBuyNow = () => {
+    navigate('/checkout', { 
+      state: { 
+        product: {
+          ...carData,
+          selectedColor: carData.colors[0] // Default to first color
+        } 
+      }
+    });
   };
 
   return (
@@ -101,7 +118,10 @@ const Product = () => {
         </div>
 
         {/* Buy Now Button */}
-        <Button className="!bg-velo-red hover:!bg-velo-black h-12 w-full cursor-pointer text-lg">
+        <Button 
+          onClick={handleBuyNow}
+          className="!bg-velo-red hover:!bg-velo-black h-12 w-full cursor-pointer text-lg"
+        >
           Buy Now
         </Button>
       </div>
