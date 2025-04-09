@@ -41,11 +41,11 @@ const routes = createBrowserRouter([
     element: <OrdersManagementPage />,
   },
   {
-    path: "/sign-in",
+    path: "/login",
     element: <SignIn />,
   },
   {
-    path: "/sign-up",
+    path: "/register",
     element: <SignUp />,
   },
 ]);
