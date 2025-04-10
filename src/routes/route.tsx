@@ -5,13 +5,17 @@ import TrackOrderPage from "@/pages/TrackOrder/TrackOrder";
 import Home from "@/pages/Home";
 import SignIn from "@/pages/SignIn/SignIn";
 import SignUp from "@/pages/SignUp/SignUp";
+import Checkout from "@/pages/Checkout/Checkout";
 import { createBrowserRouter } from "react-router-dom";
 import { Dashboard } from "@/components/Dashboard";
 import AddProduct from "@/pages/Admin/AddProduct";
 import AllProducts from "@/pages/AllProducts/AllProducts";
 
+import ProtectedRoute from "@/components/ProtectedRoute";
+import Product from "@/pages/Product/Product";
 
 const routes = createBrowserRouter([
+  // Public routes
   {
     path: "/",
     element: <App />,
@@ -23,12 +27,18 @@ const routes = createBrowserRouter([
       {
         path: "/all-product",
         element: <AllProducts />,
+      },{
+        path: "product",
+        element: <Product />,
+      },
+      {
+        path: "checkout",
+        element: <Checkout />,
       },
     ],
   },
 
-
-
+  // Authentication routes
   {
     path: "dashboard",
     element: <Dashboard />,
@@ -71,13 +81,53 @@ const routes = createBrowserRouter([
     element: <SignIn />,
   },
   {
-    path: "/register",
+    path: "register",
     element: <SignUp />,
   },
   {
     path: "/all-products",
     element: <AllProducts />,
   },
+  // User protected routes
+  {
+    path: "dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "profile",
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "track-order",
+    element: (
+      <ProtectedRoute>
+        <TrackOrderPage />
+      </ProtectedRoute>
+    ),
+  },
+
+  // Admin protected routes
+  // {
+  //   path: "admin",
+  //   children: [
+  //     {
+  //       path: "orders",
+  //       element: (
+  //         <ProtectedRoute requireAdmin={true}>
+  //           <OrdersManagement />
+  //         </ProtectedRoute>
+  //       ),
+  //     },
+  //   ],
+  // },
 ]);
 
 export default routes;
