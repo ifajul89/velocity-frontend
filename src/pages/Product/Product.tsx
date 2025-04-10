@@ -101,7 +101,7 @@ const Product = () => {
   };
 
   return (
-    <section className="container my-5">
+    <section className="container my-6">
       <div className="flex flex-col items-center gap-5 md:flex-row lg:gap-10">
         <div className="min-w-[300px] lg:min-w-[500px] xl:min-w-[600px]">
           <img

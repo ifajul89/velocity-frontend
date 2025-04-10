@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { toast } from "sonner";
+import VelocityLogo from "@/assets/velocity-logo.png";
 
 const Navbar = () => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const Navbar = () => {
 
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [menuOpen, setMenuOpen] = useState<boolean | null>(null); 
+  const [menuOpen, setMenuOpen] = useState<boolean | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,20 +51,20 @@ const Navbar = () => {
   useEffect(() => {
     const close = (e: MouseEvent) => {
       if (
-        dropdownRef.current && 
+        dropdownRef.current &&
         !dropdownRef.current.contains(e.target as Node)
       ) {
         setMenuOpen(null);
       }
-      
+
       if (
-        mobileDropdownRef.current && 
+        mobileDropdownRef.current &&
         !mobileDropdownRef.current.contains(e.target as Node)
       ) {
         setMobileMenuOpen(false);
       }
     };
-    
+
     document.addEventListener("mousedown", close);
     return () => document.removeEventListener("mousedown", close);
   }, []);
@@ -82,23 +83,21 @@ const Navbar = () => {
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-0">
-        <Link
-          to="/"
-          className="bg-gradient-to-r from-purple-600 via-purple-400 to-purple-700 bg-clip-text text-3xl font-bold text-transparent"
-        >
-          Velocity
+      <div className="container mx-auto flex py-2.5 items-center justify-between px-4 lg:px-0">
+        <Link to="/" className="flex !items-end">
+          <img className="w-8" src={VelocityLogo} alt="velocity-logo" />{" "}
+          <span className="-ml-1 text-xl text-velo-black font-semibold border-b-2 border-velo-maroon">elocity</span>
         </Link>
 
         {/* Large Device Nav */}
-        <nav className="hidden lg:flex items-center gap-6">
+        <nav className="hidden items-center gap-6 lg:flex">
           {navLinks.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
-              className={`px-4 py-2 text-base rounded-lg transition ${
+              className={`rounded-lg px-4 py-2 text-base transition ${
                 location.pathname === item.path
-                  ? "bg-purple-600 text-white font-medium"
+                  ? "bg-purple-600 font-medium text-white"
                   : "text-gray-800 hover:bg-purple-100"
               }`}
             >
@@ -109,12 +108,12 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => toggleDropdown(0)} // Use index to toggle specific dropdown
-                className="bg-sky-600 px-4 py-2 text-white rounded-sm"
+                className="rounded-sm bg-sky-600 px-4 py-2 text-white"
               >
                 Dashboard
               </button>
               {menuOpen === 0 && (
-                <ul className="absolute right-0 mt-2 w-40 space-y-2 rounded bg-sky-100 p-2 shadow-lg animate-slide-down">
+                <ul className="animate-slide-down absolute right-0 mt-2 w-40 space-y-2 rounded bg-sky-100 p-2 shadow-lg">
                   <li>
                     <Link
                       to="/dashboard"
@@ -126,7 +125,7 @@ const Navbar = () => {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left rounded px-3 py-2 hover:bg-sky-200"
+                      className="w-full rounded px-3 py-2 text-left hover:bg-sky-200"
                     >
                       Logout
                     </button>
@@ -153,7 +152,7 @@ const Navbar = () => {
         </nav>
 
         {/* Mobile Nav */}
-        <div className="lg:hidden relative" ref={mobileDropdownRef}>
+        <div className="relative lg:hidden" ref={mobileDropdownRef}>
           <button
             onClick={toggleMobileMenu}
             className="rounded bg-gray-100 p-2 text-gray-600"
@@ -165,12 +164,17 @@ const Navbar = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
 
           {mobileMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 rounded bg-white p-4 shadow-lg animate-slide-down space-y-2 z-50">
+            <div className="animate-slide-down absolute right-0 z-50 mt-2 w-48 space-y-2 rounded bg-white p-4 shadow-lg">
               {navLinks.map((item) => (
                 <Link
                   key={item.path}
@@ -199,7 +203,7 @@ const Navbar = () => {
                       handleLogout();
                       toggleMobileMenu();
                     }}
-                    className="w-full text-left rounded px-3 py-2 text-sm hover:bg-purple-100"
+                    className="w-full rounded px-3 py-2 text-left text-sm hover:bg-purple-100"
                   >
                     Logout
                   </button>
