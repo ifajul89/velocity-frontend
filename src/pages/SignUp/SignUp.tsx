@@ -3,7 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSignUpMutation } from "@/redux/features/auth/authApi";
+import { toast } from "sonner";
 
 type FormData = {
   name: string;
@@ -16,11 +18,28 @@ export default function SignUp() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>();
+  const [SignUp] = useSignUpMutation();
+  const navigate = useNavigate();
 
-  const onSubmit = (data: FormData) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (data: FormData) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      // phone: '01319101783',
+      // city: "Dhaka"
+    };
+
     // Add your API logic here
+    const res = await SignUp(userInfo);
+    console.log(res.data);
+    if (res.data.status) {
+      toast.success(res.data.message);
+      navigate("/login");
+      reset();
+    }
   };
 
   return (

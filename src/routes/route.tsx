@@ -2,6 +2,7 @@ import App from "@/layout/App";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import ProfilePage from "@/pages/Profile/Profile";
 import TrackOrderPage from "@/pages/TrackOrder/TrackOrder";
+import OrdersManagementPage from "@/pages/Admin/OrdersManagement";
 import Home from "@/pages/Home";
 import Product from "@/pages/Product/Product";
 import SignIn from "@/pages/SignIn/SignIn";
@@ -34,6 +35,10 @@ const routes = createBrowserRouter([
   {
     path: "track-order",
     element: <TrackOrderPage />,
+  },
+  {
+    path: "admin/orders",
+    element: <OrdersManagementPage />,
   },
   {
     path: "dashboard",
