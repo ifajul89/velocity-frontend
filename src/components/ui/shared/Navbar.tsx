@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import VelocityLogo from "@/assets/velocity-logo.png";
+import { Button } from "../button";
 
 const Navbar = () => {
   const location = useLocation();
@@ -83,10 +84,12 @@ const Navbar = () => {
         showNavbar ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="container mx-auto flex py-2.5 items-center justify-between px-4 lg:px-0">
-        <Link to="/" className="flex !items-end">
+      <div className="container flex items-center justify-between py-2.5 lg:px-0">
+        <Link to="/" className="flex w-1/3 items-end">
           <img className="w-8" src={VelocityLogo} alt="velocity-logo" />{" "}
-          <span className="-ml-1 text-xl text-velo-black font-semibold border-b-2 border-velo-maroon">elocity</span>
+          <span className="text-velo-black border-velo-maroon -ml-1 border-b-2 text-xl font-semibold">
+            elocity.
+          </span>
         </Link>
 
         {/* Large Device Nav */}
@@ -95,23 +98,26 @@ const Navbar = () => {
             <NavLink
               key={item.path}
               to={item.path}
-              className={`rounded-lg px-4 py-2 text-base transition ${
+              className={`border-b-2 px-0.5 text-base text-[16px] duration-300 ${
                 location.pathname === item.path
-                  ? "bg-purple-600 font-medium text-white"
-                  : "text-gray-800 hover:bg-purple-100"
+                  ? "text-velo-red border-velo-red"
+                  : "hover:border-velo-red text-velo-black hover:text-velo-red border-transparent"
               }`}
             >
               {item.name}
             </NavLink>
           ))}
+        </nav>
+
+        <div className="flex w-1/3 justify-end">
           {user ? (
             <div className="relative" ref={dropdownRef}>
-              <button
+              <Button
                 onClick={() => toggleDropdown(0)} // Use index to toggle specific dropdown
-                className="rounded-sm bg-sky-600 px-4 py-2 text-white"
+                className="rounded- bg-sky-600 px-4 py-2 text-white"
               >
                 Dashboard
-              </button>
+              </Button>
               {menuOpen === 0 && (
                 <ul className="animate-slide-down absolute right-0 mt-2 w-40 space-y-2 rounded bg-sky-100 p-2 shadow-lg">
                   <li>
@@ -135,21 +141,18 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link
-                to="/login"
-                className="rounded bg-purple-600 px-4 py-2 text-white"
-              >
-                Login
+              <Link to="/login">
+                <Button className="!bg-velo-red hover:!bg-velo-maroon h-11 w-22">Login</Button>
               </Link>
               <Link
                 to="/register"
-                className="rounded border border-purple-600 px-4 py-2 text-purple-600"
+                className=""
               >
-                Register
+                <Button className="!bg-velo-black hover:!bg-black h-11 w-24">Register</Button>
               </Link>
             </div>
           )}
-        </nav>
+        </div>
 
         {/* Mobile Nav */}
         <div className="relative lg:hidden" ref={mobileDropdownRef}>
