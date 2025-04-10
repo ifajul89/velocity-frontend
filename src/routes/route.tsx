@@ -31,7 +31,7 @@ const routes = createBrowserRouter([
       },
     ],
   },
-  
+
   // Authentication routes
   {
     path: "login",
@@ -41,30 +41,45 @@ const routes = createBrowserRouter([
     path: "register",
     element: <SignUp />,
   },
-  
+
   // User protected routes
   {
     path: "dashboard",
-    element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "profile",
-    element: <ProtectedRoute><ProfilePage /></ProtectedRoute>,
+    element: (
+      <ProtectedRoute>
+        <ProfilePage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "track-order",
-    element: <ProtectedRoute><TrackOrderPage /></ProtectedRoute>,
+    element: (
+      <ProtectedRoute>
+        <TrackOrderPage />
+      </ProtectedRoute>
+    ),
   },
-  
+
   // Admin protected routes
   {
     path: "admin",
     children: [
       {
         path: "orders",
-        element: <ProtectedRoute requireAdmin={true}><OrdersManagementPage /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute requireAdmin={true}>
+            <OrdersManagementPage />
+          </ProtectedRoute>
+        ),
       },
-
     ],
   },
 ]);

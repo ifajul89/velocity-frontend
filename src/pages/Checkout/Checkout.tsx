@@ -1,35 +1,35 @@
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import CarImage from "@/assets/dummy/car-image.png";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Get product data from state
   const { product } = location.state || {};
-  
+
   // Form state
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    zipCode: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    zipCode: "",
   });
-  
+
   // Order state
   const [quantity, setQuantity] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState('sslcommerz');
+  const [paymentMethod, setPaymentMethod] = useState("sslcommerz");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle quantity changes with stock validation
   const handleQuantityChange = (newQuantity: number) => {
     if (!product) return;
-    
+
     if (newQuantity < 1) {
       setQuantity(1);
     } else if (newQuantity > product.stockCount) {
@@ -47,11 +47,13 @@ const Checkout = () => {
   const total = subtotal + tax + shipping;
 
   // Handle form input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -63,9 +65,9 @@ const Checkout = () => {
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!product) {
-      alert('Product not found');
+      alert("Product not found");
       return;
     }
 
@@ -76,29 +78,38 @@ const Checkout = () => {
     }
 
     // Validate required fields
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city'];
-    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
-    
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "email",
+      "phone",
+      "address",
+      "city",
+    ];
+    const missingFields = requiredFields.filter(
+      (field) => !formData[field as keyof typeof formData],
+    );
+
     if (missingFields.length > 0) {
-      alert('Please fill in all required fields');
+      alert("Please fill in all required fields");
       return;
     }
 
     // Process order
     setIsSubmitting(true);
-    
+
     // Simulating API call
     setTimeout(() => {
       setIsSubmitting(false);
-      
-      if (paymentMethod === 'sslcommerz') {
+
+      if (paymentMethod === "sslcommerz") {
         // In a real implementation, this would redirect to SSLCommerz payment gateway
-        alert('Redirecting to SSLCommerz payment gateway...');
-      } else if (paymentMethod === 'cash') {
-        alert('Your cash on delivery order has been placed successfully!');
+        alert("Redirecting to SSLCommerz payment gateway...");
+      } else if (paymentMethod === "cash") {
+        alert("Your cash on delivery order has been placed successfully!");
       }
-      
-      navigate('/');
+
+      navigate("/");
     }, 1500);
   };
 
@@ -106,103 +117,113 @@ const Checkout = () => {
   if (!product) {
     return (
       <div className="container mx-auto py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">No Product Selected</h1>
+        <h1 className="mb-4 text-2xl font-bold">No Product Selected</h1>
         <p className="mb-6">Please go back and select a product to checkout.</p>
-        <Button onClick={() => navigate('/product')}>
-          Back to Products
-        </Button>
+        <Button onClick={() => navigate("/product")}>Back to Products</Button>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">Checkout</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <h1 className="mb-8 text-center text-3xl font-bold">Checkout</h1>
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-            
-            <div className="flex items-start gap-4 mb-6">
-              <img 
-                src={CarImage} 
+          <div className="rounded-lg border border-gray-200 bg-white p-6">
+            <h2 className="mb-4 text-xl font-bold">Order Summary</h2>
+
+            <div className="mb-6 flex items-start gap-4">
+              <img
+                src={CarImage}
                 alt={product.name}
-                className="w-20 h-20 object-cover rounded-md"
+                className="h-20 w-20 rounded-md object-cover"
               />
               <div>
                 <h3 className="font-medium">{product.name}</h3>
                 <div className="mt-1 flex items-center gap-2">
-                  <div 
-                    className="w-4 h-4 rounded-full" 
+                  <div
+                    className="h-4 w-4 rounded-full"
                     style={{ backgroundColor: product.selectedColor }}
                   ></div>
                   <span className="text-sm text-gray-600">Selected Color</span>
                 </div>
               </div>
             </div>
-            
-            <div className="mb-4 pb-4 border-b border-gray-200">
-              <div className="flex justify-between items-center">
+
+            <div className="mb-4 border-b border-gray-200 pb-4">
+              <div className="flex items-center justify-between">
                 <span className="text-gray-600">Quantity:</span>
                 <div className="flex items-center gap-2">
-                  <button 
+                  <button
                     type="button"
                     onClick={() => handleQuantityChange(quantity - 1)}
-                    className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300"
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300"
                   >
                     -
                   </button>
                   <span className="w-8 text-center">{quantity}</span>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => handleQuantityChange(quantity + 1)}
-                    className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-300"
+                    className="flex h-7 w-7 items-center justify-center rounded-full border border-gray-300"
                   >
                     +
                   </button>
                 </div>
               </div>
-              <div className="mt-1 text-sm text-gray-600 flex items-center gap-1">
-                <span className={product.stock ? "text-green-600" : "text-red-600"}>●</span>
-                {product.stock ? `${product.stockCount} in stock` : 'Out of stock'}
+              <div className="mt-1 flex items-center gap-1 text-sm text-gray-600">
+                <span
+                  className={product.stock ? "text-green-600" : "text-red-600"}
+                >
+                  ●
+                </span>
+                {product.stock
+                  ? `${product.stockCount} in stock`
+                  : "Out of stock"}
               </div>
             </div>
-            
+
             <div>
-              <div className="flex justify-between mb-1">
+              <div className="mb-1 flex justify-between">
                 <span className="text-gray-600">Price:</span>
                 <span>${product.price.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between mb-1">
+              <div className="mb-1 flex justify-between">
                 <span className="text-gray-600">Subtotal:</span>
                 <span>${subtotal.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between mb-1">
+              <div className="mb-1 flex justify-between">
                 <span className="text-gray-600">Tax (5%):</span>
                 <span>${tax.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between mb-1">
+              <div className="mb-1 flex justify-between">
                 <span className="text-gray-600">Shipping:</span>
                 <span>${shipping.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between font-bold text-lg mt-3 pt-3 border-t border-gray-200">
+              <div className="mt-3 flex justify-between border-t border-gray-200 pt-3 text-lg font-bold">
                 <span>Total:</span>
                 <span>${total.toLocaleString()}</span>
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Checkout Form */}
         <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit} className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-xl font-bold mb-6">Your Information</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-lg border border-gray-200 bg-white p-6"
+          >
+            <h2 className="mb-6 text-xl font-bold">Your Information</h2>
+
+            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="firstName"
+                  className="mb-1 block text-sm font-medium"
+                >
                   First Name <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -211,13 +232,16 @@ const Checkout = () => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="lastName"
+                  className="mb-1 block text-sm font-medium"
+                >
                   Last Name <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -226,13 +250,16 @@ const Checkout = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="email"
+                  className="mb-1 block text-sm font-medium"
+                >
                   Email <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -241,13 +268,16 @@ const Checkout = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="phone"
+                  className="mb-1 block text-sm font-medium"
+                >
                   Phone <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -256,14 +286,17 @@ const Checkout = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   required
                 />
               </div>
             </div>
-            
+
             <div className="mb-6">
-              <label htmlFor="address" className="block text-sm font-medium mb-1">
+              <label
+                htmlFor="address"
+                className="mb-1 block text-sm font-medium"
+              >
                 Address <span className="text-red-600">*</span>
               </label>
               <textarea
@@ -271,15 +304,18 @@ const Checkout = () => {
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 rows={3}
                 required
               />
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+
+            <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <label htmlFor="city" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="city"
+                  className="mb-1 block text-sm font-medium"
+                >
                   City <span className="text-red-600">*</span>
                 </label>
                 <input
@@ -288,13 +324,16 @@ const Checkout = () => {
                   name="city"
                   value={formData.city}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   required
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="zipCode" className="block text-sm font-medium mb-1">
+                <label
+                  htmlFor="zipCode"
+                  className="mb-1 block text-sm font-medium"
+                >
                   ZIP Code
                 </label>
                 <input
@@ -303,65 +342,74 @@ const Checkout = () => {
                   name="zipCode"
                   value={formData.zipCode}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                 />
               </div>
             </div>
-            
+
             <div className="mb-8">
-              <h3 className="text-lg font-semibold mb-3">Payment Method</h3>
-              
+              <h3 className="mb-3 text-lg font-semibold">Payment Method</h3>
+
               <div className="space-y-3">
-                <div 
-                  className={`flex items-center border rounded-md p-3 cursor-pointer ${
-                    paymentMethod === 'sslcommerz' ? 'border-purple-600 bg-purple-50' : 'border-gray-300'
+                <div
+                  className={`flex cursor-pointer items-center rounded-md border p-3 ${
+                    paymentMethod === "sslcommerz"
+                      ? "border-purple-600 bg-purple-50"
+                      : "border-gray-300"
                   }`}
-                  onClick={() => handlePaymentMethodChange('sslcommerz')}
+                  onClick={() => handlePaymentMethodChange("sslcommerz")}
                 >
-                  <div className="flex items-center justify-center w-5 h-5 rounded-full border border-gray-400 mr-3">
-                    {paymentMethod === 'sslcommerz' && (
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                  <div className="mr-3 flex h-5 w-5 items-center justify-center rounded-full border border-gray-400">
+                    {paymentMethod === "sslcommerz" && (
+                      <div className="h-3 w-3 rounded-full bg-purple-600"></div>
                     )}
                   </div>
                   <div>
                     <span className="font-medium">SSLCommerz</span>
-                    <p className="text-sm text-gray-600">Secure online payment gateway</p>
+                    <p className="text-sm text-gray-600">
+                      Secure online payment gateway
+                    </p>
                   </div>
                 </div>
-                
-                <div 
-                  className={`flex items-center border rounded-md p-3 cursor-pointer ${
-                    paymentMethod === 'cash' ? 'border-purple-600 bg-purple-50' : 'border-gray-300'
+
+                <div
+                  className={`flex cursor-pointer items-center rounded-md border p-3 ${
+                    paymentMethod === "cash"
+                      ? "border-purple-600 bg-purple-50"
+                      : "border-gray-300"
                   }`}
-                  onClick={() => handlePaymentMethodChange('cash')}
+                  onClick={() => handlePaymentMethodChange("cash")}
                 >
-                  <div className="flex items-center justify-center w-5 h-5 rounded-full border border-gray-400 mr-3">
-                    {paymentMethod === 'cash' && (
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                  <div className="mr-3 flex h-5 w-5 items-center justify-center rounded-full border border-gray-400">
+                    {paymentMethod === "cash" && (
+                      <div className="h-3 w-3 rounded-full bg-purple-600"></div>
                     )}
                   </div>
                   <div>
                     <span className="font-medium">Cash on Delivery</span>
-                    <p className="text-sm text-gray-600">Pay when you receive</p>
+                    <p className="text-sm text-gray-600">
+                      Pay when you receive
+                    </p>
                   </div>
                 </div>
               </div>
-              
-              {paymentMethod === 'sslcommerz' && (
+
+              {paymentMethod === "sslcommerz" && (
                 <div className="mt-4 rounded-lg bg-gray-50 p-4">
                   <p className="text-sm">
-                    You will be redirected to SSLCommerz to complete your payment securely.
+                    You will be redirected to SSLCommerz to complete your
+                    payment securely.
                   </p>
                 </div>
               )}
             </div>
-            
-            <Button 
+
+            <Button
               type="submit"
-              className="w-full !bg-purple-600 hover:!bg-purple-700 text-white h-12 text-lg font-semibold"
+              className="h-12 w-full !bg-purple-600 text-lg font-semibold text-white hover:!bg-purple-700"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Processing...' : 'Place Order'}
+              {isSubmitting ? "Processing..." : "Place Order"}
             </Button>
           </form>
         </div>
@@ -370,4 +418,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout; 
+export default Checkout;

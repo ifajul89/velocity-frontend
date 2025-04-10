@@ -184,7 +184,9 @@ export default function OrdersManagementPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <Link to={'/'}><BreadcrumbLink>Admin</BreadcrumbLink></Link>
+                  <Link to={"/"}>
+                    <BreadcrumbLink>Admin</BreadcrumbLink>
+                  </Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

@@ -56,10 +56,10 @@ const navItems: NavItem[] = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAppSelector((state) => state.auth);
   const isAdmin = user && (user as User).role === "admin";
-  
+
   // Filter navigation items based on role
-  const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || (item.adminOnly && isAdmin)
+  const filteredNavItems = navItems.filter(
+    (item) => !item.adminOnly || (item.adminOnly && isAdmin),
   );
 
   return (
@@ -80,7 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <Link to={'/'} className="flex items-center gap-2 font-medium">
+                <Link to={"/"} className="flex items-center gap-2 font-medium">
                   <Home className="h-4 w-4" />
                   Home
                 </Link>
