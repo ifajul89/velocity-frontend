@@ -34,7 +34,6 @@ export default function SignUp() {
 
     // Add your API logic here
     const res = await SignUp(userInfo);
-    console.log(res.data);
     if (res.data.status) {
       toast.success(res.data.message);
       navigate("/login");
