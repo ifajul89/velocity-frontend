@@ -6,7 +6,9 @@ const App = () => {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <div className="min-h-screen mt-16">
+        <Outlet />
+      </div>
       <Footer />
     </>
   );

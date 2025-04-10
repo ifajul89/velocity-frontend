@@ -8,7 +8,7 @@ const Navbar = () => {
   const location = useLocation();
   const navLinks = [
     { path: "/", name: "Home" },
-    { path: "/products", name: "All Products" },
+    { path: "/all-product", name: "All Products" },
     { path: "/about", name: "About Us" },
     { path: "/contact", name: "Contact Us" },
   ];
@@ -92,7 +92,7 @@ const Navbar = () => {
 
         {/* Large Device Nav */}
         <nav className="hidden lg:flex items-center gap-6">
-          {navLinks.map((item, index) => (
+          {navLinks.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
