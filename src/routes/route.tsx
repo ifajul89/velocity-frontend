@@ -7,9 +7,12 @@ import Home from "@/pages/Home";
 import Product from "@/pages/Product/Product";
 import SignIn from "@/pages/SignIn/SignIn";
 import SignUp from "@/pages/SignUp/SignUp";
+import Checkout from "@/pages/Checkout/Checkout";
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const routes = createBrowserRouter([
+  // Public routes
   {
     path: "/",
     element: <App />,
@@ -19,40 +22,50 @@ const routes = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/product",
+        path: "product",
         element: <Product />,
+      },
+      {
+        path: "checkout",
+        element: <Checkout />,
       },
     ],
   },
-
-
-
-  {
-    path: "dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "profile",
-    element: <ProfilePage />,
-  },
-  {
-    path: "track-order",
-    element: <TrackOrderPage />,
-  },
-  {
-    path: "admin/orders",
-    element: <OrdersManagementPage />,
-  },
-
-
   
+  // Authentication routes
   {
-    path: "/login",
+    path: "login",
     element: <SignIn />,
   },
   {
-    path: "/register",
+    path: "register",
     element: <SignUp />,
+  },
+  
+  // User protected routes
+  {
+    path: "dashboard",
+    element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
+  },
+  {
+    path: "profile",
+    element: <ProtectedRoute><ProfilePage /></ProtectedRoute>,
+  },
+  {
+    path: "track-order",
+    element: <ProtectedRoute><TrackOrderPage /></ProtectedRoute>,
+  },
+  
+  // Admin protected routes
+  {
+    path: "admin",
+    children: [
+      {
+        path: "orders",
+        element: <ProtectedRoute requireAdmin={true}><OrdersManagementPage /></ProtectedRoute>,
+      },
+
+    ],
   },
 ]);
 

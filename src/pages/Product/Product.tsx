@@ -1,13 +1,19 @@
 import CarImage from "@/assets/dummy/car-image.png";
 import { RiInformation2Line } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
+  const navigate = useNavigate();
+
   const carData = {
+    id: 1,
     name: "Range Rover Vouge 2020",
     image: "link",
     stock: false,
     brandNew: true,
+    price: 85000,
+    stockCount: 1,
     carFeatures: [
       {
         feature: "Safety",
@@ -83,9 +89,20 @@ const Product = () => {
     },
   };
 
+  const handleBuyNow = () => {
+    navigate("/checkout", {
+      state: {
+        product: {
+          ...carData,
+          selectedColor: carData.colors[0], // Default to first color
+        },
+      },
+    });
+  };
+
   return (
     <section className="container my-5">
-      <div className="flex flex-col md:flex-row items-center gap-5 lg:gap-10">
+      <div className="flex flex-col items-center gap-5 md:flex-row lg:gap-10">
         <div className="min-w-[300px] lg:min-w-[500px] xl:min-w-[600px]">
           <img
             className="aspect-square w-full rounded-2xl object-cover"
@@ -93,12 +110,14 @@ const Product = () => {
             alt="car-iamge"
           />
         </div>
-        <div className="flex flex-col gap-6 xl:gap-10 py-5 w-full">
+        <div className="flex w-full flex-col gap-6 py-5 xl:gap-10">
           {/* Name */}
-          <h3 className="text-xl lg:text-3xl xl:text-4xl font-semibold">{carData.name}</h3>
+          <h3 className="text-xl font-semibold lg:text-3xl xl:text-4xl">
+            {carData.name}
+          </h3>
 
           {/* Stock and Conditioin Status */}
-          <div className="grid grid-cols-2 text-sm md:text-md xl:grid-cols-3 gap-5">
+          <div className="md:text-md grid grid-cols-2 gap-5 text-sm xl:grid-cols-3">
             <div
               className={`flex items-center gap-1 ${carData.stock ? "text-green-600" : "text-red-700"}`}
             >
@@ -117,7 +136,7 @@ const Product = () => {
           </div>
 
           {/* Features */}
-          <div className=" xl:my-7 space-y-2 text-sm lg:text-base lg:space-y-4">
+          <div className="space-y-2 text-sm lg:space-y-4 lg:text-base xl:my-7">
             {carData.carFeatures.map((carFeature) => (
               <div>
                 <div className="inline-block w-40">
@@ -148,7 +167,10 @@ const Product = () => {
           </div>
 
           {/* Buy Now Button */}
-          <Button className="!bg-velo-red hover:!bg-velo-black h-12 w-full cursor-pointer text-lg">
+          <Button
+            onClick={handleBuyNow}
+            className="!bg-velo-red hover:!bg-velo-black h-12 w-full cursor-pointer text-lg"
+          >
             Buy Now
           </Button>
         </div>
