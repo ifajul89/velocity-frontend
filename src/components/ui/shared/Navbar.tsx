@@ -5,7 +5,7 @@ const Navbar = () => {
   const location = useLocation();
   const navLinks = [
     { path: "/", name: "Home" },
-    { path: "*", name: "All Products" },
+    { path: "/all-products", name: "All Products" },
     { path: "*", name: "About Us" },
     { path: "*", name: "Contact Us" },
   ];

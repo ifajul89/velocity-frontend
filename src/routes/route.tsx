@@ -8,6 +8,7 @@ import Product from "@/pages/Product/Product";
 import SignIn from "@/pages/SignIn/SignIn";
 import SignUp from "@/pages/SignUp/SignUp";
 import { createBrowserRouter } from "react-router-dom";
+import AllProducts from "@/pages/AllProducts/AllProducts";
 
 const routes = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const routes = createBrowserRouter([
   {
     path: "/register",
     element: <SignUp />,
+  },
+  {
+    path: "/all-products",
+    element: <AllProducts />,
   },
 ]);
 
