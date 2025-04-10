@@ -24,6 +24,9 @@ const routes = createBrowserRouter([
       },
     ],
   },
+
+
+
   {
     path: "dashboard",
     element: <Dashboard />,
@@ -40,6 +43,9 @@ const routes = createBrowserRouter([
     path: "admin/orders",
     element: <OrdersManagementPage />,
   },
+
+
+  
   {
     path: "/login",
     element: <SignIn />,

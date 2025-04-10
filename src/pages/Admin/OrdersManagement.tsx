@@ -44,6 +44,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { OrderService, Order } from "@/services/OrderService";
+import { Link } from "react-router-dom";
 
 const statusOptions = [
   {
@@ -183,7 +184,7 @@ export default function OrdersManagementPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Admin</BreadcrumbLink>
+                  <Link to={'/'}><BreadcrumbLink>Admin</BreadcrumbLink></Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
