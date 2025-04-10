@@ -85,20 +85,20 @@ const Product = () => {
 
   return (
     <section className="container my-5">
-      <div className="flex items-center gap-10">
-        <div className="w-1/2">
+      <div className="flex flex-col md:flex-row items-center gap-5 lg:gap-10">
+        <div className="min-w-[300px] lg:min-w-[500px] xl:min-w-[600px]">
           <img
             className="aspect-square w-full rounded-2xl object-cover"
             src={CarImage}
             alt="car-iamge"
           />
         </div>
-        <div className="flex flex-col gap-10 py-5">
+        <div className="flex flex-col gap-6 xl:gap-10 py-5 w-full">
           {/* Name */}
-          <h3 className="text-4xl font-semibold">{carData.name}</h3>
+          <h3 className="text-xl lg:text-3xl xl:text-4xl font-semibold">{carData.name}</h3>
 
           {/* Stock and Conditioin Status */}
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 text-sm md:text-md xl:grid-cols-3 gap-5">
             <div
               className={`flex items-center gap-1 ${carData.stock ? "text-green-600" : "text-red-700"}`}
             >
@@ -117,7 +117,7 @@ const Product = () => {
           </div>
 
           {/* Features */}
-          <div className="my-7 space-y-4">
+          <div className=" xl:my-7 space-y-2 text-sm lg:text-base lg:space-y-4">
             {carData.carFeatures.map((carFeature) => (
               <div>
                 <div className="inline-block w-40">
