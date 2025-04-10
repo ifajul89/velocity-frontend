@@ -5,6 +5,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import VelocityLogo from "@/assets/velocity-logo.png";
 import { Button } from "../button";
+import { HiMenu } from "react-icons/hi";
 
 const Navbar = () => {
   const location = useLocation();
@@ -85,9 +86,9 @@ const Navbar = () => {
       }`}
     >
       <div className="container flex items-center justify-between py-2.5 lg:px-0">
-        <Link to="/" className="flex w-1/3 items-end">
-          <img className="w-8" src={VelocityLogo} alt="velocity-logo" />{" "}
-          <span className="text-velo-black border-velo-maroon -ml-1 border-b-2 text-xl font-semibold">
+        <Link to="/" className="flex w-1/5 items-end">
+          <img className="w-6 md:w-8" src={VelocityLogo} alt="velocity-logo" />{" "}
+          <span className="text-velo-black border-velo-maroon -ml-0.5 border-b-2 font-semibold md:-ml-1 md:text-xl">
             elocity.
           </span>
         </Link>
@@ -109,7 +110,7 @@ const Navbar = () => {
           ))}
         </nav>
 
-        <div className="flex w-1/3 justify-end">
+        <div className="hidden w-1/5 justify-end lg:flex">
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <Button
@@ -157,48 +158,36 @@ const Navbar = () => {
 
         {/* Mobile Nav */}
         <div className="relative lg:hidden" ref={mobileDropdownRef}>
-          <button
+          <Button
             onClick={toggleMobileMenu}
-            className="rounded bg-gray-100 p-2 text-gray-600"
+            className="bg-velo-red size-8 md:size-10"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
+            <HiMenu className="text-xl" />
+          </Button>
 
           {mobileMenuOpen && (
-            <div className="animate-slide-down absolute right-0 z-50 mt-2 w-48 space-y-2 rounded bg-white p-4 shadow-lg">
+            <div className="animate-slide-down absolute right-0 z-50 mt-2 w-40 space-y-1 rounded-[10px] bg-white p-1 shadow-lg">
               {navLinks.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={toggleMobileMenu}
-                  className={`block rounded px-3 py-2 text-sm ${
+                  className={`block rounded-md px-3 py-1.5 text-sm ${
                     location.pathname === item.path
-                      ? "bg-purple-600 text-white"
+                      ? "bg-velo-red text-white"
                       : "text-gray-700 hover:bg-purple-100"
                   }`}
                 >
                   {item.name}
                 </Link>
               ))}
+              <div className="h-[1px] w-11/12 mx-auto rounded-full bg-gray-300" />
               {user ? (
                 <>
                   <Link
                     to="/dashboard"
                     onClick={toggleMobileMenu}
-                    className="block rounded px-3 py-2 text-sm hover:bg-purple-100"
+                    className="block px-3 py-2 text-sm hover:bg-purple-100"
                   >
                     Dashboard
                   </Link>
@@ -213,22 +202,14 @@ const Navbar = () => {
                   </button>
                 </>
               ) : (
-                <>
-                  <Link
-                    to="/login"
-                    onClick={toggleMobileMenu}
-                    className="block rounded px-3 py-2 text-sm hover:bg-purple-100"
-                  >
-                    Login
+                <div className="flex flex-col gap-1">
+                  <Link to="/login" onClick={toggleMobileMenu}>
+                    <Button className="bg-velo-red w-full">Login</Button>
                   </Link>
-                  <Link
-                    to="/register"
-                    onClick={toggleMobileMenu}
-                    className="block rounded px-3 py-2 text-sm hover:bg-purple-100"
-                  >
-                    Register
+                  <Link to="/register" onClick={toggleMobileMenu}>
+                    <Button className="bg-velo-black w-full">Register</Button>
                   </Link>
-                </>
+                </div>
               )}
             </div>
           )}
