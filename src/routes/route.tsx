@@ -85,8 +85,14 @@ const routes = createBrowserRouter([
     element: <SignUp />,
   },
   {
-    path: "/all-products",
+    path: "/all-products/:id",
     element: <AllProducts />,
+    loader: () => fetch(`http://localhost:5002/api/cars/`)
+  },
+  {
+    path: '/carDetails/:id',
+    element: <Product />,
+    loader: ({params}) => fetch(`http://localhost:5002/api/cars/${params.id}`)
   },
   // User protected routes
   {

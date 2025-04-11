@@ -1,9 +1,14 @@
-import CarImage from "@/assets/dummy/car-image.png";
 import { RiInformation2Line } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Product = () => {
+  const loadedCars = useLoaderData();
+  const [cars, setCars] = useState(loadedCars)
+  console.log(cars.data)
+  const {name, image, brand, model, year, price, category, description, quantity, inStock} = cars.data
+  console.log(name)
   const navigate = useNavigate();
 
   const carData = {
@@ -89,6 +94,9 @@ const Product = () => {
     },
   };
 
+  // const {_id} = cars || {}
+  // console.log(_id)
+
   const handleBuyNow = () => {
     navigate("/checkout", {
       state: {
@@ -106,39 +114,39 @@ const Product = () => {
         <div className="min-w-[300px] lg:min-w-[500px] xl:min-w-[600px]">
           <img
             className="aspect-square w-full rounded-2xl object-cover"
-            src={CarImage}
+            src={image}
             alt="car-iamge"
           />
         </div>
         <div className="flex w-full flex-col gap-6 py-5 xl:gap-10">
           {/* Name */}
           <h3 className="text-xl font-semibold lg:text-3xl xl:text-4xl">
-            {carData.name}
+            {name}
           </h3>
 
           {/* Stock and Conditioin Status */}
           <div className="md:text-md grid grid-cols-2 gap-5 text-sm xl:grid-cols-3">
             <div
-              className={`flex items-center gap-1 ${carData.stock ? "text-green-600" : "text-red-700"}`}
+              className={`flex items-center gap-1 ${inStock ? "text-green-600" : "text-red-700"}`}
             >
               <div
-                className={`size-3 rounded-full ${carData.stock ? "bg-green-600" : "bg-red-700"}`}
+                className={`size-3 rounded-full ${inStock ? "bg-green-600" : "bg-red-700"}`}
               />
               <p className="font-medium">
-                {carData.stock ? "In Stock" : "Out of Stock"}
+                {inStock ? "In Stock" : "Out of Stock"}
               </p>
             </div>
 
             <p className="flex items-center gap-1 text-gray-500">
               <RiInformation2Line />{" "}
-              {carData.brandNew ? "Brand New" : "Pre-Owned"}
+              {/* {carData.brandNew ? "Brand New" : "Pre-Owned"} */}
             </p>
           </div>
 
           {/* Features */}
           <div className="space-y-2 text-sm lg:space-y-4 lg:text-base xl:my-7">
-            {carData.carFeatures.map((carFeature) => (
-              <div>
+            {carData.carFeatures.map((carFeature, index) => (
+              <div key={index}>
                 <div className="inline-block w-40">
                   <p className="font-semibold">{carFeature.feature}</p>{" "}
                 </div>
@@ -153,8 +161,9 @@ const Product = () => {
               Pick a Color <span className="text-red-700">*</span>
             </h5>
             <div className="flex w-fit rounded-[12px] border-2 p-0.5">
-              {carData.colors.map((color) => (
+              {carData.colors.map((color, index) => (
                 <div
+                  key={index}
                   className={`hover:border-velo-black cursor-pointer rounded-lg border-2 border-transparent p-0.5 duration-300`}
                 >
                   <div
@@ -183,10 +192,10 @@ const Product = () => {
         </h4>
 
         <div className="text-velo-black mt-5">
-          <p className="">{carData.description.overview}</p>
+          <p className="">{description}</p>
 
-          {carData.description.extensive.map((eachDescription) => (
-            <div className="mt-4 space-y-1.5">
+          {carData.description.extensive.map((eachDescription, index) => (
+            <div key={index} className="mt-4 space-y-1.5">
               <h5 className="text-xl font-semibold">{eachDescription.title}</h5>
               <p className="text-gray-500">{eachDescription.description}</p>
             </div>
