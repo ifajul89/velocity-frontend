@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
-import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -45,6 +44,7 @@ import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { OrderService, Order } from "@/services/OrderService";
 import { Link } from "react-router-dom";
+import { Dashboard } from "@/components/Dashboard";
 
 const statusOptions = [
   {
@@ -175,7 +175,7 @@ export default function OrdersManagementPage() {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <Dashboard />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center gap-2 px-3">
@@ -184,9 +184,7 @@ export default function OrdersManagementPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <Link to={"/"}>
-                    <BreadcrumbLink>Admin</BreadcrumbLink>
-                  </Link>
+                  <Link to={'/'}><BreadcrumbLink>Admin</BreadcrumbLink></Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

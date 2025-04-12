@@ -1,15 +1,18 @@
 import App from "@/layout/App";
-import Dashboard from "@/pages/Dashboard/Dashboard";
 import ProfilePage from "@/pages/Profile/Profile";
 import TrackOrderPage from "@/pages/TrackOrder/TrackOrder";
-import OrdersManagementPage from "@/pages/Admin/OrdersManagement";
+// import OrdersManagementPage from "@/pages/Admin/OrdersManagement";
 import Home from "@/pages/Home";
-import Product from "@/pages/Product/Product";
 import SignIn from "@/pages/SignIn/SignIn";
 import SignUp from "@/pages/SignUp/SignUp";
 import Checkout from "@/pages/Checkout/Checkout";
 import { createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { Dashboard } from "@/components/Dashboard";
+import AddProduct from "@/pages/Admin/AddProduct";
+import AllProducts from "@/pages/AllProducts/AllProducts";
+import OrdersManagementPage from "@/pages/Admin/OrdersManagement";
+import Product from "@/pages/Product/Product";
 
 const routes = createBrowserRouter([
   // Public routes
@@ -26,6 +29,10 @@ const routes = createBrowserRouter([
         element: <Product />,
       },
       {
+        path: "/all-product",
+        element: <AllProducts />,
+      },
+      {
         path: "checkout",
         element: <Checkout />,
       },
@@ -34,7 +41,30 @@ const routes = createBrowserRouter([
 
   // Authentication routes
   {
-    path: "login",
+    path: "dashboard",
+    element: <Dashboard />,
+    children: [
+      {
+        path: "add-product",
+        element: <AddProduct />,
+      },
+    ],
+  },
+  {
+    path: "profile",
+    element: <ProfilePage />,
+  },
+  {
+    path: "track-order",
+    element: <TrackOrderPage />,
+  },
+  {
+    path: "admin/orders",
+    // element: <OrdersManagementPage />,
+  },
+
+  {
+    path: "/login",
     element: <SignIn />,
   },
   {
