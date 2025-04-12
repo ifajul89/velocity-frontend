@@ -13,6 +13,7 @@ import AllProducts from "@/pages/AllProducts/AllProducts";
 import ManageProduct from "@/pages/Admin/ManageProduct";
 import Product from "@/pages/Product/Product";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import About from "@/pages/About/About";
 const routes = createBrowserRouter([
   // Public routes
   {
@@ -99,6 +100,10 @@ const routes = createBrowserRouter([
     path: "/all-products/:id",
     element: <AllProducts />,
     loader: () => fetch(`http://localhost:5002/api/cars/`)
+  },
+  {
+    path: "/about",
+    element: <About />
   },
   {
     path: '/carDetails/:id',
