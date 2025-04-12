@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const cars = [
   {
     name: "Camry",
@@ -65,9 +67,43 @@ const cars = [
     image:
       "https://media.audi.com/is/image/audi/nemo/models/a6/a6-limousine/my-2024/stage/AA6_L_181012_3-L.jpg",
   },
+  {
+    name: "CX-5",
+    brand: "Mazda",
+    price: 31000,
+    category: "SUV",
+    description: "A stylish and sporty compact SUV.",
+    quantity: 7,
+    inStock: true,
+    image:
+      "https://hips.hearstapps.com/hmg-prod/images/2025-mazda-cx-5-front-three-quarters-2-67a23acb1d56f.jpg?crop=0.587xw:0.567xh;0.343xw,0.374xh&resize=1200:*",
+  },
+  {
+    name: "Civic Type R",
+    brand: "Honda",
+    price: 43000,
+    category: "Sports",
+    description: "A high-performance version of the classic Civic.",
+    quantity: 4,
+    inStock: true,
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR7UZcN_5wcMBUIekVMNNdX6uQnc1debdlAw&s",
+  },
+  {
+    name: "F-150",
+    brand: "Ford",
+    price: 45000,
+    category: "Truck",
+    description: "America's favorite full-size pickup truck.",
+    quantity: 8,
+    inStock: true,
+    image:
+      "https://hips.hearstapps.com/hmg-prod/images/2024-ford-f-150-lariat-exterior-101-64ff7459abf73.jpg?crop=0.793xw:0.771xh;0.135xw,0.188xh&resize=1200:*",
+  },
 ];
 
 const FeaturedCars = () => {
+  const [dataLength, SetDataLength] = useState(6)
   return (
     <div className="container mx-auto my-10 py-8">
       <h2 className="text-center text-4xl font-bold text-purple-700">
@@ -78,7 +114,7 @@ const FeaturedCars = () => {
         performance, style, and value.
       </p>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {cars.map((car, index) => (
+        {cars.slice(0, dataLength).map((car, index) => (
           <div
             key={index}
             className="mb-4 flex flex-col rounded-lg bg-white p-4 shadow-lg"
@@ -111,9 +147,11 @@ const FeaturedCars = () => {
         ))}
       </div>
       <div className="mt-4 flex justify-center">
-        <button className="rounded bg-purple-700 px-4 py-2 text-lg font-bold text-white transition duration-300 ease-in-out hover:bg-purple-800">
+        <div className={ dataLength === cars.length ? "hidden" : ""}>
+        <button onClick={() => SetDataLength(cars.length)} className="rounded bg-purple-700 px-4 py-2 text-lg font-bold text-white transition duration-300 ease-in-out hover:bg-purple-800">
           View All Cars
         </button>
+        </div>
       </div>
     </div>
   );
