@@ -2,6 +2,7 @@ import { RiInformation2Line } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Navbar from "@/components/ui/shared/Navbar";
 
 const Product = () => {
   const loadedCars = useLoaderData();
@@ -109,7 +110,10 @@ const Product = () => {
   };
 
   return (
-    <section className="container my-6">
+    <div>
+      <Navbar  />
+    <section className="container my-6 mt-15">
+      
       <div className="flex flex-col items-center gap-5 md:flex-row lg:gap-10">
         <div className="min-w-[300px] lg:min-w-[500px] xl:min-w-[600px]">
           <img
@@ -203,6 +207,7 @@ const Product = () => {
         </div>
       </div>
     </section>
+    </div>
   );
 };
 
