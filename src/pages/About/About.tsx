@@ -56,12 +56,9 @@ const About = () => {
               <h3 className="text-xl font-medium">Bob Smith</h3>
               <p className="text-gray-600">Frontend Developer</p>
             </div>
-            
           </div>
 
-
-
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 mt-5">
+          <div className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2">
             {/* Team Member 3 */}
             <div className="rounded-lg bg-white p-4 text-center shadow-md">
               <img

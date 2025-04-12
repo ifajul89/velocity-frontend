@@ -181,7 +181,7 @@ const Navbar = () => {
                   {item.name}
                 </Link>
               ))}
-              <div className="h-[1px] w-11/12 mx-auto rounded-full bg-gray-300" />
+              <div className="mx-auto h-[1px] w-11/12 rounded-full bg-gray-300" />
               {user ? (
                 <>
                   <Link

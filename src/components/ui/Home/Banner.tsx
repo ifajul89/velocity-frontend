@@ -41,7 +41,7 @@ const BannerVeloBlackPartInner: React.FC<BannerVeloBlackPartInnerProps> = ({
   return (
     <div>
       <h4 className="text-3xl">{value}</h4>
-      <h5 className="w-min font-extralight text-velo-gray">{title}</h5>
+      <h5 className="text-velo-gray w-min font-extralight">{title}</h5>
     </div>
   );
 };
@@ -111,7 +111,9 @@ const Banner = () => {
             </Button>
           </div>
 
-          <p className="text-gray-400 font-bold">Accelerate Your Journey with Quality and Care!!</p>
+          <p className="font-bold text-gray-400">
+            Accelerate Your Journey with Quality and Care!!
+          </p>
         </div>
 
         {/* Image Part */}
@@ -137,7 +139,7 @@ const Banner = () => {
                     <p className="mb-6 text-xl md:text-xl">
                       {items.description}
                     </p>
-                    <button className="rounded-lg bg-velo-red px-6 py-2 font-semibold text-white transition duration-300 hover:bg-velo-maroon">
+                    <button className="bg-velo-red hover:bg-velo-maroon rounded-lg px-6 py-2 font-semibold text-white transition duration-300">
                       {items.cta}
                     </button>
                   </div>
@@ -168,7 +170,7 @@ const Banner = () => {
             alt=""
           />
 
-          <div className="bg-velo-black text-velo-white col-span-2 row-span-1 grid h-full gap-5 w-full grid-cols-2 place-items-center rounded-[50px] p-8">
+          <div className="bg-velo-black text-velo-white col-span-2 row-span-1 grid h-full w-full grid-cols-2 place-items-center gap-5 rounded-[50px] p-8">
             {bannerVeloBlackPartInnerData.map((eachData) => (
               <BannerVeloBlackPartInner
                 value={eachData.value}

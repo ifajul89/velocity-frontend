@@ -6,14 +6,13 @@ const AllProducts = () => {
   const { data: allCarsData, isLoading, refetch } = useGetCarsQuery([]);
   // const loadedCars = useLoaderData();
   // const [cars, setCars] = useState(loadedCars)
-  
 
   if (isLoading) return <div>Loading...</div>;
   if (!allCarsData?.data) return <div>No cars found.</div>;
 
   return (
     <div>
-      <h1 className="text-center text-5xl font-bold ">All Cars</h1>
+      <h1 className="text-center text-5xl font-bold">All Cars</h1>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {allCarsData.data.map((car, index) => (
           <div
@@ -43,9 +42,11 @@ const AllProducts = () => {
                   Brand: <span className="text-purple-700">{car.brand}</span>
                 </p>
               </div>
-              <Link to={`/carDetails/${car._id}`}><button className="rounded bg-purple-700 px-4 py-2 text-lg font-bold text-white transition duration-300 ease-in-out hover:bg-purple-800">
-                View Details
-              </button></Link>
+              <Link to={`/carDetails/${car._id}`}>
+                <button className="rounded bg-purple-700 px-4 py-2 text-lg font-bold text-white transition duration-300 ease-in-out hover:bg-purple-800">
+                  View Details
+                </button>
+              </Link>
             </div>
           </div>
         ))}

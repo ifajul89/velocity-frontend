@@ -103,7 +103,7 @@ const cars = [
 ];
 
 const FeaturedCars = () => {
-  const [dataLength, SetDataLength] = useState(6)
+  const [dataLength, SetDataLength] = useState(6);
   return (
     <div className="container mx-auto my-10 py-8">
       <h2 className="text-center text-4xl font-bold text-purple-700">
@@ -147,10 +147,13 @@ const FeaturedCars = () => {
         ))}
       </div>
       <div className="mt-4 flex justify-center">
-        <div className={ dataLength === cars.length ? "hidden" : ""}>
-        <button onClick={() => SetDataLength(cars.length)} className="rounded bg-purple-700 px-4 py-2 text-lg font-bold text-white transition duration-300 ease-in-out hover:bg-purple-800">
-          View All Cars
-        </button>
+        <div className={dataLength === cars.length ? "hidden" : ""}>
+          <button
+            onClick={() => SetDataLength(cars.length)}
+            className="rounded bg-purple-700 px-4 py-2 text-lg font-bold text-white transition duration-300 ease-in-out hover:bg-purple-800"
+          >
+            View All Cars
+          </button>
         </div>
       </div>
     </div>
