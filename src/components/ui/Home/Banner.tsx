@@ -133,14 +133,14 @@ const Banner = () => {
                   className="h-full w-full rounded-full object-cover"
                 />
                 <div className="bg-velo-white/10 absolute inset-0 flex items-end justify-center rounded-full overflow-hidden">
-                  <div className="bg-velo-red/50 backdrop-blur-xs w-full flex flex-col justify-center items-center text-cente rounded-t-[30px] pb-8 text-center h-[200px] text-white px-5">
+                  <div className="bg-velo-red/40 backdrop-blur-xs w-full flex flex-col justify-center items-center text-cente rounded-t-[35px] pb-8 text-center h-[190px] text-white px-5">
                     <h2 className="font-semibold text-2xl">
                       {items.title}
                     </h2>
                     <p className="text-[17px] font-light mb-3 mt-1">
                       {items.description}
                     </p>
-                    <Button className="bg-velo-red hover:bg-velo-maroon rounded-lg h-10 px-6 py-2 font-semibold text-white transition duration-300">
+                    <Button className="bg-velo-red hover:!bg-velo-maroon h-10 px-6 py-2 font-semibold text-white transition duration-300">
                       {items.cta}
                     </Button>
                   </div>
@@ -149,13 +149,13 @@ const Banner = () => {
             ))}
             <button
               onClick={prevSlide}
-              className="bg-opacity-50 hover:bg-opacity-75 bg-velo-red absolute top-1/2 -left-4 z-20 -translate-y-1/2 transform rounded-full p-2 text-white transition duration-300"
+              className="bg-opacity-50 hover:bg-opacity-75 bg-velo-red absolute top-1/2 -left-4.5 z-20 -translate-y-1/2 transform rounded-full p-2 text-white transition duration-300"
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={nextSlide}
-              className="bg-opacity-50 hover:bg-opacity-75 bg-velo-black absolute top-1/2 -right-4 -translate-y-1/2 transform rounded-full p-2 text-white transition duration-300"
+              className="bg-opacity-50 hover:bg-opacity-75 bg-velo-black absolute top-1/2 -right-4.5 -translate-y-1/2 transform rounded-full p-2 text-white transition duration-300"
             >
               <ChevronRight size={24} />
             </button>
