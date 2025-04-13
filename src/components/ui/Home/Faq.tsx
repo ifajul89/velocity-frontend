@@ -36,11 +36,11 @@ const quistions = [
 
 const Faq = () => {
   return (
-    <section className="container my-16 flex items-center gap-16 md:my-20">
-      <div className="w-2/5 space-y-7">
+    <section className="container mb-5 mt-16 flex flex-col items-center gap-6 md:gap-16 md:my-20 md:flex-row">
+      <div className="w-full md:w-2/5 space-y-4 md:space-y-7">
         <div>
           <div className="bg-velo-red h-1 w-20 rounded-full" />
-          <h3 className="text-velo-black mt-2 text-4xl font-semibold">
+          <h3 className="text-velo-black mt-2 text-2xl md:text-4xl font-semibold">
             Any question?
             <br />
             We got you.
@@ -65,7 +65,7 @@ const Faq = () => {
         defaultValue="item-0"
         type="single"
         collapsible
-        className="w-3/5"
+        className="w-full md:w-3/5"
       >
         {quistions.map((question, index) => (
           <AccordionItem value={`item-${index}`}>
