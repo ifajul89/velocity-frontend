@@ -88,7 +88,7 @@ const Banner = () => {
     <section className="bg-velo-white">
       <div className="container flex h-full flex-col-reverse items-center gap-5 py-5 md:flex-row md:gap-16">
         {/* Text Part */}
-        <div className="space-y-4 md:space-y-8 md:w-1/2 lg:w-2/5 lg:space-y-12">
+        <div className="space-y-4 md:w-1/2 md:space-y-8 lg:w-2/5 lg:space-y-12">
           <h1 className="text-3xl font-medium md:text-5xl md:leading-[60px] xl:text-6xl xl:leading-[65px]">
             Your Journey <br className="hidden md:block" />
             Begins with <br className="hidden md:block" />

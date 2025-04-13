@@ -32,7 +32,7 @@ const CarCard: React.FC<CarCardProps> = ({
         className="h-[230px] w-full rounded-xl object-cover"
         alt=""
       />
-      <p className="custom-hover-category-name mt-3 text-velo-black line-clamp-1 text-center font-semibold duration-300 md:text-lg">
+      <p className="custom-hover-category-name text-velo-black mt-3 line-clamp-1 text-center font-semibold duration-300 md:text-lg">
         {brand} {carName}
       </p>
       <p className="flex items-center gap-1 text-sm text-gray-500 md:text-base">

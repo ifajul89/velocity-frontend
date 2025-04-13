@@ -110,7 +110,7 @@ const FeaturedCars = () => {
   return (
     <div className="container my-10 md:my-14">
       <SectionTitle title="Featured Cars" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2  md:grid-cols-3 ">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {cars.slice(0, dataLength).map((car, index) => (
           <CarCard
             key={index}
@@ -126,7 +126,7 @@ const FeaturedCars = () => {
         <div className={dataLength === cars.length ? "hidden" : ""}>
           <Button
             onClick={() => SetDataLength(cars.length)}
-            className="bg-velo-red hover:bg-velo-maroon text-[15px] h-10"
+            className="bg-velo-red hover:bg-velo-maroon h-10 text-[15px]"
           >
             View All Cars
           </Button>
