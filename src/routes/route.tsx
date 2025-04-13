@@ -19,6 +19,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { currentToken, currentUser } from "@/redux/features/auth/authSlice";
 import { store } from "@/redux/store";
 import { LoaderFunctionArgs } from "react-router-dom";
+import OrderVerification from "@/pages/Checkout/verifyOrder";
 
 export const productLoader = async ({ params }: LoaderFunctionArgs) => {
     interface User {
@@ -47,7 +48,8 @@ export const productLoader = async ({ params }: LoaderFunctionArgs) => {
     console.log('token', token)
 
     if (!token) {
-        // Instead of alerting, return a redirect object that React Router will handle
+        console.log('No token found, redirecting to login');
+        // Return a redirect object with the proper format
         return {
             redirect: '/login',
             message: 'You must be logged in to view this product'
@@ -100,16 +102,35 @@ const routes = createBrowserRouter([
         element: <Product />,
       },
       {
-        path: "/all-product",
+        path: "all-product",
         element: <AllProducts />,
       },
       {
         path: "checkout",
-        element: <Checkout />,
+        element: <ProtectedRoute><Checkout /></ProtectedRoute>,
+      },
+      {
+        path: "order/verify",
+        element: <ProtectedRoute><OrderVerification /></ProtectedRoute>,
       },
       {
         path: "track-order",
-        element: <TrackOrderPage />,
+        element: <Dashboard />,
+        children: [
+          {
+            index: true,
+            element: <TrackOrderPage />,
+          }
+        ],
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "carDetails/:id",
+        element: <ProtectedRoute><Product /></ProtectedRoute>,
+        loader: productLoader,
       },
     ],
   },
@@ -135,11 +156,6 @@ const routes = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "profile",
-    element: <ProfilePage />,
-    errorElement: <ErrorBoundary />,
-  },
 
   {
     path: "admin/orders",
@@ -148,21 +164,6 @@ const routes = createBrowserRouter([
   },
 
   {
-    path: "dashboard",
-    element: <Dashboard />,
-    errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "profile",
-    element: <ProfilePage />,
-    errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "track-my-order",
-    element: <TrackOrderPage />,
-    errorElement: <ErrorBoundary />,
-  },
-  {
     path: "/login",
     element: <SignIn />,
   },
@@ -170,33 +171,8 @@ const routes = createBrowserRouter([
     path: "register",
     element: <SignUp />,
   },
-  {
-    path: "/all-products/:id",
-    element: <AllProducts />,
-    loader: () => fetch(`http://localhost:5000/api/cars/`),
-    errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "/about",
-    element: <About />,
-    errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "/carDetails/:id",
-    element: <ProtectedRoute><Product /></ProtectedRoute>,
-    loader: productLoader,
-    errorElement: <ErrorBoundary />,
-  },
-  // User protected routes
-  {
-    path: "dashboard",
-    element: (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorBoundary />,
-  },
+  
+  // Protected routes
   {
     path: "profile",
     element: (
@@ -207,7 +183,7 @@ const routes = createBrowserRouter([
     errorElement: <ErrorBoundary />,
   },
   {
-    path: "track-order",
+    path: "track-my-order",
     element: (
       <ProtectedRoute>
         <TrackOrderPage />
@@ -215,21 +191,15 @@ const routes = createBrowserRouter([
     ),
     errorElement: <ErrorBoundary />,
   },
-
-  // Admin protected routes
-  // {
-  //   path: "admin",
-  //   children: [
-  //     {
-  //       path: "orders",
-  //       element: (
-  //         <ProtectedRoute requireAdmin={true}>
-  //           <OrdersManagement />
-  //         </ProtectedRoute>
-  //       ),
-  //     },
-  //   ],
-  // },
+  {
+    path: "dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorBoundary />,
+  },
 ]);
 
 export default routes;

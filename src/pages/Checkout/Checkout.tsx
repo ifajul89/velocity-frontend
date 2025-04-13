@@ -94,7 +94,6 @@ const Checkout = () => {
 
   // Order state
   const [quantity, setQuantity] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState("sslcommerz");
 
   // Handle quantity changes with stock validation
   const handleQuantityChange = (newQuantity: number) => {
@@ -125,11 +124,6 @@ const Checkout = () => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  // Handle payment method selection
-  const handlePaymentMethodChange = (method: string) => {
-    setPaymentMethod(method);
   };
 
   // Handle form submission
@@ -187,6 +181,7 @@ const Checkout = () => {
       city: formData.city,
       zipCode: formData.zipCode,
       totalPrice: total,
+      paymentMethod: "surjopay", // Fixed payment method
       products: [
         {
           product: productId,
@@ -471,57 +466,25 @@ const Checkout = () => {
               <h3 className="mb-3 text-lg font-semibold">Payment Method</h3>
 
               <div className="space-y-3">
-                <div
-                  className={`flex cursor-pointer items-center rounded-md border p-3 ${
-                    paymentMethod === "sslcommerz"
-                      ? "border-purple-600 bg-purple-50"
-                      : "border-gray-300"
-                  }`}
-                  onClick={() => handlePaymentMethodChange("sslcommerz")}
-                >
+                <div className="flex cursor-pointer items-center rounded-md border border-purple-600 bg-purple-50 p-3">
                   <div className="mr-3 flex h-5 w-5 items-center justify-center rounded-full border border-gray-400">
-                    {paymentMethod === "sslcommerz" && (
-                      <div className="h-3 w-3 rounded-full bg-purple-600"></div>
-                    )}
+                    <div className="h-3 w-3 rounded-full bg-purple-600"></div>
                   </div>
                   <div>
-                    <span className="font-medium">SSLCommerz</span>
+                    <span className="font-medium">SurjoPay</span>
                     <p className="text-sm text-gray-600">
                       Secure online payment gateway
                     </p>
                   </div>
                 </div>
-
-                <div
-                  className={`flex cursor-pointer items-center rounded-md border p-3 ${
-                    paymentMethod === "cash"
-                      ? "border-purple-600 bg-purple-50"
-                      : "border-gray-300"
-                  }`}
-                  onClick={() => handlePaymentMethodChange("cash")}
-                >
-                  <div className="mr-3 flex h-5 w-5 items-center justify-center rounded-full border border-gray-400">
-                    {paymentMethod === "cash" && (
-                      <div className="h-3 w-3 rounded-full bg-purple-600"></div>
-                    )}
-                  </div>
-                  <div>
-                    <span className="font-medium">Cash on Delivery</span>
-                    <p className="text-sm text-gray-600">
-                      Pay when you receive
-                    </p>
-                  </div>
-                </div>
               </div>
 
-              {paymentMethod === "sslcommerz" && (
-                <div className="mt-4 rounded-lg bg-gray-50 p-4">
-                  <p className="text-sm">
-                    You will be redirected to SSLCommerz to complete your
-                    payment securely.
-                  </p>
-                </div>
-              )}
+              <div className="mt-4 rounded-lg bg-gray-50 p-4">
+                <p className="text-sm">
+                  You will be redirected to SurjoPay to complete your
+                  payment securely.
+                </p>
+              </div>
             </div>
 
             <Button
