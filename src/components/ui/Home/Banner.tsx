@@ -11,18 +11,21 @@ import img4 from "@/assets/home/banner/car4.jpg";
 
 const bannerContent = [
   {
+    id: 1,
     title: "Summer Sale",
     description: "Get 30% off on selected Cars",
     cta: "Shop Now",
     image: img1,
   },
   {
+    id: 2,
     title: "New Arrivals",
     description: "Check out the latest models",
     cta: "Explore",
     image: img2,
   },
   {
+    id: 3,
     title: "Limited Time Offer",
     description: "Exclusive deals just for you",
     cta: "Grab Now",
@@ -120,7 +123,7 @@ const Banner = () => {
           <div className="relative col-span-4 row-span-2 h-[350px] md:h-[610px] md:rounded-full lg:col-span-2">
             {bannerContent.map((items, index) => (
               <div
-                key={index}
+                key={items.id}
                 className={`absolute top-0 left-0 h-full w-full overflow-hidden transition-opacity duration-500 ${
                   index === currentSlide ? "opacity-100" : "opacity-0"
                 }`}
