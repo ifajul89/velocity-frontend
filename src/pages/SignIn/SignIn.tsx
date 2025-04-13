@@ -32,6 +32,9 @@ export default function SignIn() {
     };
     const res = await SignIn(userData);
     if (res.data.status) {
+      // Save token to localStorage
+      localStorage.setItem('token', res.data.data.token);
+      
       dispatch(
         setUser({ user: res.data.data.verifyUser, token: res.data.data.token }),
       );

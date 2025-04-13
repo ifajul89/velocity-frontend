@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import CarImage from "@/assets/dummy/car-image.png";
+import Navbar from "@/components/ui/shared/Navbar";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get product data from state
-  const { product } = location.state || {};
+  // Get product and user data from state
+  const { product, user } = location.state || {};
 
   // Form state
   const [formData, setFormData] = useState({
@@ -20,6 +20,27 @@ const Checkout = () => {
     city: "",
     zipCode: "",
   });
+
+  // Auto-fill user data when component mounts
+  useEffect(() => {
+    if (user) {
+      // Split name into first and last name (assuming format is "First Last")
+      const nameParts = user.name ? user.name.split(' ') : ['', ''];
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      setFormData(prev => ({
+        ...prev,
+        firstName,
+        lastName,
+        email: user.email || '',
+        phone: user.phone || '',
+        address: user.address || '',
+        city: user.city || '',
+        zipCode: user.zipCode || '',
+      }));
+    }
+  }, [user]);
 
   // Order state
   const [quantity, setQuantity] = useState(1);
@@ -117,6 +138,7 @@ const Checkout = () => {
   if (!product) {
     return (
       <div className="container mx-auto py-16 text-center">
+        <Navbar />
         <h1 className="mb-4 text-2xl font-bold">No Product Selected</h1>
         <p className="mb-6">Please go back and select a product to checkout.</p>
         <Button onClick={() => navigate("/product")}>Back to Products</Button>
@@ -126,6 +148,7 @@ const Checkout = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <Navbar />
       <h1 className="mb-8 text-center text-3xl font-bold">Checkout</h1>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -136,20 +159,50 @@ const Checkout = () => {
 
             <div className="mb-6 flex items-start gap-4">
               <img
-                src={CarImage}
+                src={product.image}
                 alt={product.name}
                 className="h-20 w-20 rounded-md object-cover"
               />
               <div>
                 <h3 className="font-medium">{product.name}</h3>
-                <div className="mt-1 flex items-center gap-2">
-                  <div
-                    className="h-4 w-4 rounded-full"
-                    style={{ backgroundColor: product.selectedColor }}
-                  ></div>
-                  <span className="text-sm text-gray-600">Selected Color</span>
-                </div>
+                {product.selectedColor && (
+                  <div className="mt-1 flex items-center gap-2">
+                    <div
+                      className="h-4 w-4 rounded-full"
+                      style={{ backgroundColor: product.selectedColor }}
+                    ></div>
+                    <span className="text-sm text-gray-600">Selected Color</span>
+                  </div>
+                )}
               </div>
+            </div>
+
+            {/* Car details */}
+            <div className="mb-4 space-y-2 border-b border-gray-200 pb-4 text-sm">
+              {product.brand && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Brand:</span>
+                  <span>{product.brand}</span>
+                </div>
+              )}
+              {product.model && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Model:</span>
+                  <span>{product.model}</span>
+                </div>
+              )}
+              {product.year && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Year:</span>
+                  <span>{product.year}</span>
+                </div>
+              )}
+              {product.category && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Category:</span>
+                  <span>{product.category}</span>
+                </div>
+              )}
             </div>
 
             <div className="mb-4 border-b border-gray-200 pb-4">

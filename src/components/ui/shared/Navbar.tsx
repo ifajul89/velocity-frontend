@@ -30,6 +30,9 @@ const Navbar = () => {
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = async () => {
+    // Remove token from localStorage
+    localStorage.removeItem('token');
+    
     await dispatch(logout());
     toast.success("Successful log out", { duration: 1000 });
   };
