@@ -26,8 +26,10 @@ const routes = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "product",
+        path: "/car/:id",
         element: <Product />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/api/cars/${params.id}`),
       },
       {
         path: "/all-product",
@@ -97,18 +99,13 @@ const routes = createBrowserRouter([
   {
     path: "/all-products/:id",
     element: <AllProducts />,
-    loader: () => fetch(`http://localhost:5002/api/cars/`),
+    loader: () => fetch(`http://localhost:5000/api/cars/`),
   },
   {
     path: "/about",
     element: <About />,
   },
-  {
-    path: "/carDetails/:id",
-    element: <Product />,
-    loader: ({ params }) =>
-      fetch(`http://localhost:5002/api/cars/${params.id}`),
-  },
+
   // User protected routes
   {
     path: "dashboard",

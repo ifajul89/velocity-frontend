@@ -3,15 +3,16 @@ import { RxArrowTopRight } from "react-icons/rx";
 import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import img1 from "../../../assets/img1.jpg";
-import img2 from "../../../assets/img2.jpg";
-import img3 from "../../../assets/img3.jpg";
+import img1 from "@/assets/home/banner/car1.jpg";
+import img2 from "@/assets/home/banner/car2.jpg";
+import img3 from "@/assets/home/banner/car3.jpg";
+import img4 from "@/assets/home/banner/car4.jpg";
 // import { Value } from "@radix-ui/react-select";
 
 const bannerContent = [
   {
     title: "Summer Sale",
-    description: "Get up to 30% off on selected Cars",
+    description: "Get 30% off on selected Cars",
     cta: "Shop Now",
     image: img1,
   },
@@ -79,7 +80,7 @@ const Banner = () => {
   };
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000); // Auto-advance every 5 seconds
+    const timer = setInterval(nextSlide, 3000);
     return () => clearInterval(timer);
   }, [nextSlide]);
 
@@ -122,7 +123,7 @@ const Banner = () => {
             {bannerContent.map((items, index) => (
               <div
                 key={index}
-                className={`absolute top-0 left-0 h-full w-full transition-opacity duration-500 ${
+                className={`absolute top-0 left-0 h-full w-full overflow-hidden transition-opacity duration-500 ${
                   index === currentSlide ? "opacity-100" : "opacity-0"
                 }`}
               >
@@ -131,17 +132,17 @@ const Banner = () => {
                   alt={items.title}
                   className="h-full w-full rounded-full object-cover"
                 />
-                <div className="bg-opacity-40 absolute inset-0 flex items-center justify-center bg-inherit">
-                  <div className="text-center text-white">
-                    <h2 className="mb-4 text-4xl font-bold md:text-3xl">
+                <div className="bg-velo-white/10 absolute inset-0 flex items-end justify-center rounded-full overflow-hidden">
+                  <div className="bg-velo-red/50 backdrop-blur-xs w-full flex flex-col justify-center items-center text-cente rounded-t-[30px] pb-8 text-center h-[200px] text-white px-5">
+                    <h2 className="font-semibold text-2xl">
                       {items.title}
                     </h2>
-                    <p className="mb-6 text-xl md:text-xl">
+                    <p className="text-[17px] font-light mb-3 mt-1">
                       {items.description}
                     </p>
-                    <button className="bg-velo-red hover:bg-velo-maroon rounded-lg px-6 py-2 font-semibold text-white transition duration-300">
+                    <Button className="bg-velo-red hover:bg-velo-maroon rounded-lg h-10 px-6 py-2 font-semibold text-white transition duration-300">
                       {items.cta}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -161,7 +162,7 @@ const Banner = () => {
           </div>
           <img
             className="row-span-1 h-full w-full rounded-full object-cover"
-            src={img1}
+            src={img4}
             alt=""
           />
           <img

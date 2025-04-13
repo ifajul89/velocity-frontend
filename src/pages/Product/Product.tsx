@@ -7,7 +7,7 @@ import Navbar from "@/components/ui/shared/Navbar";
 const Product = () => {
   const loadedCars = useLoaderData();
   const [cars, setCars] = useState(loadedCars);
-  console.log(cars.data);
+
   const {
     name,
     image,
