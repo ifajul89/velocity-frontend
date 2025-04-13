@@ -82,6 +82,7 @@ export default function OrdersManagementPage() {
   const [tempData, setTempData] = useState({
     status: "",
     estimatedDelivery: "",
+    message: "",
   });
 
   // Load initial orders
@@ -97,11 +98,13 @@ export default function OrdersManagementPage() {
     orderId: string,
     currentStatus: string,
     currentEstimatedDelivery: string,
+    currentMessage: string = "",
   ) => {
     setEditingOrder(orderId);
     setTempData({
       status: currentStatus,
       estimatedDelivery: currentEstimatedDelivery,
+      message: currentMessage || "",
     });
   };
 
@@ -118,6 +121,13 @@ export default function OrdersManagementPage() {
     setTempData({
       ...tempData,
       estimatedDelivery: e.target.value,
+    });
+  };
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTempData({
+      ...tempData,
+      message: e.target.value,
     });
   };
 
@@ -347,6 +357,18 @@ export default function OrdersManagementPage() {
                                         />
                                       </div>
                                     </div>
+                                    <div className="space-y-2">
+                                      <Label htmlFor="message">
+                                        Status Message
+                                      </Label>
+                                      <textarea
+                                        id="message"
+                                        className="w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2"
+                                        placeholder="Add a message about the status update..."
+                                        value={tempData.message}
+                                        onChange={handleMessageChange}
+                                      />
+                                    </div>
                                     <div className="flex justify-end gap-2">
                                       <Button
                                         variant="outline"
@@ -410,6 +432,7 @@ export default function OrdersManagementPage() {
                                         order.id,
                                         order.status,
                                         order.estimatedDelivery,
+                                        order.message || ""
                                       )
                                     }
                                   >

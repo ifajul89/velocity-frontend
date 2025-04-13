@@ -112,7 +112,7 @@ const Checkout = () => {
   // Calculate totals
   const subtotal = product ? product.price * quantity : 0;
   const tax = subtotal * 0.05; // 5% tax
-  const shipping = 250; // Fixed shipping cost
+  const shipping = 250; // Fixed shipping cost of $2.50
   const total = subtotal + tax + shipping;
 
   // Handle form input changes

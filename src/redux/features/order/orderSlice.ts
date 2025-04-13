@@ -25,13 +25,20 @@ interface OrderResponse {
   message: string;
   checkout_url?: string;
   data?: string | {
-    id?: string;
-    status?: string;
+    checkoutUrl?: string;
+    order?: {
+      orderId?: string;
+      trackingNumber?: string;
+      totalPrice?: number;
+      status?: string;
+      estimatedDeliveryDate?: string;
+    };
     [key: string]: unknown;
   };
   order?: {
     id: string;
     status: string;
+    estimatedDeliveryDate?: string;
     [key: string]: unknown;
   }
 }
@@ -123,12 +130,17 @@ const orderSlice = createSlice({
       .addCase(createOrder.fulfilled, (state, action: PayloadAction<OrderResponse>) => {
         state.isLoading = false;
         
-        // The API sometimes returns the URL in data.checkout_url and sometimes in data.data
+        // Handle different response formats
         let checkoutUrl = action.payload.checkout_url;
         
-        // If not found in checkout_url, check if it's in data as a string (URL)
+        // Check if URL is in data as a string
         if (!checkoutUrl && typeof action.payload.data === 'string' && action.payload.data.includes('http')) {
           checkoutUrl = action.payload.data;
+        }
+        
+        // Check if URL is in data.checkoutUrl (new format)
+        if (!checkoutUrl && typeof action.payload.data === 'object' && action.payload.data?.checkoutUrl) {
+          checkoutUrl = action.payload.data.checkoutUrl;
         }
         
         console.log("Final checkout URL extracted:", checkoutUrl);

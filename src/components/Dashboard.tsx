@@ -66,6 +66,11 @@ export function AppSidebar() {
   // user menu
   const userMenu: NavItem[] = [
     {
+      title: "My Orders",
+      url: "/dashboard/my-orders",
+      icon: <ShoppingBag className="h-4 w-4" />,
+    },
+    {
       title: "Track Order Status",
       url: "/track-order",
       icon: <ShoppingBag className="h-4 w-4" />,

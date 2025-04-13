@@ -44,6 +44,8 @@ interface OrderData {
   transaction_status: string | null;
   method: string;
   date_time: string;
+  tracking_number?: string;
+  estimatedDeliveryDate?: string;
 }
 
 export default function OrderVerification() {
@@ -56,7 +58,96 @@ export default function OrderVerification() {
     }
   );
 
+  // Access order data while handling different response formats
   const orderData: OrderData = data?.data?.[0];
+  
+  // Function to find estimated delivery date in nested objects
+  const findEstimatedDeliveryDate = (obj: unknown): string | undefined => {
+    // If not an object or null, return undefined
+    if (!obj || typeof obj !== 'object') return undefined;
+    
+    // Use type assertion after checking it's an object
+    const dataObj = obj as Record<string, unknown>;
+    
+    // Direct check for estimatedDeliveryDate property
+    if ('estimatedDeliveryDate' in dataObj && typeof dataObj.estimatedDeliveryDate === 'string') {
+      return dataObj.estimatedDeliveryDate;
+    }
+    
+    // Check for nested order property
+    if ('order' in dataObj && dataObj.order && typeof dataObj.order === 'object') {
+      const order = dataObj.order as Record<string, unknown>;
+      if ('estimatedDeliveryDate' in order && typeof order.estimatedDeliveryDate === 'string') {
+        return order.estimatedDeliveryDate;
+      }
+    }
+    
+    // Also check in data property
+    if ('data' in dataObj && dataObj.data && typeof dataObj.data === 'object') {
+      const nestedData = dataObj.data as Record<string, unknown>;
+      
+      // Check directly in data
+      if ('estimatedDeliveryDate' in nestedData && typeof nestedData.estimatedDeliveryDate === 'string') {
+        return nestedData.estimatedDeliveryDate;
+      }
+      
+      // Check in data.order
+      if ('order' in nestedData && nestedData.order && typeof nestedData.order === 'object') {
+        const nestedOrder = nestedData.order as Record<string, unknown>;
+        if ('estimatedDeliveryDate' in nestedOrder && typeof nestedOrder.estimatedDeliveryDate === 'string') {
+          return nestedOrder.estimatedDeliveryDate;
+        }
+      }
+    }
+    
+    return undefined;
+  };
+  
+  // Try to find estimated delivery date in the response
+  const estimatedDeliveryDate = findEstimatedDeliveryDate(data);
+  
+  // Create a fallback delivery date (7 days from now) if none is provided
+  const fallbackDeliveryDate = new Date();
+  fallbackDeliveryDate.setDate(fallbackDeliveryDate.getDate() + 7);
+  
+  // Generate a tracking number if it doesn't exist
+  const trackingNumber = 
+    orderData?.tracking_number || 
+    data?.data?.order?.trackingNumber ||
+    (orderData?.order_id ? `TRK-${orderData.order_id.substring(0, 8)}` : 'Not available');
+  
+  // Format the estimated delivery date
+  const formatEstimatedDelivery = (dateString?: string) => {
+    if (!dateString) {
+      // Return the fallback date if no date is provided
+      return fallbackDeliveryDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+    
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      // Return the fallback date if there's an error
+      return fallbackDeliveryDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+  };
+
+  // For debugging
+  console.log("API Response:", data);
+  console.log("Found estimated delivery date:", estimatedDeliveryDate);
 
   return isLoading ? (
     <div className="container mx-auto p-4">
@@ -109,6 +200,8 @@ export default function OrderVerification() {
               </dd>
               <dt className="font-semibold">Date:</dt>
               <dd>{new Date(orderData?.date_time)?.toLocaleString()}</dd>
+              <dt className="font-semibold">Estimated Delivery:</dt>
+              <dd>{formatEstimatedDelivery(estimatedDeliveryDate)}</dd>
             </dl>
           </CardContent>
         </Card>
@@ -158,6 +251,12 @@ export default function OrderVerification() {
             <CardTitle>Track your Order</CardTitle>
           </CardHeader>
           <CardContent>
+            <dl className="grid grid-cols-2 gap-2 mb-4">
+              <dt className="font-semibold">Tracking Number:</dt>
+              <dd>{trackingNumber}</dd>
+              <dt className="font-semibold">Estimated Delivery:</dt>
+              <dd>{formatEstimatedDelivery(estimatedDeliveryDate)}</dd>
+            </dl>
             <div className="flex items-center gap-2">
               {orderData?.bank_status === "Success" ? (
                 <>
