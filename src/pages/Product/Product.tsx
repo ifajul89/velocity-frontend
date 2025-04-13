@@ -46,33 +46,33 @@ interface LoaderData {
 }
 
 const Product = () => {
-  const loadedCars = useLoaderData() as LoaderData;
-  const [cars, setCars] = useState(loadedCars);
+  const loadedData = useLoaderData() as LoaderData;
+  const [cars, setCars] = useState(loadedData);
   const navigate = useNavigate();
   const user = useSelector(currentUser);
 
   useEffect(() => {
-    if (loadedCars) {
-      setCars(loadedCars);
+    if (loadedData) {
+      setCars(loadedData);
       
       // If there's a message, show a toast notification
-      if (loadedCars.message) {
-        if (loadedCars.error) {
-          toast.error(loadedCars.message);
+      if (loadedData.message) {
+        if (loadedData.error) {
+          toast.error(loadedData.message);
         } else {
-          toast.info(loadedCars.message);
+          toast.info(loadedData.message);
         }
       }
     }
-  }, [loadedCars]);
+  }, [loadedData]);
 
   // Handle redirect from loader
-  if (loadedCars.redirect) {
-    return <Navigate to={loadedCars.redirect} />;
+  if (loadedData.redirect) {
+    return <Navigate to={loadedData.redirect} />;
   }
 
   // Handle error from loader
-  if (loadedCars.error) {
+  if (loadedData.error) {
     return (
       <div>
         <Navbar />
@@ -111,6 +111,9 @@ const Product = () => {
     quantity,
     year,
     description,
+    brandNew,
+    carFeatures,
+    colors,
     category
   } = carData;
 
@@ -130,7 +133,7 @@ const Product = () => {
           id: carData._id,  // Fallback ID
           name: name,
           price: price || 0,
-          selectedColor: carData.colors?.[0] || "#000000",
+          selectedColor: colors?.[0] || "#000000",
           stock: inStock,
           stockCount: quantity || 1,
           image: image,
@@ -154,22 +157,25 @@ const Product = () => {
             <img
               className="aspect-square w-full rounded-2xl object-cover"
               src={image}
-              alt="car-iamge"
+              alt="car-image"
             />
           </div>
+
           <div className="flex w-full flex-col gap-6 py-5 xl:gap-10">
-            {/* Name */}
             <h3 className="text-xl font-semibold lg:text-3xl xl:text-4xl">
               {name}
             </h3>
 
-            {/* Stock and Conditioin Status */}
-            <div className="md:text-md grid grid-cols-2 gap-5 text-sm xl:grid-cols-3">
+            <div className="grid grid-cols-2 gap-5 text-sm md:text-md xl:grid-cols-3">
               <div
-                className={`flex items-center gap-1 ${inStock ? "text-green-600" : "text-red-700"}`}
+                className={`flex items-center gap-1 ${
+                  inStock ? "text-green-600" : "text-red-700"
+                }`}
               >
                 <div
-                  className={`size-3 rounded-full ${inStock ? "bg-green-600" : "bg-red-700"}`}
+                  className={`size-3 rounded-full ${
+                    inStock ? "bg-green-600" : "bg-red-700"
+                  }`}
                 />
                 <p className="font-medium">
                   {inStock ? "In Stock" : "Out of Stock"}
@@ -177,73 +183,138 @@ const Product = () => {
               </div>
 
               <p className="flex items-center gap-1 text-gray-500">
-                <RiInformation2Line />{" "}
-                {/* {carData.brandNew ? "Brand New" : "Pre-Owned"} */}
+                <RiInformation2Line />
+                {brandNew !== undefined
+                  ? brandNew
+                    ? "Brand New"
+                    : "Pre-Owned"
+                  : ""}
               </p>
             </div>
 
-            {/* Features */}
-            <div className="space-y-2 text-sm lg:space-y-4 lg:text-base xl:my-7">
-              {carData.carFeatures?.map((carFeature: CarFeature, index: number) => (
-                <div key={index}>
+            <div className="space-y-2 text-sm lg:space-y-4 lg:text-base">
+              {brand && (
+                <div>
                   <div className="inline-block w-40">
-                    <p className="font-semibold">{carFeature.feature}</p>{" "}
+                    <p className="font-semibold">Brand</p>
                   </div>
-                  <span className="text-gray-500">
-                    {carFeature.description}
-                  </span>
+                  <span className="text-gray-500">{brand}</span>
                 </div>
-              ))}
+              )}
+              
+              {model && (
+                <div>
+                  <div className="inline-block w-40">
+                    <p className="font-semibold">Model</p>
+                  </div>
+                  <span className="text-gray-500">{model}</span>
+                </div>
+              )}
+              
+              {category && (
+                <div>
+                  <div className="inline-block w-40">
+                    <p className="font-semibold">Category</p>
+                  </div>
+                  <span className="text-gray-500">{category}</span>
+                </div>
+              )}
+              
+              {year && (
+                <div>
+                  <div className="inline-block w-40">
+                    <p className="font-semibold">Year</p>
+                  </div>
+                  <span className="text-gray-500">{year}</span>
+                </div>
+              )}
+              
+              {price !== undefined && (
+                <div>
+                  <div className="inline-block w-40">
+                    <p className="font-semibold">Price</p>
+                  </div>
+                  <span className="text-gray-500">${price?.toLocaleString()}</span>
+                </div>
+              )}
+              
+              {quantity !== undefined && (
+                <div>
+                  <div className="inline-block w-40">
+                    <p className="font-semibold">Available Units</p>
+                  </div>
+                  <span className="text-gray-500">{quantity}</span>
+                </div>
+              )}
             </div>
 
-            {/* Color */}
-            <div className="flex items-center gap-3">
-              <h5 className="text-velo-black text-xl font-semibold">
-                Pick a Color <span className="text-red-700">*</span>
-              </h5>
-              <div className="flex w-fit rounded-[12px] border-2 p-0.5">
-                {carData.colors?.map((color: string, index: number) => (
-                  <div
-                    key={index}
-                    className={`hover:border-velo-black cursor-pointer rounded-lg border-2 border-transparent p-0.5 duration-300`}
-                  >
-                    <div
-                      style={{ backgroundColor: color }}
-                      className={`h-5 w-10 rounded-[6px]`}
-                    ></div>
+            {carFeatures && carFeatures.length > 0 && (
+              <div className="space-y-2 text-sm lg:space-y-4 lg:text-base xl:my-7">
+                {carFeatures.map((carFeature: CarFeature, index: number) => (
+                  <div key={index}>
+                    <div className="inline-block w-40">
+                      <p className="font-semibold">{carFeature.feature}</p>
+                    </div>
+                    <span className="text-gray-500">
+                      {carFeature.description}
+                    </span>
                   </div>
                 ))}
               </div>
-            </div>
+            )}
 
-          {/* Buy Now Button */}
-          <Button
-            onClick={handleBuyNow}
-            className="!bg-velo-red hover:!bg-velo-black h-12 w-full cursor-pointer text-lg"
-          >
-            Buy Now
-          </Button>
+            {colors && colors.length > 0 && (
+              <div className="flex items-center gap-3">
+                <h5 className="text-velo-black text-xl font-semibold">
+                  Pick a Color <span className="text-red-700">*</span>
+                </h5>
+                <div className="flex w-fit rounded-[12px] border-2 p-0.5">
+                  {colors.map((color: string, index: number) => (
+                    <div
+                      key={index}
+                      className={`hover:border-velo-black cursor-pointer rounded-lg border-2 border-transparent p-0.5 duration-300`}
+                    >
+                      <div
+                        style={{ backgroundColor: color }}
+                        className={`h-5 w-10 rounded-[6px]`}
+                      ></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <Button
+              onClick={handleBuyNow}
+              className="!bg-velo-red hover:!bg-velo-black h-12 w-full cursor-pointer text-lg"
+            >
+              Buy Now
+            </Button>
+          </div>
         </div>
-      </div>
 
-        {/* Description */}
         <div className="mt-7 mb-10">
           <h4 className="border-velo-maroon w-fit border-b-4 pb-2 text-3xl">
             Description
           </h4>
 
-        <div className="text-velo-black mt-5">
-          <p className="">{typeof description === 'string' ? description : description?.brief || ''}</p>
-
-          {typeof description === 'object' && description.extensive?.map((eachDescription: DescriptionSection, index: number) => (
-            <div key={index} className="mt-4 space-y-1.5">
-              <h5 className="text-xl font-semibold">{eachDescription.title}</h5>
-              <p className="text-gray-500">{eachDescription.description}</p>
-            </div>
-          ))}
+          <div className="text-velo-black mt-5">
+            {typeof description === "string" ? (
+              <p>{description}</p>
+            ) : (
+              <>
+                {description.brief && <p>{description.brief}</p>}
+                {description.extensive?.map((desc, index) => (
+                  <div key={index} className="mt-4 space-y-1.5">
+                    <h5 className="text-xl font-semibold">{desc.title}</h5>
+                    <p className="text-gray-500">{desc.description}</p>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </div>
   );
 };
