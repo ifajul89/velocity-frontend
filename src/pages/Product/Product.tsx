@@ -34,6 +34,8 @@ interface CarData {
   brandNew?: boolean;
   carFeatures?: CarFeature[];
   colors?: string[];
+  _id?: string;
+  id?: string;
 }
 
 interface LoaderData {
@@ -116,9 +118,19 @@ const Product = () => {
   } = carData;
 
   const handleBuyNow = () => {
+    // Check if we have the car data with _id
+    if (!carData || !carData._id) {
+      toast.error("Product information is incomplete. Please try again.");
+      return;
+    }
+
+    console.log("Car data being sent to checkout:", carData);
+
     navigate("/checkout", {
       state: {
         product: {
+          _id: carData._id, // Make sure to pass the MongoDB ID
+          id: carData._id,  // Fallback ID
           name: name,
           price: price || 0,
           selectedColor: colors?.[0] || "#000000",

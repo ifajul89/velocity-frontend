@@ -2,13 +2,23 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/ui/shared/Navbar";
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder, selectCheckoutUrl, selectOrderError, selectOrderLoading } from "@/redux/features/order/orderSlice";
+import { toast } from "sonner";
+import { AppDispatch } from "@/redux/store";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
 
   // Get product and user data from state
   const { product, user } = location.state || {};
+
+  // Redux state
+  const isLoading = useSelector(selectOrderLoading);
+  const error = useSelector(selectOrderError);
+  const checkoutUrl = useSelector(selectCheckoutUrl);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -42,10 +52,49 @@ const Checkout = () => {
     }
   }, [user]);
 
+  // Handle checkout URL redirect
+  useEffect(() => {
+    if (checkoutUrl) {
+      toast.success("Order created successfully! Redirecting to payment...");
+      console.log("Redirecting to payment URL:", checkoutUrl);
+      
+      // Force redirect to payment URL
+      try {
+        // Add small delay before redirecting to ensure toast is seen
+        setTimeout(() => {
+          console.log("Executing redirect to:", checkoutUrl);
+          // Use window.open as a fallback if location.href doesn't work
+          const result = window.location.replace(checkoutUrl);
+          console.log("Redirect result:", result);
+          
+          // Fallback to window.open if replace doesn't work
+          setTimeout(() => {
+            if (window.location.href === checkoutUrl) {
+              console.log("Redirect successful");
+            } else {
+              console.log("Redirect failed, trying window.open");
+              window.open(checkoutUrl, '_self');
+            }
+          }, 500);
+        }, 1000);
+      } catch (err) {
+        console.error("Error during redirect:", err);
+        toast.error("Failed to redirect to payment page. Please try again.");
+      }
+    }
+  }, [checkoutUrl]);
+
+  // Display errors
+  useEffect(() => {
+    if (error) {
+      console.error("Order creation error:", error);
+      toast.error(`Order creation failed: ${error}`);
+    }
+  }, [error]);
+
   // Order state
   const [quantity, setQuantity] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("sslcommerz");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle quantity changes with stock validation
   const handleQuantityChange = (newQuantity: number) => {
@@ -54,7 +103,7 @@ const Checkout = () => {
     if (newQuantity < 1) {
       setQuantity(1);
     } else if (newQuantity > product.stockCount) {
-      alert(`Sorry, only ${product.stockCount} units available`);
+      toast.error(`Sorry, only ${product.stockCount} units available`);
       setQuantity(product.stockCount);
     } else {
       setQuantity(newQuantity);
@@ -88,13 +137,13 @@ const Checkout = () => {
     e.preventDefault();
 
     if (!product) {
-      alert("Product not found");
+      toast.error("Product not found");
       return;
     }
 
     // Validate stock again
     if (quantity > product.stockCount) {
-      alert(`Sorry, only ${product.stockCount} units available`);
+      toast.error(`Sorry, only ${product.stockCount} units available`);
       return;
     }
 
@@ -112,26 +161,44 @@ const Checkout = () => {
     );
 
     if (missingFields.length > 0) {
-      alert("Please fill in all required fields");
+      toast.error("Please fill in all required fields");
       return;
     }
 
-    // Process order
-    setIsSubmitting(true);
+    // Get product ID from product object
+    const productId = product._id || product.id;
+    
+    console.log("Product details:", product);
+    console.log("Product ID being used:", productId);
+    console.log("Total price calculated:", total);
 
-    // Simulating API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    if (!productId) {
+      toast.error("Invalid product ID. Please select a product again.");
+      return;
+    }
 
-      if (paymentMethod === "sslcommerz") {
-        // In a real implementation, this would redirect to SSLCommerz payment gateway
-        alert("Redirecting to SSLCommerz payment gateway...");
-      } else if (paymentMethod === "cash") {
-        alert("Your cash on delivery order has been placed successfully!");
-      }
+    // Prepare order data
+    const orderData = {
+      customerFirstName: formData.firstName,
+      customerLastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      city: formData.city,
+      zipCode: formData.zipCode,
+      totalPrice: total,
+      products: [
+        {
+          product: productId,
+          quantity: quantity
+        }
+      ]
+    };
 
-      navigate("/");
-    }, 1500);
+    console.log("Sending order data:", orderData);
+
+    // Dispatch order creation action
+    dispatch(createOrder(orderData));
   };
 
   // If no product data, show error
@@ -460,9 +527,9 @@ const Checkout = () => {
             <Button
               type="submit"
               className="h-12 w-full !bg-purple-600 text-lg font-semibold text-white hover:!bg-purple-700"
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? "Processing..." : "Place Order"}
+              {isLoading ? "Processing..." : "Place Order"}
             </Button>
           </form>
         </div>

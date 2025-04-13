@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import countSlice from "./features/count/countSlice";
 import authReducer from "./features/auth/authSlice";
+import orderReducer from "./features/order/orderSlice";
 import { baseApi } from "./api/baseApi";
 import {
   persistReducer,
@@ -26,6 +27,7 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedAuthReducer,
     count: countSlice,
+    order: orderReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({
