@@ -32,7 +32,7 @@ const routes = createBrowserRouter([
           fetch(`http://localhost:5000/api/cars/${params.id}`),
       },
       {
-        path: "/all-product",
+        path: "/all-cars",
         element: <AllProducts />,
       },
       {
