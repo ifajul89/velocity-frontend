@@ -17,7 +17,6 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 
-
 type NavItem = {
   title: string;
   url: string;
@@ -60,7 +59,7 @@ export function AppSidebar() {
       title: "Manage Products",
       url: "/dashboard/manage-products",
       icon: <MdOutlineProductionQuantityLimits className="h-4 w-4" />,
-    }
+    },
   ];
 
   // user menu
@@ -91,7 +90,7 @@ export function AppSidebar() {
   }, [user?.role]);
 
   return (
-    <Sidebar className="h-screen bg-white border-r">
+    <Sidebar className="h-screen border-r bg-white">
       <SidebarHeader className="border-b">
         <div className="flex h-16 items-center px-4">
           <div className="flex w-full items-center">
@@ -114,7 +113,7 @@ export function AppSidebar() {
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent className="flex-1 h-full">
+      <SidebarContent className="h-full flex-1">
         <SidebarMenu className="h-full py-2">
           <SidebarMenuItem>
             <SidebarMenuButton asChild>

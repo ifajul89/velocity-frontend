@@ -371,10 +371,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sidebar-content"
       data-sidebar="content"
-      className={cn(
-        "flex flex-1 flex-col overflow-y-auto h-full",
-        className,
-      )}
+      className={cn("flex h-full flex-1 flex-col overflow-y-auto", className)}
       {...props}
     />
   );

@@ -1,3 +1,11 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { FaArrowRightLong } from "react-icons/fa6";
+
 const quistions = [
   {
     question: "What financing options are available for purchasing a car?",
@@ -24,31 +32,53 @@ const quistions = [
     answer:
       "All new cars come with a manufacturer's warranty, which typically includes coverage for 3 years or 36,000 miles, whichever comes first. Additional extended warranty options are available.",
   },
-  {
-    question: "Do you offer home delivery for purchased vehicles?",
-    answer:
-      "Yes, we offer home delivery for your convenience. Once you've purchased your vehicle, our team will arrange a delivery to your doorstep.",
-  },
 ];
 
 const Faq = () => {
   return (
-    <div>
-      <h1 className="my-8 text-center text-3xl font-bold">
-        Frequently Asked Questions
-      </h1>
-      <div className="mx-auto grid grid-cols-1 gap-4 px-4 lg:grid-cols-3">
-        {quistions.map((item, index) => (
-          <div
-            key={index}
-            className="mb-6 rounded-lg bg-purple-600 p-6 text-white shadow-md"
-          >
-            <h2 className="mb-2 text-xl font-semibold">{item.question}</h2>
-            <p>{item.answer}</p>
-          </div>
-        ))}
+    <section className="container mb-5 mt-16 flex flex-col items-center gap-6 md:gap-16 md:my-20 md:flex-row">
+      <div className="w-full md:w-2/5 space-y-4 md:space-y-7">
+        <div>
+          <div className="bg-velo-red h-1 w-20 rounded-full" />
+          <h3 className="text-velo-black mt-2 text-2xl md:text-4xl font-semibold">
+            Any question?
+            <br />
+            We got you.
+          </h3>
+        </div>
+
+        <p className="text-gray-600">
+          At Velocity, we believe in making your car buying experience as smooth
+          and transparent as possible. Browse through our frequently asked
+          questions to find quick answers about pricing, availability,
+          financing, and more.
+        </p>
+
+        <a
+          className="text-velo-red hover:text-velo-maroon flex items-center gap-1 duration-300 hover:underline"
+          href="#"
+        >
+          More FAQs <FaArrowRightLong />
+        </a>
       </div>
-    </div>
+      <Accordion
+        defaultValue="item-0"
+        type="single"
+        collapsible
+        className="w-full md:w-3/5"
+      >
+        {quistions.map((question, index) => (
+          <AccordionItem value={`item-${index}`}>
+            <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
+              {question.question}
+            </AccordionTrigger>
+            <AccordionContent className="text-[15px] font-light text-gray-600">
+              {question.answer}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </section>
   );
 };
 

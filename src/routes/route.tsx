@@ -99,11 +99,13 @@ const routes = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "product",
+        path: "/car/:id",
         element: <Product />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/api/cars/${params.id}`),
       },
       {
-        path: "all-product",
+        path: "/all-cars",
         element: <AllProducts />,
       },
       {
@@ -176,8 +178,25 @@ const routes = createBrowserRouter([
     path: "register",
     element: <SignUp />,
   },
-  
-  // Protected routes
+  {
+    path: "/all-products/:id",
+    element: <AllProducts />,
+    loader: () => fetch(`http://localhost:5000/api/cars/`),
+  },
+  {
+    path: "/about",
+    element: <About />,
+  },
+
+  // User protected routes
+  {
+    path: "dashboard",
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: "profile",
     element: (
