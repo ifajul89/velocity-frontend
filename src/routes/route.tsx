@@ -36,6 +36,10 @@ const routes = createBrowserRouter([
         element: <AllProducts />,
       },
       {
+        path: "/about",
+        element: <About />,
+      },
+      {
         path: "checkout",
         element: <Checkout />,
       },
@@ -100,10 +104,6 @@ const routes = createBrowserRouter([
     path: "/all-products/:id",
     element: <AllProducts />,
     loader: () => fetch(`http://localhost:5000/api/cars/`),
-  },
-  {
-    path: "/about",
-    element: <About />,
   },
 
   // User protected routes
