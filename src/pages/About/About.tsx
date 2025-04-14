@@ -99,8 +99,8 @@ const About = () => {
           />
         </div>
 
-        <div className="my-10 md:my-20 gap-6 grid grid-cols-1 lg:grid-cols-2">
-          <h3 className="flex text-2xl md:text-3xl lg:text-5xl font-semibold xl:pl-44">
+        <div className="my-10 grid grid-cols-1 gap-6 md:my-20 lg:grid-cols-2">
+          <h3 className="flex text-2xl font-semibold md:text-3xl lg:text-5xl xl:pl-44">
             Our Story <PiArrowDownRightBold className="mt-2" />
           </h3>
 
@@ -146,23 +146,23 @@ const About = () => {
         </div>
       </div>
 
-      {/* <div className="bg-velo-white">
-        <div className="container py-10">
-          <h3 className="text-center text-5xl leading-[60px] font-semibold">
+      <div className="bg-velo-white">
+        <div className="container py-5 md:py-10">
+          <h3 className="text-2xl font-semibold md:text-center md:text-5xl md:leading-[60px]">
             Our Team has over{" "}
             <span className="text-gray-400">
               70 years
-              <br />
+              <br className="hidden md:block" />
               of combined experience!
             </span>
           </h3>
-          <p className="mx-auto w-[550px] py-5 text-center text-[16px] font-light text-gray-500">
+          <p className="mx-auto mt-2 text-[14.5px] font-light text-gray-500 md:mt-0 md:w-[550px] md:py-5 md:text-center md:text-[16px]">
             Our team brings experience, innovation, and creativity to the
             automotive world, ensuring your vehicle is in the best hands at
             Velocity Car Shop.
           </p>
 
-          <div className="my-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+          <div className="my-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {teamData.map((eachMember, index) => (
               <TeamCard
                 image={eachMember.image}
@@ -174,7 +174,7 @@ const About = () => {
             ))}
           </div>
         </div>
-      </div> */}
+      </div>
     </section>
   );
 };
