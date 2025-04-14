@@ -68,10 +68,12 @@ const About = () => {
   return (
     <section>
       <div className="container">
-        <div className="mx-auto flex items-end justify-center gap-8 py-10">
+        <div className="mx-auto flex items-end justify-center gap-8 py-20">
           <div className="pb-5">
-            <h4 className="text-velo-red font-semibold">We are Velocity</h4>
-            <h3 className="w-max text-4xl font-[600]">
+            <h4 className="text-velo-red mb-3 text-xl font-semibold">
+              We are Velocity
+            </h4>
+            <h3 className="w-max text-5xl leading-[50px] font-[600]">
               Quality cars, trusted service,
               <br />
               <span className="text-gray-500">
@@ -144,31 +146,33 @@ const About = () => {
         </div>
       </div>
 
-      <div className="bg-velo-white container py-10">
-        <h3 className="text-center text-5xl leading-[60px] font-semibold">
-          Our Team has over{" "}
-          <span className="text-gray-400">
-            70 years
-            <br />
-            of combined experience!
-          </span>
-        </h3>
-        <p className="py-5 w-[550px] text-gray-600 mx-auto text-center text-[16px] font-light">
-          Our team brings experience, innovation, and creativity to the
-          automotive world,
-          ensuring your vehicle is in the best hands at Velocity Car Shop.
-        </p>
+      <div className="bg-velo-white">
+        <div className="container py-10">
+          <h3 className="text-center text-5xl leading-[60px] font-semibold">
+            Our Team has over{" "}
+            <span className="text-gray-400">
+              70 years
+              <br />
+              of combined experience!
+            </span>
+          </h3>
+          <p className="mx-auto w-[550px] py-5 text-center text-[16px] font-light text-gray-600">
+            Our team brings experience, innovation, and creativity to the
+            automotive world, ensuring your vehicle is in the best hands at
+            Velocity Car Shop.
+          </p>
 
-        <div className="grid grid-cols-4 gap-5 my-5">
-          {teamData.map((eachMember, index) => (
-            <TeamCard
-              image={eachMember.image}
-              name={eachMember.name}
-              designation={eachMember.designation}
-              description={eachMember.description}
-              key={index}
-            />
-          ))}
+          <div className="my-5 grid grid-cols-4 gap-5">
+            {teamData.map((eachMember, index) => (
+              <TeamCard
+                image={eachMember.image}
+                name={eachMember.name}
+                designation={eachMember.designation}
+                description={eachMember.description}
+                key={index}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
