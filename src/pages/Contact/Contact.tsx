@@ -15,9 +15,9 @@ interface ContactSliceProps {
 const ContactSlice: React.FC<ContactSliceProps> = ({ title, data1, data2 }) => {
   return (
     <div className="space-y-0.5">
-      <h6 className="mb-0.5 text-lg font-medium">{title}</h6>
-      <p className="text-gray-600">{data1}</p>
-      <p className="text-gray-600">{data2}</p>
+      <h6 className="mb-0.5 font-medium sm:text-lg">{title}</h6>
+      <p className="text-sm text-gray-600 sm:text-base">{data1}</p>
+      <p className="text-sm text-gray-600 sm:text-base">{data2}</p>
     </div>
   );
 };
@@ -46,30 +46,34 @@ const contactSliceData: ContactSliceProps[] = [
 const Contact = () => {
   return (
     <section className="pb-5">
-      <div className="bg-velo-white container py-5">
-        <div
-          style={{
-            backgroundImage: `url(${ContactBG})`,
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-          }}
-          className="overflow-hidden rounded-xl"
-        >
-          <div className="bg-velo-black/60 space-y-1 px-7 py-20 backdrop-blur-[1px]">
-            <div className="text-velo-white flex items-center text-lg">
-              <img className="w-4" src={VeloV} alt="velocity" />
-              elocity
+      <div className="bg-velo-white py-5">
+        <div className="container">
+          <div
+            style={{
+              backgroundImage: `url(${ContactBG})`,
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+            }}
+            className="overflow-hidden rounded-xl"
+          >
+            <div className="bg-velo-black/60 space-y-1 px-7 py-7 backdrop-blur-[1px] sm:py-10 md:py-13 lg:py-20">
+              <div className="text-velo-white flex items-center text-lg">
+                <img className="w-4" src={VeloV} alt="velocity" />
+                elocity
+              </div>
+              <h3 className="text-velo-white text-2xl md:text-5xl">
+                Contact Us
+              </h3>
             </div>
-            <h3 className="text-velo-white text-5xl">Contact Us</h3>
           </div>
         </div>
       </div>
 
-      <div className="container grid grid-cols-2 gap-12 py-20">
+      <div className="container grid grid-cols-1 gap-8 py-10 md:grid-cols-2 md:py-20 lg:gap-12">
         <div className="space-y-7">
           <h6 className="text-velo-red font-semibold">/get in touch/</h6>
-          <h5 className="text-5xl">
+          <h5 className="text-3xl lg:text-5xl">
             We are always ready to help you and answer your questions
           </h5>
 
@@ -79,7 +83,7 @@ const Contact = () => {
             moving forward.
           </p>
 
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-2 gap-5 md:gap-8">
             {contactSliceData.map((eachSlice, index) => (
               <ContactSlice
                 key={index}
@@ -91,10 +95,10 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="bg-velo-gray flex items-center justify-center rounded-3xl p-15">
+        <div className="bg-velo-gray flex items-center justify-center rounded-3xl p-5 sm:p-10 md:p-7 lg:p-15">
           <div>
             <h6 className="text-2xl font-medium">Get In Touch</h6>
-            <p className="pt-3 pb-6 text-[17px] text-gray-500">
+            <p className="pt-3 pb-6 text-gray-500 lg:text-[17px]">
               Let us know what you need, and we will gladly assist you with your
               tailored requirements.
             </p>
@@ -129,7 +133,7 @@ const Contact = () => {
 
       <div className="container">
         <iframe
-          className="pointer-events-none h-[350px] w-full rounded-2xl brightness-85 grayscale filter"
+          className="pointer-events-none h-[200px] md:h-[350px] w-full rounded-2xl brightness-85 grayscale filter"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.05052390957!2d-74.30915645023623!3d40.697193364541725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2z4Kao4Ka_4KaJIOCmh-Cmr-CmvOCmsOCnjeCmlSwg4Kau4Ka-4Kaw4KeN4KaV4Ka_4KaoIOCmr-CngeCmleCnjeCmpOCmsOCmvuCmt-CnjeCmn-CnjeCmsA!5e0!3m2!1sbn!2sbd!4v1744656816494!5m2!1sbn!2sbd"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
