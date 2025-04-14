@@ -13,7 +13,7 @@ const Footer = () => {
                 src={VelocityLogo}
                 alt="velocity-logo"
               />{" "}
-              <span className="border-velo-maroon -ml-0.5 border-b-2 font-semibold text-white md:-ml-1 md:text-2xl">
+              <span className="border-velo-maroon -ml-0.5 border-b-2 font-semibold text-white md:text-2xl">
                 elocity.
               </span>
             </Link>

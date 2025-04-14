@@ -14,6 +14,7 @@ import AllProducts from "@/pages/AllProducts/AllProducts";
 import Product from "@/pages/Product/Product";
 import ManageProduct from "@/pages/Admin/ManageProduct";
 import About from "@/pages/About/About";
+import Contact from "@/pages/Contact/Contact";
 
 const routes = createBrowserRouter([
   // Public routes
@@ -41,7 +42,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "/contact",
-        element: <About />,
+        element: <Contact />,
       },
       {
         path: "checkout",
