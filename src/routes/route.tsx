@@ -117,16 +117,6 @@ const routes = createBrowserRouter([
         element: <ProtectedRoute><OrderVerification /></ProtectedRoute>,
       },
       {
-        path: "track-order",
-        element: <Dashboard />,
-        children: [
-          {
-            index: true,
-            element: <TrackOrderPage />,
-          }
-        ],
-      },
-      {
         path: "about",
         element: <About />,
       },
@@ -153,12 +143,14 @@ const routes = createBrowserRouter([
         path: "manage-products",
         element: <ManageProduct />,
       },
-     
       {
         path: "my-orders",
         element: <MyOrdersPage />,
       },
-      
+      {
+        path: "track-order",
+        element: <TrackOrderPage />,
+      },
     ],
   },
 
@@ -205,15 +197,7 @@ const routes = createBrowserRouter([
     ),
     errorElement: <ErrorBoundary />,
   },
-  {
-    path: "track-my-order",
-    element: (
-      <ProtectedRoute>
-        <TrackOrderPage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorBoundary />,
-  },
+
   {
     path: "dashboard",
     element: (

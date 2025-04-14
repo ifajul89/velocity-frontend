@@ -35,7 +35,7 @@ interface User {
 const navItems: NavItem[] = [
   {
     title: "Track Order Status",
-    url: "/track-order",
+    url: "dashboard/track-order",
     items: [],
     adminOnly: false,
   },

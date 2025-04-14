@@ -1,9 +1,56 @@
 import { Link } from "react-router-dom";
-import { Package, Calendar, ChevronRight, AlertCircle, CreditCard, Truck, CircleSlash } from "lucide-react";
+import { Package, Calendar, AlertCircle, CreditCard, Truck, CircleSlash } from "lucide-react";
 import { useGetUserOrdersQuery } from "@/redux/features/order/order";
 import { useSelector } from "react-redux";
 import { currentToken } from "@/redux/features/auth/authSlice";
 import { format } from "date-fns";
+
+// Helper function to get estimated delivery date from order data
+const getEstimatedDelivery = (order: unknown): string | undefined => {
+  if (!order || typeof order !== 'object') return undefined;
+  
+  const data = order as Record<string, any>;
+  
+  // Check direct properties first
+  if (data.estimatedDelivery && typeof data.estimatedDelivery === 'string') {
+    return data.estimatedDelivery;
+  }
+  
+  if (data.estimatedDeliveryDate && typeof data.estimatedDeliveryDate === 'string') {
+    return data.estimatedDeliveryDate;
+  }
+  
+  // Check for nested properties
+  if (data.shipping && typeof data.shipping === 'object') {
+    const shipping = data.shipping as Record<string, any>;
+    if (shipping.estimatedDelivery) return shipping.estimatedDelivery;
+    if (shipping.estimatedDeliveryDate) return shipping.estimatedDeliveryDate;
+  }
+  
+  // API might have different casing
+  if (data.estimated_delivery && typeof data.estimated_delivery === 'string') {
+    return data.estimated_delivery;
+  }
+  
+  // Last resort - calculate our own estimated delivery if we have created date
+  if (data.createdAt && typeof data.createdAt === 'string') {
+    try {
+      const createdDate = new Date(data.createdAt);
+      const estimatedDate = new Date(createdDate);
+      estimatedDate.setDate(createdDate.getDate() + 7); // Default: 7 days from creation
+      
+      return estimatedDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error calculating estimated delivery date:', error);
+    }
+  }
+  
+  return "7 days from order date"; // Default fallback
+};
 
 // Helper function to get status color
 const getStatusColor = (status: string) => {
@@ -104,45 +151,46 @@ export default function MyOrdersPage() {
       </header>
 
       <main className="flex-1 container mx-auto p-2 max-w-6xl">
-        <h1 className="text-lg font-bold text-gray-900 mb-2">My Orders</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-3">My Orders</h1>
 
         {!hasOrders ? (
           <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 text-center">
-            <CircleSlash className="h-8 w-8 text-gray-400 mx-auto mb-3" />
-            <h3 className="text-base font-medium text-gray-900 mb-2">No orders found</h3>
+            <CircleSlash className="h-10 w-10 text-gray-400 mx-auto mb-3" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No orders found</h3>
             <Link 
               to="/all-product" 
-              className="inline-block mt-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs"
+              className="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-base"
             >
               Browse Products
             </Link>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {orders.map((order) => (
-              <div key={order._id} className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all text-xs">
+              <div key={order._id} className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all text-sm">
                 {/* Order Header */}
-                <div className="bg-gray-50 py-1.5 px-2 border-b flex items-center justify-between">
+                <div className="bg-gray-50 py-2 px-3 border-b flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900"># {order.transaction?.id || order._id.substring(0, 8)}</span>
-                    <span className="text-gray-500 flex items-center">
-                      <Calendar className="h-3 w-3 mr-0.5" />
+                    <span className="font-medium text-gray-900 text-base"># {order.trackingNumber}</span>
+                    
+                    <span className="text-gray-500 flex items-center text-sm">
+                      <Calendar className="h-4 w-4 mr-0.5" />
                       {formatDate(order.createdAt)}
                     </span>
                   </div>
-                  <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                  <span className={`px-2 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                     {order.status}
                   </span>
                 </div>
                 
                 {/* Order Content */}
-                <div className="p-2">
-                  <div className="flex flex-row gap-2">
+                <div className="p-3">
+                  <div className="flex flex-row gap-3">
                     {/* Left Column - Customer Info */}
                     <div className="w-1/5 min-w-[110px]">
-                      <div className="bg-gray-50 p-1.5 rounded border border-gray-200 text-[10px] h-full">
-                        <div className="font-medium text-xs mb-0.5 text-gray-700 border-b pb-0.5">Customer</div>
-                        <div className="grid gap-y-0.5">
+                      <div className="bg-gray-50 p-2 rounded border border-gray-200 text-xs h-full">
+                        <div className="font-medium text-sm mb-1 text-gray-700 border-b pb-1">Customer</div>
+                        <div className="grid gap-y-1">
                           <div className="truncate">{order.customerFirstName} {order.customerLastName}</div>
                           <div className="truncate">{order.email}</div>
                           <div className="truncate">{order.phone}</div>
@@ -154,32 +202,32 @@ export default function MyOrdersPage() {
                     {/* Right Column - Order Details */}
                     <div className="flex-1">
                       {/* Products */}
-                      <div className="mb-1.5 border border-gray-200 rounded">
-                        <div className="bg-gray-50 px-2 py-1 border-b flex justify-between items-center text-[10px]">
+                      <div className="mb-2 border border-gray-200 rounded">
+                        <div className="bg-gray-50 px-3 py-2 border-b flex justify-between items-center text-xs">
                           <div className="flex items-center">
-                            <Package className="h-3 w-3 mr-1 text-gray-500" />
+                            <Package className="h-4 w-4 mr-1 text-gray-500" />
                             <span className="font-medium text-gray-700">Products ({order.products?.length || 0})</span>
                           </div>
                           <span>Total: <span className="font-medium">{formatCurrency(order.totalPrice)}</span></span>
                         </div>
                         
-                        <div className="max-h-20 overflow-y-auto">
+                        <div className="max-h-24 overflow-y-auto">
                           {order.products?.map((item) => (
-                            <div key={item._id} className="p-1.5 flex items-center gap-1.5 border-b last:border-b-0">
+                            <div key={item._id} className="p-2 flex items-center gap-2 border-b last:border-b-0">
                               {item.product?.image ? (
                                 <img 
                                   src={item.product.image} 
                                   alt={item.product.name} 
-                                  className="w-8 h-8 object-cover rounded border border-gray-200"
+                                  className="w-10 h-10 object-cover rounded border border-gray-200"
                                 />
                               ) : (
-                                <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
-                                  <Package className="h-3 w-3 text-gray-400" />
+                                <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
+                                  <Package className="h-4 w-4 text-gray-400" />
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
-                                <div className="font-medium text-[11px] truncate">{item.product.name}</div>
-                                <div className="text-[10px] text-gray-500 truncate">
+                                <div className="font-medium text-sm truncate">{item.product.name}</div>
+                                <div className="text-xs text-gray-500 truncate">
                                   {item.product.brand} {item.product.model} • {item.quantity} × {formatCurrency(item.price)}
                                 </div>
                               </div>
@@ -189,14 +237,19 @@ export default function MyOrdersPage() {
                       </div>
                       
                       {/* Shipment and Payment */}
-                      <div className="grid grid-cols-2 gap-1.5">
-                        <div className="border border-gray-200 rounded text-[10px]">
-                          <div className="bg-gray-50 px-2 py-1 border-b flex items-center">
-                            <Truck className="h-3 w-3 mr-1 text-gray-500" />
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="border border-gray-200 rounded text-xs">
+                          <div className="bg-gray-50 px-3 py-2 border-b flex items-center">
+                            <Truck className="h-4 w-4 mr-1 text-gray-500" />
                             <span className="font-medium text-gray-700">Shipment</span>
                           </div>
-                          <div className="p-1.5">
-                            <div className="mb-0.5 font-medium truncate">Tracking ID: {order.trackingNumber || "Not available"}</div>
+                          <div className="p-2">
+                            <div className="mb-1 font-medium truncate">Tracking ID: {order.trackingNumber || "Not available"}</div>
+                            {getEstimatedDelivery(order) && (
+                              <div className="text-gray-500 truncate mb-1">
+                                Est. Delivery: {getEstimatedDelivery(order)}
+                              </div>
+                            )}
                             {order.trackingUpdates && order.trackingUpdates.length > 0 && (
                               <div className="text-gray-500 truncate">
                                 Status: {order.trackingUpdates[0].stage}
@@ -205,33 +258,22 @@ export default function MyOrdersPage() {
                           </div>
                         </div>
                         
-                        <div className="border border-gray-200 rounded text-[10px]">
-                          <div className="bg-gray-50 px-2 py-1 border-b flex items-center">
-                            <CreditCard className="h-3 w-3 mr-1 text-gray-500" />
+                        <div className="border border-gray-200 rounded text-xs">
+                          <div className="bg-gray-50 px-3 py-2 border-b flex items-center">
+                            <CreditCard className="h-4 w-4 mr-1 text-gray-500" />
                             <span className="font-medium text-gray-700">Payment</span>
                           </div>
-                          <div className="p-1.5">
-                            <div className="grid grid-cols-2 gap-y-0.5">
+                          <div className="p-2">
+                            <div className="grid grid-cols-2 gap-y-1">
                               <span className="text-gray-500">Subtotal:</span>
                               <span className="text-right">{formatCurrency(order.subtotal)}</span>
                               <span className="text-gray-500">Tax + Ship:</span>
                               <span className="text-right">{formatCurrency(order.tax + order.shipping)}</span>
-                              <span className="font-medium border-t pt-0.5 mt-0.5">Total:</span>
-                              <span className="text-right font-bold border-t pt-0.5 mt-0.5">{formatCurrency(order.totalPrice)}</span>
+                              <span className="font-medium border-t pt-1 mt-1">Total:</span>
+                              <span className="text-right font-bold border-t pt-1 mt-1">{formatCurrency(order.totalPrice)}</span>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      
-                      {/* Action Button */}
-                      <div className="flex justify-end mt-1.5">
-                        <Link 
-                          to={`/track-order/${order._id}`}
-                          className="inline-flex items-center px-2 py-1 text-[10px] rounded font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-                        >
-                          Track Order
-                          <ChevronRight className="ml-0.5 h-2.5 w-2.5" />
-                        </Link>
                       </div>
                     </div>
                   </div>

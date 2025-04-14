@@ -71,9 +71,10 @@ export function AppSidebar() {
     },
     {
       title: "Track Order Status",
-      url: "/track-order",
+      url: "/dashboard/track-order",
       icon: <ShoppingBag className="h-4 w-4" />,
     },
+    
     {
       title: "Manage Profile Settings",
       url: "/profile",

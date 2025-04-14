@@ -58,6 +58,7 @@ interface Order {
   trackingUpdates: TrackingUpdate[];
   trackingNumber: string;
   transaction: Transaction;
+  estimatedDelivery?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -67,6 +68,44 @@ interface OrderResponse {
   statusCode: number;
   message: string;
   data: Order[];
+}
+
+interface TrackingStages {
+  placed: boolean;
+  approved: boolean;
+  processed: boolean;
+  shipped: boolean;
+  delivered: boolean;
+}
+
+interface TrackOrderResponse {
+  status: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    trackingStages: TrackingStages;
+    transaction: Transaction;
+    _id: string;
+    user: string;
+    customerFirstName: string;
+    customerLastName: string;
+    email: string;
+    phone: string;
+    address: string;
+    city: string;
+    zipCode: string;
+    products: OrderProduct[];
+    subtotal: number;
+    tax: number;
+    shipping: number;
+    totalPrice: number;
+    status: string;
+    trackingUpdates: TrackingUpdate[];
+    trackingNumber: string;
+    estimatedDelivery?: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 const orderApi = baseApi.injectEndpoints({
@@ -98,6 +137,16 @@ const orderApi = baseApi.injectEndpoints({
         return response?.data || [];
       },
     }),
+    // Endpoint for tracking an order by tracking number
+    trackOrder: builder.query<TrackOrderResponse['data'], string>({
+      query: (trackingNumber) => ({
+        url: `/orders/track/${trackingNumber}`,
+        method: "GET",
+      }),
+      transformResponse: (response: TrackOrderResponse) => {
+        return response?.data || null;
+      },
+    }),
   }),
 });
 
@@ -106,4 +155,5 @@ export const {
   useGetOrdersQuery,
   useVerifyOrderQuery,
   useGetUserOrdersQuery,
+  useTrackOrderQuery,
 } = orderApi;
