@@ -40,6 +40,10 @@ const routes = createBrowserRouter([
         element: <About />,
       },
       {
+        path: "/contact",
+        element: <About />,
+      },
+      {
         path: "checkout",
         element: <Checkout />,
       },
