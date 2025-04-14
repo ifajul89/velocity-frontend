@@ -25,14 +25,14 @@ const teamData = [
     image: "https://randomuser.me/api/portraits/men/32.jpg",
     designation: "Head of Sales",
     description:
-      "15+ years in dealership sales and customer experience leadership.",
+      "15+ years in car dealership sales and customer experience leadership.",
   },
   {
     name: "Sophie Lee",
     image: "https://randomuser.me/api/portraits/women/68.jpg",
     designation: "Operations Manager",
     description:
-      "Streamlined operations in multi-location car dealerships nationwide.",
+      "Streamlined operations in multi-location luxury car dealerships nationwide.",
   },
 ];
 
@@ -68,12 +68,12 @@ const About = () => {
   return (
     <section>
       <div className="container">
-        <div className="mx-auto flex items-end justify-center gap-8 py-20">
+        <div className="mx-auto flex items-end lg:justify-center lg:gap-8 pt-5 md:py-7 lg:py-20">
           <div className="pb-5">
-            <h4 className="text-velo-red mb-3 text-xl font-semibold">
+            <h4 className="text-velo-red m d:mb-3 text-lg md:text-xl font-semibold">
               We are Velocity
             </h4>
-            <h3 className="w-max text-5xl leading-[50px] font-[600]">
+            <h3 className="w-max text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl lg:leading-[50px] font-[600]">
               Quality cars, trusted service,
               <br />
               <span className="text-gray-500">
@@ -81,25 +81,25 @@ const About = () => {
               </span>
             </h3>
           </div>
-          <p className="w-80 text-gray-400">
+          <p className="w-80 hidden lg:block text-gray-400">
             Velocity is your trusted destination for quality cars, seamless
             service, and a drive towards excellence
           </p>
         </div>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center sm:gap-3 md:gap-5">
           <img
-            className="h-[400px] w-2/3 rounded-2xl object-cover"
+            className="h-[150px] md:h-[250px] lg:h-[330px] xl:h-[400px] w-full sm:w-2/3 rounded-2xl object-cover"
             src={About1}
             alt=""
           />
           <img
-            className="h-[400px] w-1/3 rounded-2xl object-cover"
+            className=" hidden sm:block h-[150px] md:h-[250px] lg:h-[330px] xl:h-[400px] sm:w-1/3 rounded-2xl object-cover"
             src={About2}
             alt=""
           />
         </div>
 
-        <div className="my-20 grid grid-cols-2">
+        {/* <div className="my-20 grid grid-cols-2">
           <h3 className="flex pl-44 text-5xl font-semibold">
             Our Story <PiArrowDownRightBold className="mt-2" />
           </h3>
@@ -143,10 +143,10 @@ const About = () => {
               automotive care with speed, integrity, and excellence."
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
 
-      <div className="bg-velo-white">
+      {/* <div className="bg-velo-white">
         <div className="container py-10">
           <h3 className="text-center text-5xl leading-[60px] font-semibold">
             Our Team has over{" "}
@@ -156,13 +156,13 @@ const About = () => {
               of combined experience!
             </span>
           </h3>
-          <p className="mx-auto w-[550px] py-5 text-center text-[16px] font-light text-gray-600">
+          <p className="mx-auto w-[550px] py-5 text-center text-[16px] font-light text-gray-500">
             Our team brings experience, innovation, and creativity to the
             automotive world, ensuring your vehicle is in the best hands at
             Velocity Car Shop.
           </p>
 
-          <div className="my-5 grid grid-cols-4 gap-5">
+          <div className="my-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
             {teamData.map((eachMember, index) => (
               <TeamCard
                 image={eachMember.image}
@@ -174,7 +174,7 @@ const About = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };
