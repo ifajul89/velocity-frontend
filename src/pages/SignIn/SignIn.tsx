@@ -30,16 +30,23 @@ export default function SignIn() {
       email: data.email,
       password: data.password,
     };
-    const res = await SignIn(userData);
-    if (res.data.status) {
-      // Save token to localStorage
-      localStorage.setItem('token', res.data.data.token);
-      
-      dispatch(
-        setUser({ user: res.data.data.verifyUser, token: res.data.data.token }),
-      );
-      toast.success(res.data.message, { duration: 1000 });
-      navigate("/");
+    try {
+      const res = await SignIn(userData);
+      if (res.data.status) {
+        // Save token to localStorage
+        localStorage.setItem('token', res.data.data.token);
+        
+        // Pass the entire response to setUser, which now handles the nested structure
+        dispatch(setUser(res.data));
+        
+        toast.success(res.data.message, { duration: 1000 });
+        navigate("/");
+      } else {
+        toast.error(res.data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("An error occurred during login");
     }
   };
 
