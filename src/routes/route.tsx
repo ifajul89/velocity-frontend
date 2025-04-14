@@ -153,14 +153,12 @@ const routes = createBrowserRouter([
         path: "manage-products",
         element: <ManageProduct />,
       },
-      {
-        path: "orders",
-        element: <OrdersManagementPage />,
-      },
+     
       {
         path: "my-orders",
         element: <MyOrdersPage />,
       },
+      
     ],
   },
 
@@ -187,6 +185,7 @@ const routes = createBrowserRouter([
     path: "/about",
     element: <About />,
   },
+ 
 
   // User protected routes
   {
