@@ -80,7 +80,6 @@ export default function SignIn() {
             >
               {" "}
               <div className="space-y-2">
-                {/* <Label htmlFor="email">Email address</Label> */}
                 <Input
                   id="email"
                   placeholder="Enter your email address"
@@ -92,7 +91,6 @@ export default function SignIn() {
                 )}
               </div>
               <div className="space-y-2">
-                {/* <Label htmlFor="password">Password</Label> */}
                 <Input
                   id="password"
                   type="password"
