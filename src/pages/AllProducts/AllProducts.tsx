@@ -54,6 +54,10 @@ const AllProducts = () => {
   const [brandFilter, setBrandFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
   
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const carsPerPage = 9;
+  
   // Extract unique brands and categories for filter dropdowns
   const brands = allCarsData?.data 
     ? [...new Set((allCarsData.data as Car[]).map(car => car.brand))]
@@ -105,6 +109,8 @@ const AllProducts = () => {
     );
     
     setFilteredCars(filtered);
+    // Reset to first page when filters change
+    setCurrentPage(1);
   }, [allCarsData, searchTerm, minPrice, maxPrice, brandFilter, categoryFilter]);
 
   useEffect(() => {
@@ -126,7 +132,19 @@ const AllProducts = () => {
     setMaxPrice(highestPrice);
     setBrandFilter("all");
     setCategoryFilter("all");
+    setCurrentPage(1);
   };
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+  const indexOfLastCar = currentPage * carsPerPage;
+  const indexOfFirstCar = indexOfLastCar - carsPerPage;
+  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const goToNextPage = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
+  const goToPrevPage = () => setCurrentPage(prev => Math.max(prev - 1, 1));
 
   return (
     <section className="container py-10">
@@ -242,13 +260,13 @@ const AllProducts = () => {
       
       {/* Results Count */}
       <p className="mb-4">
-        Showing {filteredCars.length} of {allCarsData.data.length} cars
+        Showing {indexOfFirstCar + 1}-{Math.min(indexOfLastCar, filteredCars.length)} of {filteredCars.length} cars
       </p>
       
       {/* Car Grid */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredCars.length > 0 ? (
-          filteredCars.map((car) => (
+        {currentCars.length > 0 ? (
+          currentCars.map((car) => (
             <CarCard
               key={car._id}
               carName={car.name}
@@ -265,6 +283,77 @@ const AllProducts = () => {
           </div>
         )}
       </div>
+      
+      {/* Pagination */}
+      {filteredCars.length > 0 && (
+        <div className="mt-8 flex justify-center">
+          <nav className="flex items-center space-x-2">
+            <button
+              onClick={goToPrevPage}
+              disabled={currentPage === 1}
+              className={`px-3 py-2 rounded-md ${
+                currentPage === 1
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-red-600 hover:bg-red-50"
+              }`}
+            >
+              Previous
+            </button>
+            
+            <div className="flex space-x-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(page => {
+                  // Show first page, last page, current page, and pages around current page
+                  return (
+                    page === 1 ||
+                    page === totalPages ||
+                    Math.abs(page - currentPage) <= 1
+                  );
+                })
+                .map((page, index, array) => {
+                  // Add ellipsis
+                  const showEllipsisBefore = index > 0 && array[index - 1] !== page - 1;
+                  const showEllipsisAfter = index < array.length - 1 && array[index + 1] !== page + 1;
+                  
+                  return (
+                    <div key={page} className="flex items-center">
+                      {showEllipsisBefore && (
+                        <span className="px-3 py-2 text-gray-500">...</span>
+                      )}
+                      
+                      <button
+                        onClick={() => paginate(page)}
+                        className={`px-3 py-2 rounded-md ${
+                          currentPage === page
+                            ? "bg-red-600 text-white"
+                            : "text-red-600 hover:bg-blue-50"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                      
+                      {showEllipsisAfter && (
+                        <span className="px-3 py-2 text-gray-500">...</span>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+            
+            <button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-2 rounded-md ${
+                currentPage === totalPages
+                  ? "text-gray-400 cursor-not-allowed"
+                  : "text-red-600 hover:bg-red-50"
+              }`}
+            >
+              Next
+            </button>
+          </nav>
+        </div>
+      )}
     </section>
   );
 };
