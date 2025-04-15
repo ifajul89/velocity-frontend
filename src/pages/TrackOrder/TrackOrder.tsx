@@ -130,7 +130,7 @@ export default function TrackOrderPage() {
               <CardHeader>
                 <CardTitle>Order Tracking</CardTitle>
                 <CardDescription>
-                  Find your order by entering your tracking number
+                  Find your order by entering your tracking number (make sure no space in front of your tracking number)
                 </CardDescription>
               </CardHeader>
               <CardContent>

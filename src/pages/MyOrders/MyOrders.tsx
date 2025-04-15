@@ -9,7 +9,7 @@ import { format } from "date-fns";
 const getEstimatedDelivery = (order: unknown): string | undefined => {
   if (!order || typeof order !== 'object') return undefined;
   
-  const data = order as Record<string, any>;
+  const data = order as Record<string, unknown>;
   
   // Check direct properties first
   if (data.estimatedDelivery && typeof data.estimatedDelivery === 'string') {
@@ -22,9 +22,9 @@ const getEstimatedDelivery = (order: unknown): string | undefined => {
   
   // Check for nested properties
   if (data.shipping && typeof data.shipping === 'object') {
-    const shipping = data.shipping as Record<string, any>;
-    if (shipping.estimatedDelivery) return shipping.estimatedDelivery;
-    if (shipping.estimatedDeliveryDate) return shipping.estimatedDeliveryDate;
+    const shipping = data.shipping as Record<string, unknown>;
+    if (shipping.estimatedDelivery && typeof shipping.estimatedDelivery === 'string') return shipping.estimatedDelivery;
+    if (shipping.estimatedDeliveryDate && typeof shipping.estimatedDeliveryDate === 'string') return shipping.estimatedDeliveryDate;
   }
   
   // API might have different casing
@@ -152,6 +152,7 @@ export default function MyOrdersPage() {
 
       <main className="flex-1 container mx-auto p-2 max-w-6xl">
         <h1 className="text-2xl font-bold text-gray-900 mb-3">My Orders</h1>
+        <p className="text-gray-600 mb-5">Track Your Order Status using Tracking Number from Track status page. View order status and delivery details.</p>
 
         {!hasOrders ? (
           <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 text-center">
@@ -171,7 +172,7 @@ export default function MyOrdersPage() {
                 {/* Order Header */}
                 <div className="bg-gray-50 py-2 px-3 border-b flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900 text-base"># {order.trackingNumber}</span>
+                    <span className="font-medium text-gray-900 text-base">Tracking Number :{order.trackingNumber}</span>
                     
                     <span className="text-gray-500 flex items-center text-sm">
                       <Calendar className="h-4 w-4 mr-0.5" />
@@ -214,7 +215,7 @@ export default function MyOrdersPage() {
                         <div className="max-h-24 overflow-y-auto">
                           {order.products?.map((item) => (
                             <div key={item._id} className="p-2 flex items-center gap-2 border-b last:border-b-0">
-                              {item.product?.image ? (
+                              {typeof item.product === 'object' && item.product?.image ? (
                                 <img 
                                   src={item.product.image} 
                                   alt={item.product.name} 
@@ -226,9 +227,14 @@ export default function MyOrdersPage() {
                                 </div>
                               )}
                               <div className="flex-1 min-w-0">
-                                <div className="font-medium text-sm truncate">{item.product.name}</div>
+                                <div className="font-medium text-sm truncate">
+                                  {typeof item.product === 'object' ? item.product.name : 'Product'}
+                                </div>
                                 <div className="text-xs text-gray-500 truncate">
-                                  {item.product.brand} {item.product.model} • {item.quantity} × {formatCurrency(item.price)}
+                                  {typeof item.product === 'object' ? 
+                                    <>{item.product.brand} {item.product.model} • {item.quantity} × {formatCurrency('price' in item ? item.price ?? 0 : 0)}</> : 
+                                    <>{item.quantity} × {formatCurrency('price' in item ? item.price ?? 0 : 0)}</>
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -266,9 +272,9 @@ export default function MyOrdersPage() {
                           <div className="p-2">
                             <div className="grid grid-cols-2 gap-y-1">
                               <span className="text-gray-500">Subtotal:</span>
-                              <span className="text-right">{formatCurrency(order.subtotal)}</span>
+                              <span className="text-right">{formatCurrency(order.subtotal ?? 0)}</span>
                               <span className="text-gray-500">Tax + Ship:</span>
-                              <span className="text-right">{formatCurrency(order.tax + order.shipping)}</span>
+                              <span className="text-right">{formatCurrency((order.tax ?? 0) + (order.shipping ?? 0))}</span>
                               <span className="font-medium border-t pt-1 mt-1">Total:</span>
                               <span className="text-right font-bold border-t pt-1 mt-1">{formatCurrency(order.totalPrice)}</span>
                             </div>

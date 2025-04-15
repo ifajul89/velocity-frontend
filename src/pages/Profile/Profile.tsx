@@ -25,7 +25,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { useUpdateUserMutation, useChangePasswordMutation } from "@/redux/features/user/userApi";
+import { useUpdateCurrentUserMutation, useChangePasswordMutation } from "@/redux/features/user/userApi";
 import { toast } from "sonner";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -79,7 +79,7 @@ export default function ProfilePage() {
   console.log("Auth user object:", user);
   console.log("User ID:", userId);
   
-  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+  const [updateCurrentUser, { isLoading: isUpdating }] = useUpdateCurrentUserMutation();
   const [changePassword, { isLoading: isChangingPassword }] = useChangePasswordMutation();
   
   // Initialize formData with user info directly from Redux state
@@ -184,7 +184,7 @@ export default function ProfilePage() {
         password: editFormData.password, // For verification
       };
       
-      const response = await updateUser({ 
+      const response = await updateCurrentUser({ 
         id: userId, 
         userData 
       }).unwrap();

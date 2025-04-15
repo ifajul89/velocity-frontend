@@ -32,6 +32,10 @@ const ManageProduct = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  // Add pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // Add state for mobile sidebar
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
@@ -190,6 +194,17 @@ const ManageProduct = () => {
           car.category.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : [];
+    
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredCars.slice(indexOfFirstItem, indexOfLastItem);
+  
+  // Handle page changes
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   const toggleMobileSidebar = () => {
     setIsMobileSidebarOpen((prev) => !prev);
@@ -348,11 +363,11 @@ const ManageProduct = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredCars.length > 0 ? (
-                    filteredCars.map((car, idx) => (
+                  {currentItems.length > 0 ? (
+                    currentItems.map((car, idx) => (
                       <tr key={car._id} className="border-t hover:bg-gray-50">
                         <td className="hidden px-4 py-3 sm:table-cell">
-                          {idx + 1}
+                          {indexOfFirstItem + idx + 1}
                         </td>
                         <td className="px-4 py-3">{car.name}</td>
                         <td className="hidden px-4 py-3 md:table-cell">
@@ -406,10 +421,48 @@ const ManageProduct = () => {
                 <tfoot className="border-t bg-gray-50">
                   <tr>
                     <td colSpan={8} className="px-4 py-3 text-sm text-gray-500">
-                      Showing {filteredCars.length} of{" "}
-                      {carsData?.data ? (carsData.data as Car[]).length : 0} cars
+                      Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredCars.length)} of {filteredCars.length} cars
                     </td>
                   </tr>
+                  {totalPages > 1 && (
+                    <tr>
+                      <td colSpan={8}>
+                        <div className="flex items-center justify-center py-4">
+                          <div className="flex space-x-1">
+                            <button
+                              onClick={() => handlePageChange(currentPage - 1)}
+                              disabled={currentPage === 1}
+                              className="rounded-md border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
+                            >
+                              Previous
+                            </button>
+                            
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                              <button
+                                key={page}
+                                onClick={() => handlePageChange(page)}
+                                className={`rounded-md px-3 py-1 text-sm ${
+                                  currentPage === page
+                                    ? "bg-red-600 text-white"
+                                    : "border border-gray-300"
+                                }`}
+                              >
+                                {page}
+                              </button>
+                            ))}
+                            
+                            <button
+                              onClick={() => handlePageChange(currentPage + 1)}
+                              disabled={currentPage === totalPages}
+                              className="rounded-md border border-gray-300 px-3 py-1 text-sm disabled:opacity-50"
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tfoot>
               </table>
             </div>
