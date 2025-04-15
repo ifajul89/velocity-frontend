@@ -124,6 +124,26 @@ const Product = () => {
       return;
     }
 
+    // Check if user is an admin
+    if (user && user.role === "admin") {
+      toast.error(
+        "Admin Access Restricted",
+        {
+          description: " Please use a regular customer account. Administrators are not allowed to make purchases.",
+          duration: 5000,
+          style: { 
+            fontSize: "1.2rem",
+            backgroundColor: "#FFE1E1",
+            borderLeft: "5px solid #FF0000",
+            padding: "16px",
+            width: "400px"
+          },
+          icon: "🛑"
+        }
+      );
+      return;
+    }
+
     console.log("Car data being sent to checkout:", carData);
 
     navigate("/checkout", {

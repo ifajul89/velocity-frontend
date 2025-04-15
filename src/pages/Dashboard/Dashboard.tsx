@@ -134,7 +134,7 @@ export default function Page() {
               {isLoading ? (
                 <div className="h-6 sm:h-8 w-20 sm:w-24 bg-blue-100 animate-pulse rounded"></div>
               ) : (
-                <p className="text-2xl sm:text-3xl font-bold text-blue-900">${totalSales.toFixed(2)}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-blue-900">৳{totalSales.toFixed(2)}</p>
               )}
               <p className="text-xs text-blue-700 mt-1">Based on order history</p>
             </div>
@@ -179,7 +179,7 @@ export default function Page() {
               {isLoading ? (
                 <div className="h-6 sm:h-8 w-16 sm:w-20 bg-emerald-100 animate-pulse rounded"></div>
               ) : (
-                <p className="text-xl sm:text-2xl font-bold text-emerald-900">${performanceMetrics.avgOrderValue.toFixed(2)}</p>
+                <p className="text-xl sm:text-2xl font-bold text-emerald-900">৳{performanceMetrics.avgOrderValue.toFixed(2)}</p>
               )}
               <p className="text-xs text-emerald-600 mt-1">↑ 3.5% from last month</p>
             </div>

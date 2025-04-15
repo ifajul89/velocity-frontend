@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createOrder, selectCheckoutUrl, selectOrderError, selectOrderLoading } from "@/redux/features/order/orderSlice";
 import { toast } from "sonner";
 import { AppDispatch } from "@/redux/store";
+import { useAppSelector } from "@/redux/hooks";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -13,7 +14,35 @@ const Checkout = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   // Get product and user data from state
-  const { product, user } = location.state || {};
+  const { product, user: routeStateUser } = location.state || {};
+  
+  // Get user data from Redux as fallback
+  const reduxUser = useAppSelector((state) => state.auth.user);
+  
+  // Use route state user if available, otherwise use Redux user
+  const user = routeStateUser || reduxUser;
+
+  // Check if user is admin - if so, redirect and show error
+  useEffect(() => {
+    if (user && user.role === "admin") {
+      toast.error(
+        "Admin Access Restricted",
+        {
+          description: "Please use a regular customer account.Administrators are not allowed to make purchases. ",
+          duration: 5000,
+          style: { 
+            fontSize: "1.2rem",
+            backgroundColor: "#FFE1E1",
+            borderLeft: "5px solid #FF0000",
+            padding: "16px",
+            width: "400px"
+          },
+          icon: "🛑"
+        }
+      );
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   // Redux state
   const isLoading = useSelector(selectOrderLoading);

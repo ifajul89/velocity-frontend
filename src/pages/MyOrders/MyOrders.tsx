@@ -172,7 +172,7 @@ export default function MyOrdersPage() {
                 {/* Order Header */}
                 <div className="bg-gray-50 py-2 px-3 border-b flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900 text-base">Tracking Number :<span className="text-red-600">{order.trackingNumber}</span></span>
+                    <span className="font-medium text-gray-900 text-base">Tracking Number :<span className="text-green-600">{order.trackingNumber}</span></span>
                     
                     <span className="text-gray-500 flex items-center text-sm">
                       <Calendar className="h-4 w-4 mr-0.5" />
