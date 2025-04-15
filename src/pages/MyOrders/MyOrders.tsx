@@ -16,7 +16,7 @@ import { format } from "date-fns";
 const getEstimatedDelivery = (order: unknown): string | undefined => {
   if (!order || typeof order !== "object") return undefined;
 
-  const data = order as Record<string, any>;
+  const data = order as Record<string, unknown>;
 
   // Check direct properties first
   if (data.estimatedDelivery && typeof data.estimatedDelivery === "string") {
@@ -32,9 +32,17 @@ const getEstimatedDelivery = (order: unknown): string | undefined => {
 
   // Check for nested properties
   if (data.shipping && typeof data.shipping === "object") {
-    const shipping = data.shipping as Record<string, any>;
-    if (shipping.estimatedDelivery) return shipping.estimatedDelivery;
-    if (shipping.estimatedDeliveryDate) return shipping.estimatedDeliveryDate;
+    const shipping = data.shipping as Record<string, unknown>;
+    if (
+      shipping.estimatedDelivery &&
+      typeof shipping.estimatedDelivery === "string"
+    )
+      return shipping.estimatedDelivery;
+    if (
+      shipping.estimatedDeliveryDate &&
+      typeof shipping.estimatedDeliveryDate === "string"
+    )
+      return shipping.estimatedDeliveryDate;
   }
 
   // API might have different casing
@@ -182,6 +190,10 @@ export default function MyOrdersPage() {
 
       <main className="container mx-auto max-w-6xl flex-1 p-2">
         <h1 className="mb-3 text-2xl font-bold text-gray-900">My Orders</h1>
+        <p className="mb-5 text-gray-600">
+          Track Your Order Status using Tracking Number from Track status page.
+          View order status and delivery details.
+        </p>
 
         {!hasOrders ? (
           <div className="rounded-md border border-gray-200 bg-white p-6 text-center shadow-sm">
@@ -207,7 +219,7 @@ export default function MyOrdersPage() {
                 <div className="flex items-center justify-between border-b bg-gray-50 px-3 py-2">
                   <div className="flex items-center gap-2">
                     <span className="text-base font-medium text-gray-900">
-                      # {order.trackingNumber}
+                      Tracking Number :{order.trackingNumber}
                     </span>
 
                     <span className="flex items-center text-sm text-gray-500">
@@ -269,7 +281,8 @@ export default function MyOrdersPage() {
                               key={item._id}
                               className="flex items-center gap-2 border-b p-2 last:border-b-0"
                             >
-                              {item.product?.image ? (
+                              {typeof item.product === "object" &&
+                              item.product?.image ? (
                                 <img
                                   src={item.product.image}
                                   alt={item.product.name}
@@ -282,11 +295,27 @@ export default function MyOrdersPage() {
                               )}
                               <div className="min-w-0 flex-1">
                                 <div className="truncate text-sm font-medium">
-                                  {item.product.name}
+                                  {typeof item.product === "object"
+                                    ? item.product.name
+                                    : "Product"}
                                 </div>
                                 <div className="truncate text-xs text-gray-500">
-                                  {item.product.brand} {item.product.model} •{" "}
-                                  {item.quantity} × {formatCurrency(item.price)}
+                                  {typeof item.product === "object" ? (
+                                    <>
+                                      {item.product.brand} {item.product.model}{" "}
+                                      • {item.quantity} ×{" "}
+                                      {formatCurrency(
+                                        "price" in item ? (item.price ?? 0) : 0,
+                                      )}
+                                    </>
+                                  ) : (
+                                    <>
+                                      {item.quantity} ×{" "}
+                                      {formatCurrency(
+                                        "price" in item ? (item.price ?? 0) : 0,
+                                      )}
+                                    </>
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -333,11 +362,13 @@ export default function MyOrdersPage() {
                             <div className="grid grid-cols-2 gap-y-1">
                               <span className="text-gray-500">Subtotal:</span>
                               <span className="text-right">
-                                {formatCurrency(order.subtotal)}
+                                {formatCurrency(order.subtotal ?? 0)}
                               </span>
                               <span className="text-gray-500">Tax + Ship:</span>
                               <span className="text-right">
-                                {formatCurrency(order.tax + order.shipping)}
+                                {formatCurrency(
+                                  (order.tax ?? 0) + (order.shipping ?? 0),
+                                )}
                               </span>
                               <span className="mt-1 border-t pt-1 font-medium">
                                 Total:

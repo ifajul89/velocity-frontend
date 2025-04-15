@@ -42,7 +42,6 @@ import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { AppSidebar } from "@/components/Dashboard";
 import { useAppSelector } from "@/redux/hooks";
-import { baseApi } from "@/redux/api/baseApi";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,81 +50,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-
-// Check if we're in development mode
-const isDevelopment = process.env.NODE_ENV === "development";
-
-// Define API URL based on environment
-const API_BASE_URL = isDevelopment
-  ? "http://localhost:5000/api" // Development
-  : "/api"; // Production
-
-// Create a specialized version of baseApi for user management
-const userManagementApi = baseApi.injectEndpoints({
-  endpoints: (builder) => ({
-    getAllUsers: builder.query({
-      query: () => ({
-        url: "/user",
-        method: "GET",
-      }),
-      providesTags: ["User"],
-    }),
-    updateUserStatus: builder.mutation({
-      query: ({ userId, status }) => ({
-        url: `/user/${userId}/status`,
-        method: "PATCH",
-        body: { status },
-      }),
-      invalidatesTags: ["User"],
-    }),
-    adminUpdateUser: builder.mutation({
-      query: ({ userId, userData }) => {
-        console.log("Admin Update user API call with ID:", userId);
-
-        // Validate userId before making the request
-        if (!userId) {
-          throw new Error("User ID is required for update");
-        }
-
-        // Return the full API configuration
-        return {
-          url: `user/admin-update/${userId}`,
-          method: "PATCH",
-          body: userData,
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-      },
-      invalidatesTags: ["User"],
-    }),
-    deleteUser: builder.mutation({
-      query: (userId) => {
-        console.log("Deleting user with ID:", userId);
-
-        // Validate userId before making the request
-        if (!userId) {
-          throw new Error("User ID is required for delete operation");
-        }
-
-        return {
-          url: `user/${userId}`,
-          method: "DELETE",
-          credentials: "include",
-        };
-      },
-      invalidatesTags: ["User"],
-    }),
-  }),
-});
-
-export const {
+import {
   useGetAllUsersQuery,
-  useUpdateUserStatusMutation,
   useAdminUpdateUserMutation,
   useDeleteUserMutation,
-} = userManagementApi;
+} from "./userManagementApi";
 
 // Define User type interface
 interface User {
@@ -522,7 +451,6 @@ export default function UserManagementPage() {
 
       console.log("Updating user with ID:", userId);
       console.log("Update data:", userData);
-      console.log("API base URL:", API_BASE_URL);
 
       if (!userId || userId.trim() === "") {
         throw new Error("User ID is required for update");

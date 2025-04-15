@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { StatsWidget } from "@/components/StatsWidget";
 import CarCard from "@/components/ui/CarCard";
 
 // Define Car interface
@@ -133,11 +132,6 @@ const AllProducts = () => {
     <section className="container py-10">
       <SectionTitle title="All Cars" />
 
-      {/* Stats Widget with improved styling */}
-      <div className="mb-8">
-        <StatsWidget />
-      </div>
-
       {/* Search and Filter Section */}
       <div className="mb-8 space-y-4 rounded-lg bg-gray-50 p-4">
         <h3 className="text-lg font-semibold">Search & Filters</h3>
@@ -153,8 +147,8 @@ const AllProducts = () => {
           />
         </div>
 
-        {/* Filters grid */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {/* Filters in a single row */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {/* Brand Filter */}
           <div>
             <label htmlFor="brandFilter" className="mb-1 block text-sm">
@@ -166,11 +160,49 @@ const AllProducts = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Brands</SelectItem>
-                {brands.sort().map((brand) => (
-                  <SelectItem key={brand} value={brand}>
-                    {brand}
-                  </SelectItem>
-                ))}
+                <SelectItem value="Toyota">Toyota</SelectItem>
+                <SelectItem value="Ford">Ford</SelectItem>
+                <SelectItem value="Honda">Honda</SelectItem>
+                <SelectItem value="Tesla">Tesla</SelectItem>
+                <SelectItem value="Mazda">Mazda</SelectItem>
+                <SelectItem value="Audi">Audi</SelectItem>
+                <SelectItem value="BMW">BMW</SelectItem>
+                <SelectItem value="Mercedes-Benz">Mercedes-Benz</SelectItem>
+                <SelectItem value="Chevrolet">Chevrolet</SelectItem>
+                <SelectItem value="Hyundai">Hyundai</SelectItem>
+                <SelectItem value="Kia">Kia</SelectItem>
+                <SelectItem value="Nissan">Nissan</SelectItem>
+                <SelectItem value="Volkswagen">Volkswagen</SelectItem>
+                <SelectItem value="Subaru">Subaru</SelectItem>
+                <SelectItem value="Lexus">Lexus</SelectItem>
+                {/* Keep dynamic brand options from database if needed */}
+                {brands
+                  .filter(
+                    (brand) =>
+                      ![
+                        "Toyota",
+                        "Ford",
+                        "Honda",
+                        "Tesla",
+                        "Mazda",
+                        "Audi",
+                        "BMW",
+                        "Mercedes-Benz",
+                        "Chevrolet",
+                        "Hyundai",
+                        "Kia",
+                        "Nissan",
+                        "Volkswagen",
+                        "Subaru",
+                        "Lexus",
+                      ].includes(brand),
+                  )
+                  .sort()
+                  .map((brand) => (
+                    <SelectItem key={brand} value={brand}>
+                      {brand}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
@@ -195,13 +227,15 @@ const AllProducts = () => {
             </Select>
           </div>
 
-          {/* Reset Button */}
-          <button
-            onClick={resetFilters}
-            className="rounded-md bg-red-600 px-4 py-2 text-white transition duration-200 hover:bg-red-700"
-          >
-            Reset Filters
-          </button>
+          {/* Reset Button - In the same row */}
+          <div className="flex items-end">
+            <button
+              onClick={resetFilters}
+              className="w-full rounded-md bg-red-600 px-4 py-2 text-white transition duration-200 hover:bg-red-700"
+            >
+              Reset Filters
+            </button>
+          </div>
         </div>
 
         {/* Price Range Inputs */}

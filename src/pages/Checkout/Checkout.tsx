@@ -154,6 +154,7 @@ const Checkout = () => {
       "phone",
       "address",
       "city",
+      "zipCode",
     ];
     const missingFields = requiredFields.filter(
       (field) => !formData[field as keyof typeof formData],
@@ -456,7 +457,7 @@ const Checkout = () => {
                   htmlFor="zipCode"
                   className="mb-1 block text-sm font-medium"
                 >
-                  ZIP Code
+                  ZIP Code <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
@@ -465,6 +466,7 @@ const Checkout = () => {
                   value={formData.zipCode}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-gray-300 p-2 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  required
                 />
               </div>
             </div>

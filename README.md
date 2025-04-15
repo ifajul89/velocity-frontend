@@ -1,4 +1,3 @@
-
 # 🚗 Car Shop - Inventory & E-Commerce Management Platform
 
 A feature-rich, full-stack Car Shop web application built for managing car inventory, processing secure orders, and delivering a seamless e-commerce experience. Built with modern technologies like TypeScript, React, Redux, Node.js, and MongoDB.
@@ -17,18 +16,21 @@ This application provides a robust inventory management and car shopping experie
 ## 🧩 Features
 
 ### ✅ **Authentication & Authorization**
+
 - Secure registration & login with hashed passwords
 - JWT-based token system with local storage
 - Role-based dashboards (User/Admin)
 - Protected routes & logout functionality
 
 ### 🌐 **Public Pages**
+
 - **Home Page**: Banner, featured cars, and a dynamic product overview
 - **All Products**: Powerful filtering & sorting (brand, price, model, availability)
 - **Product Details**: Full specs, image preview & "Buy Now" CTA
 - **About Us**: Insight into company mission & values
 
 ### 🔒 **Private Pages**
+
 - **Checkout Page**: Place orders with quantity validation and payment integration (SurjoPay)
 - **User Dashboard**: Track orders, view purchase history, update profile/password
 - **Admin Dashboard**:
@@ -37,6 +39,7 @@ This application provides a robust inventory management and car shopping experie
   - Manage Orders (CRUD + status updates)
 
 ### 💅 **UI/UX**
+
 - Fully responsive on all screen sizes
 - Clean typography and layout
 - Toast notifications for key actions (login success, order placed, etc.)
@@ -44,6 +47,7 @@ This application provides a robust inventory management and car shopping experie
 - Error messages for form validation, login issues, and stock checks
 
 ### 📦 **Backend Functionalities**
+
 - Built with Express and MongoDB
 - Module-based architecture
 - Product, Order, User schemas
@@ -56,6 +60,7 @@ This application provides a robust inventory management and car shopping experie
 ## ⚙️ Tech Stack
 
 ### 💻 Frontend
+
 - React + TypeScript
 - TailwindCSS
 - Redux Toolkit + RTK Query
@@ -64,6 +69,7 @@ This application provides a robust inventory management and car shopping experie
 - Lucide Icons & React Icons
 
 ### 🛠 Backend
+
 - Node.js + Express.js
 - MongoDB + Mongoose
 - JWT for Auth
@@ -75,11 +81,13 @@ This application provides a robust inventory management and car shopping experie
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js & npm
 - MongoDB (local or cloud)
 - Environment variables setup (`.env`)
 
 ### 🔧 Backend Setup
+
 ```bash
 git clone [your-backend-repo-link]
 cd backend
@@ -88,6 +96,7 @@ npm run dev
 ```
 
 ### ⚙️ Frontend Setup
+
 ```bash
 git clone [your-frontend-repo-link]
 cd frontend
@@ -98,6 +107,7 @@ npm run dev
 ---
 
 ## 🔑 Admin Credentials (For Evaluation)
+
 ```
 Email: admin@carshop.com
 Password: Admin123!
