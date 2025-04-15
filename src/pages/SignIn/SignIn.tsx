@@ -8,16 +8,25 @@ import { setUser } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
 import LoginBG from "@/assets/login/login.jpeg";
 import VeloV from "@/assets/velocity-logo.png";
+import { useState } from "react";
 
 type SignInFormData = {
   email: string;
   password: string;
 };
 
+// Define type for backend error response
+type ErrorData = {
+  message?: string;
+  status?: boolean;
+  error?: string;
+};
+
 export default function SignIn() {
   const navigate = useNavigate();
   const [SignIn] = useSignInMutation();
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -25,30 +34,72 @@ export default function SignIn() {
   } = useForm<SignInFormData>();
 
   const onSubmit = async (data: SignInFormData) => {
+    // Set loading state to true
+    setIsLoading(true);
+    
     // Call your API or auth logic here
     const userData = {
       email: data.email,
       password: data.password,
     };
     try {
-      const res = await SignIn(userData);
-      if (res.data.status) {
-        // Save token to localStorage
-        localStorage.setItem('token', res.data.data.token);
-        
-        // Pass the entire response to setUser, which now handles the nested structure
-        dispatch(setUser(res.data));
-        
-        toast.success(res.data.message, { duration: 1000 });
-        navigate("/");
-      } else {
-        toast.error(res.data.message || "Login failed");
+      const response = await SignIn(userData);
+      
+      // Check if response has an error
+      if ('error' in response) {
+        // Handle error response
+        const errorResponse = response.error;
+        if (errorResponse && 'data' in errorResponse && errorResponse.data) {
+          // Try to extract message from error data
+          const errorData = errorResponse.data as ErrorData;
+          if (errorData.message) {
+            toast.error(errorData.message);
+          } else {
+            toast.error("Login failed. Please try again.");
+          }
+        } else {
+          toast.error("Login failed. Please try again.");
+        }
+        setIsLoading(false);
+        return;
+      }
+      
+      // Handle successful response
+      if (response.data) {
+        const { data: responseData } = response;
+        // Check if response has status field
+        if (responseData.status) {
+          // Save token to localStorage if available
+          if (responseData.data && responseData.data.token) {
+            localStorage.setItem('token', responseData.data.token);
+          }
+          
+          // Pass the entire response to setUser
+          dispatch(setUser(responseData));
+          
+          // Show success message
+          if (responseData.message) {
+            toast.success(responseData.message, { duration: 1000 });
+          } else {
+            toast.success("Login successful", { duration: 1000 });
+          }
+          
+          navigate("/");
+        } else if (responseData.message) {
+          // Show error message from response
+          toast.error(responseData.message);
+        } else {
+          toast.error("Login failed. Please check your credentials.");
+        }
       }
     } catch (error: unknown) {
       console.error("Login error:", error);
       
-      // Always show "Wrong password" for login errors
-      toast.error("Wrong password or email. Please check your email and password and try again.");
+      // Generic error handling as fallback
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      // Set loading state to false regardless of outcome
+      setIsLoading(false);
     }
   };
 
@@ -121,8 +172,9 @@ export default function SignIn() {
               <Button
                 type="submit"
                 className="bg-velo-red hover:bg-velo-maroon h-11 w-full md:text-lg"
+                disabled={isLoading}
               >
-                Sign In
+                {isLoading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
           </div>

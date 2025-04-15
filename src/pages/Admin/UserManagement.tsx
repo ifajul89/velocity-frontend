@@ -198,7 +198,7 @@ const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="blocked">Blocked</SelectItem>
+                      <SelectItem value="blocked">Deactivate</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -617,7 +617,7 @@ export default function UserManagementPage() {
                         <SelectItem value="all">All Users</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="user">Regular Users</SelectItem>
-                        <SelectItem value="blocked">Blocked Users</SelectItem>
+                        <SelectItem value="blocked">Deactivated Users</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -667,7 +667,7 @@ export default function UserManagementPage() {
                             </TableCell>
                             <TableCell>
                               <Badge variant={user.isBlocked ? 'destructive' : 'secondary'}>
-                                {user.isBlocked ? 'Blocked' : 'Active'}
+                                {user.isBlocked ? 'Deactive' : 'Active'}
                               </Badge>
                             </TableCell>
                             <TableCell>
