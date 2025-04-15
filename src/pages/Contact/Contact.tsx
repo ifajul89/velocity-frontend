@@ -133,7 +133,7 @@ const Contact = () => {
 
       <div className="container">
         <iframe
-          className="pointer-events-none h-[200px] md:h-[350px] w-full rounded-2xl brightness-85 grayscale filter"
+          className="pointer-events-none h-[200px] w-full rounded-2xl brightness-85 grayscale filter md:h-[350px]"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.05052390957!2d-74.30915645023623!3d40.697193364541725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2z4Kao4Ka_4KaJIOCmh-Cmr-CmvOCmsOCnjeCmlSwg4Kau4Ka-4Kaw4KeN4KaV4Ka_4KaoIOCmr-CngeCmleCnjeCmpOCmsOCmvuCmt-CnjeCmn-CnjeCmsA!5e0!3m2!1sbn!2sbd!4v1744656816494!5m2!1sbn!2sbd"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"

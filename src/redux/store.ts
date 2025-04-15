@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import countSlice from "./features/count/countSlice";
 import authReducer from "./features/auth/authSlice";
+import orderReducer from "./features/order/orderSlice";
 import { baseApi } from "./api/baseApi";
 import {
   persistReducer,
@@ -14,6 +15,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { carApi } from "./features/carPost/carApi";
+import { userApi } from "./features/user/userApi";
 
 const persisConfig = {
   key: "auth",
@@ -26,13 +28,14 @@ export const store = configureStore({
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedAuthReducer,
     count: countSlice,
+    order: orderReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(baseApi.middleware, carApi.middleware),
+    }).concat(baseApi.middleware, carApi.middleware, userApi.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

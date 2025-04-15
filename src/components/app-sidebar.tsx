@@ -1,6 +1,8 @@
 import * as React from "react";
-import { Home, User, Settings, ShoppingBag } from "lucide-react";
-import { useAppSelector } from "@/redux/hooks";
+import { Home, User, Settings, ShoppingBag, LogOut } from "lucide-react";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 import {
   Sidebar,
@@ -14,6 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -35,12 +38,12 @@ interface User {
 const navItems: NavItem[] = [
   {
     title: "Track Order Status",
-    url: "/track-order",
+    url: "dashboard/track-order",
     items: [],
     adminOnly: false,
   },
   {
-    title: "Admin: Orders Management",
+    title: "Orders Management",
     url: "/admin/orders",
     items: [],
     adminOnly: true,
@@ -55,12 +58,21 @@ const navItems: NavItem[] = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const isAdmin = user && (user as User).role === "admin";
 
   // Filter navigation items based on role
   const filteredNavItems = navItems.filter(
     (item) => !item.adminOnly || (item.adminOnly && isAdmin),
   );
+
+  const handleLogout = async () => {
+    // Remove token from localStorage if it exists
+    localStorage.removeItem("token");
+
+    await dispatch(logout());
+    toast.success("Successfully logged out", { duration: 1000 });
+  };
 
   return (
     <Sidebar {...props}>
@@ -121,6 +133,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="mt-auto border-t pt-2">
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            onClick={handleLogout}
+            className="flex w-full items-center gap-2 font-medium text-red-600 hover:text-red-700"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

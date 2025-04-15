@@ -8,6 +8,7 @@ interface CarCardProps {
   price: number;
   category: string;
   brand: string;
+  _id: string;
 }
 
 const CarCard: React.FC<CarCardProps> = ({
@@ -16,10 +17,11 @@ const CarCard: React.FC<CarCardProps> = ({
   price,
   category,
   brand,
+  _id,
 }) => {
   return (
     <Link
-      to="/"
+      to={`/carDetails/${_id}`}
       className="category-card-custom-hover hover:border-velo-red relative flex cursor-pointer flex-col items-center gap-1 overflow-hidden rounded-2xl border-[1.5px] bg-white p-3 duration-400 md:p-4"
     >
       <div className="absolute top-6 right-6 mb-5 w-full">

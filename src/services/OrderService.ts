@@ -32,6 +32,7 @@ export interface Order {
   timeline: TimelineEvent[];
   shippingAddress: string;
   contactInfo: ContactInfo;
+  message?: string;
 }
 
 // Initial orders data
@@ -270,6 +271,21 @@ const formatDateTime = (): { date: string; time: string } => {
   };
 };
 
+// Calculate estimated delivery date (always 1 week from order date)
+const calculateEstimatedDelivery = (): string => {
+  const now = new Date();
+  // Add 7 days to current date for estimated delivery
+  const estimatedDate = new Date(now);
+  estimatedDate.setDate(now.getDate() + 7);
+
+  // Format the date as "Month Day, Year"
+  return estimatedDate.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
 // Order service
 export const OrderService = {
   // Get all orders
@@ -353,5 +369,74 @@ export const OrderService = {
     orders[orderIndex].estimatedDelivery = estimatedDelivery;
 
     return orders[orderIndex];
+  },
+
+  // Create a new order
+  createOrder: (
+    items: OrderItem[],
+    shippingAddress: string,
+    contactInfo: ContactInfo,
+  ): Order => {
+    const currentDateTime = formatDateTime();
+    const orderId = `ORD-${Math.floor(10000 + Math.random() * 90000)}`; // Generate a random order ID
+    const estimatedDelivery = calculateEstimatedDelivery();
+
+    // Calculate total
+    const total = items.reduce((sum, item) => {
+      const price = parseFloat(item.price.replace("$", ""));
+      return sum + price * item.quantity;
+    }, 0);
+
+    const newOrder: Order = {
+      id: orderId,
+      status: "Pending",
+      statusColor: statusColorMap["Pending"],
+      date: currentDateTime.date,
+      estimatedDelivery: estimatedDelivery,
+      items: [...items],
+      total: `$${total.toFixed(2)}`,
+      trackingNumber: "Not available yet",
+      carrier: "Not assigned",
+      currentLocation: "Awaiting Processing",
+      timeline: [
+        {
+          date: currentDateTime.date,
+          time: currentDateTime.time,
+          status: "Placed",
+          completed: true,
+        },
+        {
+          date: "Pending",
+          time: "Pending",
+          status: "Approved",
+          completed: false,
+        },
+        {
+          date: "Pending",
+          time: "Pending",
+          status: "Processed",
+          completed: false,
+        },
+        {
+          date: "Pending",
+          time: "Pending",
+          status: "Shipped",
+          completed: false,
+        },
+        {
+          date: "Pending",
+          time: "Pending",
+          status: "Delivered",
+          completed: false,
+        },
+      ],
+      shippingAddress: shippingAddress,
+      contactInfo: contactInfo,
+    };
+
+    // Add the new order to the orders array
+    orders.push(newOrder);
+
+    return newOrder;
   },
 };

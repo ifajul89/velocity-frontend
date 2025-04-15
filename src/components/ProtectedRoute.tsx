@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "@/redux/hooks";
 
@@ -14,7 +14,18 @@ const ProtectedRoute: React.FC<{
   children: React.ReactNode;
   requireAdmin?: boolean;
 }> = ({ children, requireAdmin = false }) => {
-  const { user, token } = useAppSelector((state) => state.auth);
+  const { user, token: reduxToken } = useAppSelector((state) => state.auth);
+  const [token, setToken] = useState<string | null>(reduxToken);
+
+  // Check localStorage for token if not in Redux
+  useEffect(() => {
+    if (!reduxToken) {
+      const localToken = localStorage.getItem("token");
+      if (localToken) {
+        setToken(localToken);
+      }
+    }
+  }, [reduxToken]);
 
   const isAuthenticated = !!token;
   const isAdmin = user && (user as User).role === "admin";
@@ -23,8 +34,12 @@ const ProtectedRoute: React.FC<{
     return <Navigate to="/login" />;
   }
 
+  // If admin route but user is not admin, redirect to user dashboard
   if (requireAdmin && !isAdmin) {
-    return <Navigate to="/dashboard" />;
+    console.log(
+      "Unauthorized access attempt: Regular user tried to access admin route",
+    );
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

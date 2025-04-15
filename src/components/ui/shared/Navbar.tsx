@@ -32,6 +32,9 @@ const Navbar = () => {
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = async () => {
+    // Remove token from localStorage
+    localStorage.removeItem("token");
+
     await dispatch(logout());
     toast.success("Successful log out", { duration: 1000 });
   };
@@ -119,7 +122,7 @@ const Navbar = () => {
                 onClick={() => toggleDropdown(0)}
                 className="bg-velo-red hover:bg-velo-maroon flex h-11 items-center gap-1.5 text-[17px]"
               >
-                <LucideIdCard className="size-4.5" /> Account
+                <LucideIdCard className="size-5.5" /> Account
               </Button>
               {menuOpen === 0 && (
                 <ul className="animate-slide-down absolute right-0 mt-2 w-40 space-y-1.5 rounded-lg bg-white p-2 shadow-lg">
@@ -128,7 +131,7 @@ const Navbar = () => {
                       to="/dashboard"
                       className="bg-velo-red/5 hover:bg-velo-red/10 flex items-center gap-1 rounded-lg px-3 py-2 duration-300"
                     >
-                      <MdOutlineSpaceDashboard className="text-velo-maroon text-lg" />
+                      <MdOutlineSpaceDashboard className="text-velo-maroon size-5" />
                       Dashboard
                     </Link>
                   </li>

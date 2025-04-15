@@ -30,13 +30,27 @@ export default function SignIn() {
       email: data.email,
       password: data.password,
     };
-    const res = await SignIn(userData);
-    if (res.data.status) {
-      dispatch(
-        setUser({ user: res.data.data.verifyUser, token: res.data.data.token }),
+    try {
+      const res = await SignIn(userData);
+      if (res.data.status) {
+        // Save token to localStorage
+        localStorage.setItem("token", res.data.data.token);
+
+        // Pass the entire response to setUser, which now handles the nested structure
+        dispatch(setUser(res.data));
+
+        toast.success(res.data.message, { duration: 1000 });
+        navigate("/");
+      } else {
+        toast.error(res.data.message || "Login failed");
+      }
+    } catch (error: unknown) {
+      console.error("Login error:", error);
+
+      // Always show "Wrong password" for login errors
+      toast.error(
+        "Wrong password or email. Please check your email and password and try again.",
       );
-      toast.success(res.data.message, { duration: 1000 });
-      navigate("/");
     }
   };
 
