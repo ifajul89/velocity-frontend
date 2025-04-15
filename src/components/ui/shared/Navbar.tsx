@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import VelocityLogo from "@/assets/velocity-logo.png";
 import { Button } from "../button";
 import { HiMenu } from "react-icons/hi";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { LucideIdCard } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
@@ -115,24 +117,25 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <Button
                 onClick={() => toggleDropdown(0)}
-                className="bg-velo-red hover:bg-velo-maroon h-11"
+                className="bg-velo-red hover:bg-velo-maroon flex h-11 items-center gap-1.5 text-[17px]"
               >
-                Dashboard
+                <LucideIdCard className="size-4.5" /> Account
               </Button>
               {menuOpen === 0 && (
-                <ul className="animate-slide-down absolute right-0 mt-2 w-40 space-y-1.5 rounded-lg bg-white p-1.5 shadow-lg">
+                <ul className="animate-slide-down absolute right-0 mt-2 w-40 space-y-1.5 rounded-lg bg-white p-2 shadow-lg">
                   <li>
                     <Link
                       to="/dashboard"
-                      className="hover:bg-velo-red/10 block rounded-lg px-3 py-2"
+                      className="bg-velo-red/5 hover:bg-velo-red/10 flex items-center gap-1 rounded-lg px-3 py-2 duration-300"
                     >
+                      <MdOutlineSpaceDashboard className="text-velo-maroon text-lg" />
                       Dashboard
                     </Link>
                   </li>
                   <li>
                     <Button
                       onClick={handleLogout}
-                      className="bg-velo-black w-full hover:bg-black"
+                      className="bg-velo-black h-10 w-full hover:bg-black"
                     >
                       Logout
                     </Button>
