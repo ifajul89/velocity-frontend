@@ -6,12 +6,14 @@ import { toast } from "sonner";
 import VelocityLogo from "@/assets/velocity-logo.png";
 import { Button } from "../button";
 import { HiMenu } from "react-icons/hi";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { LucideIdCard } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
   const navLinks = [
     { path: "/", name: "Home" },
-    { path: "/all-product", name: "All Products" },
+    { path: "/all-cars", name: "All Cars" },
     { path: "/about", name: "About Us" },
     { path: "/contact", name: "Contact Us" },
   ];
@@ -23,7 +25,7 @@ const Navbar = () => {
 
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [menuOpen, setMenuOpen] = useState<boolean | null>(null);
+  const [menuOpen, setMenuOpen] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -114,28 +116,29 @@ const Navbar = () => {
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <Button
-                onClick={() => toggleDropdown(0)} // Use index to toggle specific dropdown
-                className="rounded- bg-sky-600 px-4 py-2 text-white"
+                onClick={() => toggleDropdown(0)}
+                className="bg-velo-red hover:bg-velo-maroon flex h-11 items-center gap-1.5 text-[17px]"
               >
-                Dashboard
+                <LucideIdCard className="size-4.5" /> Account
               </Button>
               {menuOpen === 0 && (
-                <ul className="animate-slide-down absolute right-0 mt-2 w-40 space-y-2 rounded bg-sky-100 p-2 shadow-lg">
+                <ul className="animate-slide-down absolute right-0 mt-2 w-40 space-y-1.5 rounded-lg bg-white p-2 shadow-lg">
                   <li>
                     <Link
                       to="/dashboard"
-                      className="block rounded px-3 py-2 hover:bg-sky-200"
+                      className="bg-velo-red/5 hover:bg-velo-red/10 flex items-center gap-1 rounded-lg px-3 py-2 duration-300"
                     >
+                      <MdOutlineSpaceDashboard className="text-velo-maroon text-lg" />
                       Dashboard
                     </Link>
                   </li>
                   <li>
-                    <button
+                    <Button
                       onClick={handleLogout}
-                      className="w-full rounded px-3 py-2 text-left hover:bg-sky-200"
+                      className="bg-velo-black h-10 w-full hover:bg-black"
                     >
                       Logout
-                    </button>
+                    </Button>
                   </li>
                 </ul>
               )}
@@ -181,7 +184,7 @@ const Navbar = () => {
                   {item.name}
                 </Link>
               ))}
-              <div className="h-[1px] w-11/12 mx-auto rounded-full bg-gray-300" />
+              <div className="mx-auto h-[1px] w-11/12 rounded-full bg-gray-300" />
               {user ? (
                 <>
                   <Link

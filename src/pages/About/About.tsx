@@ -1,92 +1,181 @@
-import Navbar from "@/components/ui/shared/Navbar";
+import About1 from "@/assets/about-us/about1.jpg";
+import About2 from "@/assets/about-us/about2.jpg";
+import { PiArrowDownRightBold } from "react-icons/pi";
+import CEO from "@/assets/about-us/ceo.jpg";
+import React from "react";
+
+const teamData = [
+  {
+    name: "Conor McGregor",
+    image:
+      "https://i2-prod.dublinlive.ie/news/celebs/article25659946.ece/ALTERNATES/s1200c/2_conor-mcgregor.jpg",
+    designation: "CTO & Retired CFO",
+    description:
+      "Over a decade of experience in automotive tech and dealership growth.",
+  },
+  {
+    name: "Ava Martinez",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    designation: "Chief Marketing Officer",
+    description:
+      "Led marketing teams in top-tier car dealerships across the U.S. and Europe",
+  },
+  {
+    name: "Derek Johnson",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    designation: "Head of Sales",
+    description:
+      "15+ years in car dealership sales and customer experience leadership.",
+  },
+  {
+    name: "Sophie Lee",
+    image: "https://randomuser.me/api/portraits/women/68.jpg",
+    designation: "Operations Manager",
+    description:
+      "Streamlined operations in multi-location luxury car dealerships nationwide.",
+  },
+];
+
+interface TeamCardProps {
+  image: string;
+  name: string;
+  designation: string;
+  description: string;
+}
+
+const TeamCard: React.FC<TeamCardProps> = ({
+  image,
+  name,
+  designation,
+  description,
+}) => {
+  return (
+    <div className="flex flex-col items-center space-y-1 rounded-2xl bg-white px-5 py-10 text-center">
+      <img
+        className="size-[150px] rounded-full border-[6px]"
+        src={image}
+        alt="team-image"
+      />
+      <h5 className="mt-5 text-lg font-semibold">{name}</h5>
+      <h6 className="text-velo-red">{designation}</h6>
+      <div className="my-3 h-[1px] w-4/5 bg-gray-200" />
+      <p className="text-[16.5px] font-light text-gray-600">{description}</p>
+    </div>
+  );
+};
 
 const About = () => {
   return (
-    <div>
-      <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        {/* Page Title */}
-        <h1 className="mb-6 text-center text-3xl font-bold">About Us</h1>
-
-        {/* Introduction Section */}
-        <section className="mb-8">
-          <h2 className="mb-4 text-2xl font-semibold">Our Mission</h2>
-          <p className="leading-relaxed text-gray-700">
-            At Car Shop, our mission is to provide a seamless and trustworthy
-            platform for buying and selling cars. We aim to connect buyers and
-            sellers through an intuitive interface, ensuring a smooth
-            transaction experience.
+    <section>
+      <div className="container">
+        <div className="mx-auto flex items-end pt-5 md:py-7 lg:justify-center lg:gap-8 lg:py-20">
+          <div className="pb-5">
+            <h4 className="text-velo-red m d:mb-3 text-lg font-semibold md:text-xl">
+              We are Velocity
+            </h4>
+            <h3 className="w-max text-xl font-[600] sm:text-2xl md:text-3xl lg:text-4xl lg:leading-[50px] xl:text-5xl">
+              Quality cars, trusted service,
+              <br />
+              <span className="text-gray-500">
+                reliability, and performance
+              </span>
+            </h3>
+          </div>
+          <p className="hidden w-80 text-gray-400 lg:block">
+            Velocity is your trusted destination for quality cars, seamless
+            service, and a drive towards excellence
           </p>
-        </section>
+        </div>
+        <div className="flex items-center sm:gap-3 md:gap-5">
+          <img
+            className="h-[150px] w-full rounded-2xl object-cover sm:w-2/3 md:h-[250px] lg:h-[330px] xl:h-[400px]"
+            src={About1}
+            alt=""
+          />
+          <img
+            className="hidden h-[150px] rounded-2xl object-cover sm:block sm:w-1/3 md:h-[250px] lg:h-[330px] xl:h-[400px]"
+            src={About2}
+            alt=""
+          />
+        </div>
 
-        {/* Features Section */}
-        <section className="mb-8">
-          <h2 className="mb-4 text-2xl font-semibold">Features</h2>
-          <ul className="list-inside list-disc leading-relaxed text-gray-700">
-            <li>Browse a wide selection of cars from various brands.</li>
-            <li>
-              Advanced search and filtering options to find your perfect match.
-            </li>
-            <li>Secure user authentication and profile management.</li>
-            <li>Responsive design for optimal viewing on all devices.</li>
-          </ul>
-        </section>
+        <div className="my-10 grid grid-cols-1 gap-6 md:my-20 lg:grid-cols-2">
+          <h3 className="flex text-2xl font-semibold md:text-3xl lg:text-5xl xl:pl-44">
+            Our Story <PiArrowDownRightBold className="mt-2" />
+          </h3>
 
-        {/* Team Section */}
-        <section>
-          <h2 className="mb-4 text-2xl font-semibold">Meet the Team</h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2">
-            {/* Team Member 1 */}
-            <div className="rounded-lg bg-white p-4 text-center shadow-md">
-              <img
-                src="data:image/jpeg;base64,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"
-                alt="Team Member 1"
-                className="mx-auto mb-4 h-24 w-24 rounded-full"
-              />
-              <h3 className="text-xl font-medium">Alice Johnson</h3>
-              <p className="text-gray-600">Project Manager</p>
+          <div className="space-y-4 font-[400] text-gray-700">
+            <p className="text-velo-black text-[16.1px] font-medium">
+              Velocity started with a simple idea: to make car buying better.
+              Frustrated by the traditional dealership experience, we set out to
+              create a space where quality, transparency, and trust are the
+              foundation—not the exception. What began as a small team of
+              passionate car lovers quickly grew into a trusted destination for
+              drivers seeking more than just a vehicle.
+            </p>
+
+            <p className="pt-3">
+              We carefully curate every car in our collection, ensuring it meets
+              our high standards of performance, reliability, and design.
+              Whether you're buying your first car or upgrading to your dream
+              ride, we're here to guide you every step of the way—with honest
+              advice, fair pricing, and zero pressure.
+            </p>
+
+            <p>
+              At Velocity, we believe your car should match your lifestyle and
+              your expectations. That's why we're committed to delivering a
+              seamless experience rooted in care, quality, and community. We're
+              not just in the car business—we're in the business of helping you
+              drive forward with confidence.
+            </p>
+
+            <div className="flex items-center gap-3 pt-4">
+              <img className="size-10 rounded-full" src={CEO} alt="ceo" />
+              <div>
+                <h5 className="font-bold">Mike Tyson</h5>
+                <h6 className="text-gray-400">Founder & CEO</h6>
+              </div>
             </div>
-            {/* Team Member 2 */}
-            <div className="rounded-lg bg-white p-4 text-center shadow-md">
-              <img
-                src="data:image/jpeg;base64,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"
-                alt="Team Member 2"
-                className="mx-auto mb-4 h-24 w-24 rounded-full"
-              />
-              <h3 className="text-xl font-medium">Bob Smith</h3>
-              <p className="text-gray-600">Frontend Developer</p>
-            </div>
-            
+            <p className="text-[16.1px] font-medium">
+              "At Velocity Car Shop, we're driven by precision, performance, and
+              customer satisfaction. Our mission is to deliver top-tier
+              automotive care with speed, integrity, and excellence."
+            </p>
           </div>
-
-
-
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 mt-5">
-            {/* Team Member 3 */}
-            <div className="rounded-lg bg-white p-4 text-center shadow-md">
-              <img
-                src="data:image/jpeg;base64,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"
-                alt="Team Member 1"
-                className="mx-auto mb-4 h-24 w-24 rounded-full"
-              />
-              <h3 className="text-xl font-medium">Alice Johnson</h3>
-              <p className="text-gray-600">Backend Developer</p>
-            </div>
-            {/* Team Member 4 */}
-            <div className="rounded-lg bg-white p-4 text-center shadow-md">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSWnAdvtLjY-WwPGzQnvqndbAXQ4L1DDAEoCtIYxQH2IdQUR3rjj0OwsQ&s"
-                alt="Team Member 2"
-                className="mx-auto mb-4 h-24 w-24 rounded-full"
-              />
-              <h3 className="text-xl font-medium">Bob Smith</h3>
-              <p className="text-gray-600">UI/UX Developer</p>
-            </div>
-            {/* Team Member 3 */}
-          </div>
-        </section>
+        </div>
       </div>
-    </div>
+
+      <div className="bg-velo-white">
+        <div className="container py-5 md:py-10">
+          <h3 className="text-2xl font-semibold md:text-center md:text-5xl md:leading-[60px]">
+            Our Team has over{" "}
+            <span className="text-gray-400">
+              70 years
+              <br className="hidden md:block" />
+              of combined experience!
+            </span>
+          </h3>
+          <p className="mx-auto mt-2 text-[14.5px] font-light text-gray-500 md:mt-0 md:w-[550px] md:py-5 md:text-center md:text-[16px]">
+            Our team brings experience, innovation, and creativity to the
+            automotive world, ensuring your vehicle is in the best hands at
+            Velocity Car Shop.
+          </p>
+
+          <div className="my-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {teamData.map((eachMember, index) => (
+              <TeamCard
+                image={eachMember.image}
+                name={eachMember.name}
+                designation={eachMember.designation}
+                description={eachMember.description}
+                key={index}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
