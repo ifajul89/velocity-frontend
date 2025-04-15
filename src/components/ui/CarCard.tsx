@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-
 import React from "react";
 
 interface CarCardProps {
@@ -22,24 +21,46 @@ const CarCard: React.FC<CarCardProps> = ({
   return (
     <Link
       to={`/carDetails/${_id}`}
-      className="category-card-custom-hover hover:border-velo-red relative flex cursor-pointer flex-col items-center gap-1 overflow-hidden rounded-2xl border-[1.5px] bg-white p-3 duration-400 md:p-4"
+      className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-velo-red/30"
     >
-      <div className="absolute top-6 right-6 mb-5 w-full">
-        <div className="bg-opacity-10 bg-velo-red border-velo-red text-velo-white ml-auto w-fit rounded-full px-3 py-[1px] text-xs uppercase md:text-base">
+      {/* Category Badge */}
+      <div className="absolute right-3 top-3 z-10">
+        <div className="bg-velo-red text-velo-white rounded-full px-4 py-1 text-xs font-semibold uppercase shadow-sm">
           {category}
         </div>
       </div>
-      <img
-        src={image}
-        className="h-[230px] w-full rounded-xl object-cover"
-        alt=""
-      />
-      <p className="custom-hover-category-name text-velo-black mt-3 line-clamp-1 text-center font-semibold duration-300 md:text-lg">
-        {brand} {carName}
-      </p>
-      <p className="flex items-center gap-1 text-sm text-gray-500 md:text-base">
-        USD {price}
-      </p>
+      
+      {/* Image Container */}
+      <div className="relative h-48 w-full overflow-hidden">
+        <img
+          src={image}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          alt={`${brand} ${carName}`}
+        />
+      </div>
+      
+      {/* Card Content */}
+      <div className="flex flex-1 flex-col p-4">
+        {/* Brand */}
+        <div className="text-gray-500 text-sm font-medium mb-1">
+          {brand}
+        </div>
+        
+        {/* Model Name */}
+        <h3 className="text-velo-black font-bold text-lg line-clamp-1 mb-2 group-hover:text-velo-red transition-colors">
+          {carName}
+        </h3>
+        
+        {/* Divider */}
+        <div className="border-t border-gray-100 my-2"></div>
+        
+        {/* Price */}
+        <div className="mt-auto">
+          <p className="text-velo-red font-bold text-xl">
+            USD {price.toLocaleString()}
+          </p>
+        </div>
+      </div>
     </Link>
   );
 };
