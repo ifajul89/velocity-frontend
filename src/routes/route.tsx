@@ -52,6 +52,14 @@ const routes = createBrowserRouter([
         path: "track-order",
         element: <TrackOrderPage />,
       },
+      {
+        path: "/login",
+        element: <SignIn />,
+      },
+      {
+        path: "register",
+        element: <SignUp />,
+      },
     ],
   },
 
@@ -96,14 +104,6 @@ const routes = createBrowserRouter([
   {
     path: "track-my-order",
     element: <TrackOrderPage />,
-  },
-  {
-    path: "/login",
-    element: <SignIn />,
-  },
-  {
-    path: "register",
-    element: <SignUp />,
   },
   {
     path: "/all-products/:id",
