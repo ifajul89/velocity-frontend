@@ -272,7 +272,7 @@ export default function OrderVerification() {
             </div>
           </CardContent>
           <CardFooter>
-            <Link to="/track-order">
+            <Link to="/dashboard/my-orders">
               <Button className="w-full">Track Order</Button>
             </Link>
           </CardFooter>

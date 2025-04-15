@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Home, User, Settings, ShoppingBag } from "lucide-react";
-import { Link, Outlet } from "react-router-dom";
+import { Home, User, Settings, ShoppingBag, Users } from "lucide-react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { currentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { JSX } from "react";
@@ -16,6 +16,8 @@ import {
   SidebarProvider,
   SidebarInset,
 } from "@/components/ui/sidebar";
+import AdminDashboard from "@/pages/Dashboard/Dashboard";
+import UserDashboard from "@/pages/Dashboard/UserDashboard";
 
 type NavItem = {
   title: string;
@@ -36,14 +38,24 @@ export function AppSidebar() {
   // admin menu
   const adminMenu: NavItem[] = [
     {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: <Home className="h-4 w-4" />,
+    },
+    {
       title: "Add Product",
       url: "/dashboard/add-product",
       icon: <MdOutlineProductionQuantityLimits className="h-4 w-4" />,
     },
     {
-      title: "Admin: Orders Management",
+      title: "Manage Orders",
       url: "/admin/orders",
       icon: <Settings className="h-4 w-4" />,
+    },
+    {
+      title: "Manage User",
+      url: "/admin/users",
+      icon: <Users className="h-4 w-4" />,
     },
     {
       title: "Manage Profile Settings",
@@ -141,11 +153,45 @@ export function AppSidebar() {
 }
 
 export function Dashboard() {
+  const user = useAppSelector(currentUser) as UserType | null;
+  const location = useLocation();
+  const [isReady, setIsReady] = React.useState(false);
+  
+  // Ensure the component is ready after mounting
+  React.useEffect(() => {
+    setIsReady(true);
+  }, []);
+  
+  // Use pathname from React Router instead of window.location
+  const pathname = location.pathname;
+  
+  if (!isReady) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+  
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset>
-        <Outlet />
+        {user?.role === "admin" ? (
+          // If admin, show the index route or outlet based on current location
+          pathname === "/dashboard" ? (
+            <AdminDashboard />
+          ) : (
+            <Outlet />
+          )
+        ) : (
+          // If regular user, show user dashboard or outlet based on pathname
+          pathname === "/dashboard" ? (
+            <UserDashboard />
+          ) : (
+            <Outlet />
+          )
+        )}
       </SidebarInset>
     </SidebarProvider>
   );

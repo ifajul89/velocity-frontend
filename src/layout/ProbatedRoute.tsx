@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 const ProbatedRoute = ({ children }: { children: ReactNode }) => {
   const token = useAppSelector(currentToken);
   if (!token) {
-    <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace />;
   }
   return children;
 };

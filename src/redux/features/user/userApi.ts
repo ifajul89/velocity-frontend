@@ -6,7 +6,7 @@ export const userApi = baseApi.injectEndpoints({
       query: ({ id, userData }) => {
         console.log("Updating user with ID:", id, "Data:", userData);
         return {
-          url: `/user/update/${id}`,
+          url: `user/admin-update/${id}`,
           method: "PATCH",
           body: userData,
         };

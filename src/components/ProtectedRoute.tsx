@@ -34,8 +34,10 @@ const ProtectedRoute: React.FC<{
     return <Navigate to="/login" />;
   }
 
+  // If admin route but user is not admin, redirect to user dashboard
   if (requireAdmin && !isAdmin) {
-    return <Navigate to="/dashboard" />;
+    console.log("Unauthorized access attempt: Regular user tried to access admin route");
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

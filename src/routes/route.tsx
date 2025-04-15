@@ -2,6 +2,7 @@ import App from "@/layout/App";
 import ProfilePage from "@/pages/Profile/Profile";
 import TrackOrderPage from "@/pages/TrackOrder/TrackOrder";
 import OrdersManagementPage from "@/pages/Admin/OrdersManagement";
+import UserManagementPage from "@/pages/Admin/UserManagement";
 import MyOrdersPage from "@/pages/MyOrders/MyOrders";
 import Home from "@/pages/Home";
 import SignIn from "@/pages/SignIn/SignIn";
@@ -15,6 +16,7 @@ import Product from "@/pages/Product/Product";
 import ManageProduct from "@/pages/Admin/ManageProduct";
 import About from "@/pages/About/About";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import DashboardPage from "@/pages/Dashboard/Dashboard";
 
 import { createBrowserRouter } from "react-router-dom";
 import { currentToken, currentUser } from "@/redux/features/auth/authSlice";
@@ -131,17 +133,32 @@ const routes = createBrowserRouter([
   // Authentication routes
   {
     path: "dashboard",
-    element: <Dashboard />,
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {
-        path: "add-product",
-        element: <AddProduct />,
+        index: true,
+        element: <DashboardPage />,
       },
-      { path: "add-product", element: <AddProduct /> },
+      {
+        path: "add-product",
+        element: (
+          <ProtectedRoute requireAdmin={true}>
+            <AddProduct />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "manage-products",
-        element: <ManageProduct />,
+        element: (
+          <ProtectedRoute requireAdmin={true}>
+            <ManageProduct />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "my-orders",
@@ -156,7 +173,21 @@ const routes = createBrowserRouter([
 
   {
     path: "admin/orders",
-    element: <OrdersManagementPage />,
+    element: (
+      <ProtectedRoute requireAdmin={true}>
+        <OrdersManagementPage />
+      </ProtectedRoute>
+    ),
+    errorElement: <ErrorBoundary />,
+  },
+
+  {
+    path: "admin/users",
+    element: (
+      <ProtectedRoute requireAdmin={true}>
+        <UserManagementPage />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorBoundary />,
   },
 
@@ -178,31 +209,12 @@ const routes = createBrowserRouter([
     element: <About />,
   },
  
-
   // User protected routes
-  {
-    path: "dashboard",
-    element: (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
-    ),
-  },
   {
     path: "profile",
     element: (
       <ProtectedRoute>
         <ProfilePage />
-      </ProtectedRoute>
-    ),
-    errorElement: <ErrorBoundary />,
-  },
-
-  {
-    path: "dashboard",
-    element: (
-      <ProtectedRoute>
-        <Dashboard />
       </ProtectedRoute>
     ),
     errorElement: <ErrorBoundary />,

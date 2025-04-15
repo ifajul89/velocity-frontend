@@ -44,9 +44,11 @@ export default function SignIn() {
       } else {
         toast.error(res.data.message || "Login failed");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Login error:", error);
-      toast.error("An error occurred during login");
+      
+      // Always show "Wrong password" for login errors
+      toast.error("Wrong password or email. Please check your email and password and try again.");
     }
   };
 

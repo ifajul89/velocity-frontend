@@ -24,6 +24,25 @@ interface Car {
 // Standard vehicle categories
 const standardCategories = ["Sedan", "SUV", "Truck", "Coupe", "Convertible"];
 
+// Standard car brands
+const standardBrands = [
+  "Toyota", 
+  "Ford", 
+  "Honda", 
+  "Tesla", 
+  "Mazda", 
+  "Audi", 
+  "BMW", 
+  "Mercedes-Benz", 
+  "Chevrolet", 
+  "Hyundai", 
+  "Kia", 
+  "Nissan", 
+  "Volkswagen", 
+  "Subaru", 
+  "Lexus"
+];
+
 const AllProducts = () => {
   const { data: allCarsData, isLoading } = useGetCarsQuery([]);
   
@@ -137,11 +156,21 @@ const AllProducts = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Brands</SelectItem>
-                {brands.map((brand, index) => (
-                  <SelectItem key={`brand-${index}-${brand}`} value={brand}>
+                {/* Standard brands */}
+                {standardBrands.map((brand, index) => (
+                  <SelectItem key={`standard-brand-${index}`} value={brand}>
                     {brand}
                   </SelectItem>
                 ))}
+                {/* Brands from data (if not already included in standard brands) */}
+                {brands
+                  .filter(brand => !standardBrands.includes(brand))
+                  .map((brand, index) => (
+                    <SelectItem key={`data-brand-${index}`} value={brand}>
+                      {brand}
+                    </SelectItem>
+                  ))
+                }
               </SelectContent>
             </Select>
           </div>

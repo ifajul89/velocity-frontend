@@ -120,10 +120,27 @@ export default function AddProduct() {
               <label className="mb-2 block font-medium text-gray-700">
                 Brand
               </label>
-              <input
+              <select
                 {...register("brand", { required: "Brand is required" })}
                 className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-              />
+              >
+                <option value="">Select a brand</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Ford">Ford</option>
+                <option value="Honda">Honda</option>
+                <option value="Tesla">Tesla</option>
+                <option value="Mazda">Mazda</option>
+                <option value="Audi">Audi</option>
+                <option value="BMW">BMW</option>
+                <option value="Mercedes-Benz">Mercedes-Benz</option>
+                <option value="Chevrolet">Chevrolet</option>
+                <option value="Hyundai">Hyundai</option>
+                <option value="Kia">Kia</option>
+                <option value="Nissan">Nissan</option>
+                <option value="Volkswagen">Volkswagen</option>
+                <option value="Subaru">Subaru</option>
+                <option value="Lexus">Lexus</option>
+              </select>
               {errors.brand && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.brand.message}

@@ -158,8 +158,8 @@ export default function MyOrdersPage() {
             <CircleSlash className="h-10 w-10 text-gray-400 mx-auto mb-3" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No orders found</h3>
             <Link 
-              to="/all-product" 
-              className="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-base"
+              to="/all-cars" 
+              className="inline-block mt-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-base"
             >
               Browse Products
             </Link>
