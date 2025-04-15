@@ -200,8 +200,8 @@ export default function OrderVerification() {
               </dd>
               <dt className="font-semibold">Date:</dt>
               <dd>{new Date(orderData?.date_time)?.toLocaleString()}</dd>
-              <dt className="font-semibold">Estimated Delivery:</dt>
-              <dd>{formatEstimatedDelivery(estimatedDeliveryDate)})</dd>
+              <dt className="font-semibold text-red-600">Estimated Delivery:</dt>
+              <dd className="text-red-600">{formatEstimatedDelivery(estimatedDeliveryDate)}</dd>
             </dl>
           </CardContent>
         </Card>
@@ -255,7 +255,7 @@ export default function OrderVerification() {
               <dt className="font-semibold">Tracking Number:</dt>
               <dd>{trackingNumber}</dd>
               <dt className="font-semibold">Estimated Delivery:</dt>
-              <dd>{formatEstimatedDelivery(estimatedDeliveryDate)}  (7days latter from Current date)</dd>
+              <dd className="text-velo-red">{formatEstimatedDelivery(estimatedDeliveryDate)}  (7days latter from Current date)</dd>
             </dl>
             <div className="flex items-center gap-2">
               {orderData?.bank_status === "Success" ? (
