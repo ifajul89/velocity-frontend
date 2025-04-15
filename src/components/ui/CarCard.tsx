@@ -51,17 +51,16 @@ const CarCard: React.FC<CarCardProps> = ({
         {/* Divider */}
         <div className="border-t border-gray-100 my-2"></div>
         
-        {/* Price */}
+        {/* Price and Button in single row */}
         <div className="mt-auto">
-          <p className="text-velo-red font-bold text-xl mb-3">
-            BDT {price.toLocaleString()}
-          </p>
-          
-          {/* View Details Button */}
-          <div className="flex justify-center mt-4">
+          <div className="flex items-center justify-between mt-4">
+            <p className="text-velo-red font-bold text-xl">
+              BDT {price.toLocaleString()}
+            </p>
+            
             <Link 
               to={`/carDetails/${_id}`}
-              className="bg-velo-red hover:bg-velo-red/90 text-white font-semibold py-2.5 px-4 rounded-lg w-full text-center transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow transform hover:-translate-y-0.5"
+              className="bg-velo-red hover:bg-velo-red/90 text-white font-semibold py-2 px-3 rounded-lg w-auto text-center transition-all duration-300 flex items-center justify-center gap-1 shadow-sm hover:shadow transform hover:-translate-y-0.5"
             >
               View details
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
