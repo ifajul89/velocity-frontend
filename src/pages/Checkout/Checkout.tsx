@@ -111,8 +111,8 @@ const Checkout = () => {
 
   // Calculate totals
   const subtotal = product ? product.price * quantity : 0;
-  const tax = subtotal * 0.05; // 5% tax
-  const shipping = 250; // Fixed shipping cost of $2.50
+  const tax = subtotal * 0.05; // 5% tax (matching backend)
+  const shipping = 2500; // Fixed shipping cost (matching backend)
   const total = subtotal + tax + shipping;
 
   // Handle form input changes
@@ -304,23 +304,23 @@ const Checkout = () => {
             <div>
               <div className="mb-1 flex justify-between">
                 <span className="text-gray-600">Price:</span>
-                <span>${product.price.toLocaleString()}</span>
+                <span>{product.price.toLocaleString()}</span>
               </div>
               <div className="mb-1 flex justify-between">
                 <span className="text-gray-600">Subtotal:</span>
-                <span>${subtotal.toLocaleString()}</span>
+                <span>৳ {subtotal.toLocaleString()}</span>
               </div>
               <div className="mb-1 flex justify-between">
                 <span className="text-gray-600">Tax (5%):</span>
-                <span>${tax.toLocaleString()}</span>
+                <span>৳ {tax.toLocaleString()}</span>
               </div>
               <div className="mb-1 flex justify-between">
-                <span className="text-gray-600">Shipping:</span>
-                <span>${shipping.toLocaleString()}</span>
+                <span className="text-gray-600">Shipping (Fixed):</span>
+                <span>৳ {shipping.toLocaleString()}</span>
               </div>
               <div className="mt-3 flex justify-between border-t border-gray-200 pt-3 text-lg font-bold">
                 <span>Total:</span>
-                <span>${total.toLocaleString()}</span>
+                <span>৳ {total.toLocaleString()}</span>
               </div>
             </div>
           </div>

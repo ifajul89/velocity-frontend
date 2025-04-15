@@ -19,10 +19,7 @@ const CarCard: React.FC<CarCardProps> = ({
   _id,
 }) => {
   return (
-    <Link
-      to={`/carDetails/${_id}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-velo-red/30"
-    >
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:border-velo-red/30">
       {/* Category Badge */}
       <div className="absolute right-3 top-3 z-10">
         <div className="bg-velo-red text-velo-white rounded-full px-4 py-1 text-xs font-semibold uppercase shadow-sm">
@@ -56,12 +53,25 @@ const CarCard: React.FC<CarCardProps> = ({
         
         {/* Price */}
         <div className="mt-auto">
-          <p className="text-velo-red font-bold text-xl">
-            USD {price.toLocaleString()}
+          <p className="text-velo-red font-bold text-xl mb-3">
+            BDT {price.toLocaleString()}
           </p>
+          
+          {/* View Details Button */}
+          <div className="flex justify-center mt-4">
+            <Link 
+              to={`/carDetails/${_id}`}
+              className="bg-velo-red hover:bg-velo-red/90 text-white font-semibold py-2.5 px-4 rounded-lg w-full text-center transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow transform hover:-translate-y-0.5"
+            >
+              View details
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

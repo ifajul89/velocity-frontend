@@ -234,7 +234,7 @@ const Product = () => {
                   <div className="inline-block w-40">
                     <p className="font-semibold">Price</p>
                   </div>
-                  <span className="text-gray-500">${price?.toLocaleString()}</span>
+                  <span className="text-gray-500">৳ {price?.toLocaleString()}</span>
                 </div>
               )}
               
