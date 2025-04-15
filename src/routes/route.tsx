@@ -88,6 +88,7 @@ export const productLoader = async ({ params }: LoaderFunctionArgs) => {
     }
 };
 
+import Contact from "@/pages/Contact/Contact";
 
 const routes = createBrowserRouter([
   // Public routes
@@ -111,6 +112,14 @@ const routes = createBrowserRouter([
         element: <AllProducts />,
       },
       {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
         path: "checkout",
         element: <ProtectedRoute><Checkout /></ProtectedRoute>,
       },
@@ -126,6 +135,14 @@ const routes = createBrowserRouter([
         path: "carDetails/:id",
         element: <ProtectedRoute><Product /></ProtectedRoute>,
         loader: productLoader,
+      },
+      {
+        path: "/login",
+        element: <SignIn />,
+      },
+      {
+        path: "register",
+        element: <SignUp />,
       },
     ],
   },
@@ -154,11 +171,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "manage-products",
-        element: (
-          <ProtectedRoute requireAdmin={true}>
-            <ManageProduct />
-          </ProtectedRoute>
-        ),
+        element: <ManageProduct />,
       },
       {
         path: "my-orders",
@@ -204,11 +217,6 @@ const routes = createBrowserRouter([
     element: <AllProducts />,
     loader: () => fetch(`http://localhost:5000/api/cars/`),
   },
-  {
-    path: "/about",
-    element: <About />,
-  },
- 
   // User protected routes
   {
     path: "profile",

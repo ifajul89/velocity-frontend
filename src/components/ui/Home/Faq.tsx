@@ -36,11 +36,11 @@ const quistions = [
 
 const Faq = () => {
   return (
-    <section className="container mb-5 mt-16 flex flex-col items-center gap-6 md:gap-16 md:my-20 md:flex-row">
-      <div className="w-full md:w-2/5 space-y-4 md:space-y-7">
+    <section className="container mt-16 mb-5 flex flex-col items-center gap-6 md:my-20 md:flex-row md:gap-16">
+      <div className="w-full space-y-4 md:w-2/5 md:space-y-7">
         <div>
           <div className="bg-velo-red h-1 w-20 rounded-full" />
-          <h3 className="text-velo-black mt-2 text-2xl md:text-4xl font-semibold">
+          <h3 className="text-velo-black mt-2 text-2xl font-semibold md:text-4xl">
             Any question?
             <br />
             We got you.

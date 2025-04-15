@@ -145,3 +145,8 @@ body {
 .category-card-custom-hover:hover .custom-hover-category-name {
   @apply text-velo-red;
 }
+
+/* Contact Us Map */
+.gmnoprint {
+  display: none !important;
+}
