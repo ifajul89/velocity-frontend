@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Search, AlertCircle, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, X, Eye, MoreHorizontal } from "lucide-react";
+import { Search, AlertCircle, ChevronLeft, ChevronRight, ArrowUp, ArrowDown, X, Eye, MoreHorizontal, Pencil, Trash } from "lucide-react";
+import { toast } from "sonner";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -40,7 +41,7 @@ import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { AppSidebar } from "@/components/Dashboard";
-import { useGetAllOrdersQuery, useUpdateOrderTrackingMutation } from "@/redux/features/order/order";
+import { useGetAllOrdersQuery, useUpdateOrderTrackingMutation, useDeleteOrderMutation } from "@/redux/features/order/order";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -90,38 +91,15 @@ interface Transaction {
   sp_message?: string;
 }
 
-interface Order {
-  _id: string;
-  user: string;
-  customerFirstName?: string;
-  customerLastName?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  city?: string;
-  zipCode?: string;
-  products: OrderProduct[];
-  subtotal?: number;
-  tax: number;
-  shipping: number;
-  totalPrice: number;
-  status: string;
-  trackingUpdates: TrackingUpdate[];
-  trackingNumber?: string;
-  transaction?: Transaction;
-  trackingStages?: TrackingStages;
-  estimatedDelivery?: string;
-  estimatedDeliveryDate?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 // OrderModal component for showing detailed order information
-const OrderDetailsModal = ({ order, onClose }: { order: ApiOrder; onClose: () => void }) => {
+const OrderDetailsModal = ({ order, onClose }: { order: ApiOrder & { 
+  trackingStages?: TrackingStages;
+  transaction?: Transaction; 
+}; onClose: () => void }) => {
   if (!order) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-2 sm:p-4">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl max-h-[90vh] overflow-auto">
         <div className="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
           <h2 className="text-xl font-bold">Order Details: {order._id}</h2>
@@ -130,7 +108,7 @@ const OrderDetailsModal = ({ order, onClose }: { order: ApiOrder; onClose: () =>
           </Button>
         </div>
         
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <Card>
             <CardHeader>
               <CardTitle>Customer Information</CardTitle>
@@ -314,6 +292,69 @@ const OrderDetailsModal = ({ order, onClose }: { order: ApiOrder; onClose: () =>
   );
 };
 
+// DeleteConfirmationModal component for confirming order deletion
+const DeleteConfirmationModal = ({ 
+  orderId, 
+  onConfirm, 
+  onCancel 
+}: { 
+  orderId: string; 
+  onConfirm: () => Promise<void>; 
+  onCancel: () => void;
+}) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await onConfirm();
+    } catch (err) {
+      console.error("Delete confirmation error:", err);
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
+        <div className="p-6">
+          <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+          <p className="mb-6">Are you sure you want to delete this order? This action cannot be undone.</p>
+          <p className="mb-6 text-sm text-muted-foreground break-all">
+            <span className="font-medium">Order ID:</span> {orderId}
+          </p>
+          <div className="flex justify-end space-x-3">
+            <Button 
+              variant="outline" 
+              onClick={onCancel}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <div className="flex items-center">
+                  <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                  Deleting...
+                </div>
+              ) : (
+                <>
+                  <Trash className="h-4 w-4 mr-2" />
+                  Delete Order
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const statusOptions = [
   {
     value: "placed",
@@ -343,8 +384,9 @@ const statusOptions = [
 ];
 
 export default function OrdersManagementPage() {
-  const { data: orders = [], isLoading, error } = useGetAllOrdersQuery();
+  const { data: orders = [], isLoading, error, refetch } = useGetAllOrdersQuery();
   const [updateOrderTracking] = useUpdateOrderTrackingMutation();
+  const [deleteOrder] = useDeleteOrderMutation();
   const [filteredOrders, setFilteredOrders] = useState<ApiOrder[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingOrder, setEditingOrder] = useState<string | null>(null);
@@ -363,6 +405,9 @@ export default function OrdersManagementPage() {
   
   // Modal state
   const [viewingOrder, setViewingOrder] = useState<ApiOrder | null>(null);
+
+  // Add this new state for the delete confirmation modal
+  const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null);
 
   // Set filtered orders when orders data is loaded and apply initial sorting
   useEffect(() => {
@@ -461,26 +506,22 @@ export default function OrdersManagementPage() {
     
     console.log('Order to edit:', orderToEdit);
     
-    // Determine the current active tracking stage
-    // First, normalize the current status to lowercase
-    const normalizedStatus = currentStatus.toLowerCase();
+    // Get current stage from tracking stages if available
+    let activeStage = "placed"; // Default fallback
     
-    // Use the current status if it's one of our valid stage values
-    let activeStage = ["placed", "approved", "processed", "shipped", "delivered"].includes(normalizedStatus) 
-        ? normalizedStatus 
-        : "placed"; // Default fallback
-    
-    // Double check with trackingStages if available
+    // First check if we have tracking stages available and use those
     if (orderToEdit.trackingStages) {
-        // Only use trackingStages if at least one stage is true
-        const hasActiveStageDefined = Object.values(orderToEdit.trackingStages).some(value => value === true);
-        
-        if (hasActiveStageDefined) {
-            if (orderToEdit.trackingStages.delivered) activeStage = "delivered";
-            else if (orderToEdit.trackingStages.shipped) activeStage = "shipped";
-            else if (orderToEdit.trackingStages.processed) activeStage = "processed";
-            else if (orderToEdit.trackingStages.approved) activeStage = "approved";
-            else if (orderToEdit.trackingStages.placed) activeStage = "placed";
+        if (orderToEdit.trackingStages.delivered) activeStage = "delivered";
+        else if (orderToEdit.trackingStages.shipped) activeStage = "shipped";
+        else if (orderToEdit.trackingStages.processed) activeStage = "processed";
+        else if (orderToEdit.trackingStages.approved) activeStage = "approved";
+        else if (orderToEdit.trackingStages.placed) activeStage = "placed";
+    } 
+    // If no tracking stages or none active, try to use the current status
+    else {
+        const normalizedStatus = currentStatus.toLowerCase();
+        if (["placed", "approved", "processed", "shipped", "delivered"].includes(normalizedStatus)) {
+            activeStage = normalizedStatus;
         }
     }
     
@@ -506,7 +547,6 @@ export default function OrdersManagementPage() {
     console.log('Setting edit form with:', {
         orderId,
         currentStatus,
-        normalizedStatus,
         activeStage,
         formattedDate,
         messageToUse
@@ -551,18 +591,19 @@ export default function OrdersManagementPage() {
 
     if (!orderId) {
         console.error('No order ID provided');
+        toast.error('No order ID provided');
         return;
     }
 
     // Validate required fields
     if (!tempData.status) {
-        alert('Please select a status');
+        toast.error('Please select a status');
         return;
     }
 
     // Ensure message is not empty
     if (!tempData.message || tempData.message.trim() === '') {
-        alert('Please provide a status message');
+        toast.error('Please provide a status message');
         return;
     }
 
@@ -587,6 +628,9 @@ export default function OrdersManagementPage() {
 
         console.log('Sending simplified update data:', JSON.stringify(updateData, null, 2));
 
+        // Show pending toast
+        const toastId = toast.loading("Updating order status...");
+        
         // Call the mutation
         const result = await updateOrderTracking({
             orderId,
@@ -618,12 +662,15 @@ export default function OrdersManagementPage() {
 
         console.log('Manually updated order:', updatedOrder);
 
-        // Update the filtered orders with the updated order
+        // Update both filtered orders and refresh data from server
         setFilteredOrders(prevOrders =>
             prevOrders.map(order => 
                 order._id === orderId ? updatedOrder : order
             )
         );
+
+        // Force refresh data from server
+        await refetch();
 
         // Reset UI state
         setEditingOrder(null);
@@ -634,11 +681,11 @@ export default function OrdersManagementPage() {
         });
 
         // Show success message
-        alert('Order updated successfully!');
+        toast.success('Order updated successfully!', {id: toastId});
     } catch (error) {
         console.error('Failed to update order:', error);
         console.error('Error details:', JSON.stringify(error, null, 2));
-        alert('Failed to update order: Stage and message are required for tracking update');
+        toast.error('Failed to update order: Stage and message are required for tracking update');
     }
   };
 
@@ -655,6 +702,51 @@ export default function OrdersManagementPage() {
   // Close order details modal
   const handleCloseDetails = () => {
     setViewingOrder(null);
+  };
+
+  // Handle order deletion
+  const handleDelete = (orderId: string) => {
+    // Show delete confirmation modal
+    setDeletingOrderId(orderId);
+  };
+  
+  // Handle confirm deletion
+  const handleConfirmDelete = async () => {
+    if (!deletingOrderId) return;
+    
+    const orderId = deletingOrderId;
+    
+    try {
+      // Show pending toast
+      const toastId = toast.loading("Deleting order...");
+      
+      console.log("Deleting order:", orderId);
+      
+      // Call the delete API
+      await deleteOrder(orderId).unwrap();
+      
+      // Update the filtered orders to remove the deleted order
+      setFilteredOrders(prevOrders => prevOrders.filter(order => order._id !== orderId));
+      
+      // Refetch to ensure data is in sync with server
+      await refetch();
+      
+      // Clear the deleting order ID
+      setDeletingOrderId(null);
+      
+      // Update toast to success
+      toast.success('Order deleted successfully!', {id: toastId});
+    } catch (error) {
+      console.error('Failed to delete order:', error);
+      toast.error('Failed to delete order. Please try again.');
+      // Keep the modal open on error
+      throw error;
+    }
+  };
+  
+  // Handle cancel deletion
+  const handleCancelDelete = () => {
+    setDeletingOrderId(null);
   };
 
   // Add this helper function to the component to determine the active stage
@@ -725,7 +817,7 @@ export default function OrdersManagementPage() {
             </div>
           </header>
 
-          <main className="flex-1 p-4">
+          <main className="flex-1 p-3 sm:p-4">
             <div className="mb-4">
               <h1 className="mb-2 text-2xl font-bold">Orders Management</h1>
               <p className="text-muted-foreground">
@@ -733,7 +825,7 @@ export default function OrdersManagementPage() {
               </p>
             </div>
 
-            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-5">
+            <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:gap-4">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">
@@ -802,10 +894,10 @@ export default function OrdersManagementPage() {
                 </CardHeader>
                 <CardContent>
                   <form
-                    className="flex items-center gap-4"
+                    className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4"
                     onSubmit={applySearch}
                   >
-                    <div className="relative flex-1">
+                    <div className="relative flex-1 w-full">
                       <Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
                       <Input
                         type="search"
@@ -815,15 +907,17 @@ export default function OrdersManagementPage() {
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
                     </div>
-                    <Button type="submit">Search</Button>
-                    {searchQuery && (
-                      <Button
-                        variant="outline"
-                        onClick={clearSearch}
-                      >
-                        Clear
-                      </Button>
-                    )}
+                    <div className="flex gap-2 self-end sm:self-auto">
+                      <Button type="submit">Search</Button>
+                      {searchQuery && (
+                        <Button
+                          variant="outline"
+                          onClick={clearSearch}
+                        >
+                          Clear
+                        </Button>
+                      )}
+                    </div>
                   </form>
                 </CardContent>
               </Card>
@@ -832,18 +926,18 @@ export default function OrdersManagementPage() {
             <div>
               <Card>
                 <CardHeader className="pb-2">
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
                     <div>
-                  <CardTitle>All Orders</CardTitle>
-                  <CardDescription>
-                    View and manage all customer orders
-                  </CardDescription>
+                      <CardTitle>All Orders</CardTitle>
+                      <CardDescription>
+                        View and manage all customer orders
+                      </CardDescription>
                     </div>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={toggleSortDirection}
-                      className="flex items-center gap-1"
+                      className="flex items-center gap-1 self-end sm:self-auto"
                     >
                       Date
                       {sortDirection === 'desc' ? (
@@ -855,13 +949,13 @@ export default function OrdersManagementPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="w-full overflow-x-hidden">
-                    <Table className="w-full table-fixed">
+                  <div className="w-full overflow-x-auto">
+                    <Table className="w-full table-fixed min-w-[800px]">
                       <TableHeader>
                         <TableRow>
-                          <TableHead className="w-[15%] text-xs">Order ID</TableHead>
-                          <TableHead className="w-[15%] text-xs">Customer</TableHead>
-                          <TableHead className="w-[10%] cursor-pointer text-xs" onClick={toggleSortDirection}>
+                          <TableHead className="w-[25%] text-xs">Order ID</TableHead>
+                          <TableHead className="w-[12%] text-xs">Customer</TableHead>
+                          <TableHead className="w-[10%] cursor-pointer text-xs hidden sm:table-cell" onClick={toggleSortDirection}>
                             <div className="flex items-center gap-1">
                               Date
                               {sortDirection === 'desc' ? (
@@ -871,9 +965,9 @@ export default function OrdersManagementPage() {
                               )}
                             </div>
                           </TableHead>
-                          <TableHead className="w-[12%] text-xs">Payment Status</TableHead>
+                          <TableHead className="w-[12%] text-xs hidden sm:table-cell">Payment Status</TableHead>
                           <TableHead className="w-[15%] text-xs">Order Stage</TableHead>
-                          <TableHead className="w-[15%] text-xs">Estimated Delivery</TableHead>
+                          <TableHead className="w-[15%] text-xs hidden md:table-cell">Estimated Delivery</TableHead>
                           <TableHead className="w-[8%] text-xs">Total</TableHead>
                           <TableHead className="w-[10%] text-xs">Actions</TableHead>
                         </TableRow>
@@ -893,9 +987,20 @@ export default function OrdersManagementPage() {
                                         <Select
                                           value={tempData.status}
                                           onValueChange={handleStatusChange}
+                                          defaultValue={tempData.status}
                                         >
                                           <SelectTrigger id="status" className="w-full">
-                                            <SelectValue placeholder="Select status" />
+                                            <SelectValue>
+                                              {statusOptions.find(s => s.value === tempData.status) ? (
+                                                <div className="flex items-center gap-2">
+                                                  <Badge className={statusOptions.find(s => s.value === tempData.status)?.color || ""}>
+                                                    {statusOptions.find(s => s.value === tempData.status)?.label || tempData.status}
+                                                  </Badge>
+                                                </div>
+                                              ) : (
+                                                "Select status"
+                                              )}
+                                            </SelectValue>
                                           </SelectTrigger>
                                           <SelectContent>
                                             {statusOptions.map((status) => (
@@ -963,18 +1068,18 @@ export default function OrdersManagementPage() {
                             ) : (
                               <>
                                 <TableCell className="font-medium text-xs">
-                                  {order._id}
+                                  <div className="break-all overflow-hidden text-ellipsis whitespace-normal" title={order._id}>{order._id}</div>
                                 </TableCell>
                                 <TableCell className="text-xs">
-                                  <div>{order.customerFirstName || 'N/A'} {order.customerLastName || ''}</div>
-                                  <div className="text-muted-foreground text-[11px]">
+                                  <div className="truncate">{order.customerFirstName || 'N/A'} {order.customerLastName || ''}</div>
+                                  <div className="text-muted-foreground text-[11px] truncate break-all w-full" title={order.email || ''}>
                                     {order.email || 'No email provided'}
                                   </div>
                                 </TableCell>
-                                <TableCell className="text-xs">
+                                <TableCell className="text-xs hidden sm:table-cell">
                                   {format(new Date(order.createdAt), "MMM d, yyyy")}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="hidden sm:table-cell">
                                   <Badge
                                     className="text-[10px] py-0.5"
                                     variant={
@@ -1003,7 +1108,7 @@ export default function OrdersManagementPage() {
                                     {getActiveStage(order)}
                                   </Badge>
                                 </TableCell>
-                                <TableCell className="text-xs">
+                                <TableCell className="text-xs hidden md:table-cell">
                                   {order.estimatedDelivery
                                     ? format(new Date(order.estimatedDelivery), "MMM d, yyyy")
                                     : order.estimatedDeliveryDate 
@@ -1041,7 +1146,15 @@ export default function OrdersManagementPage() {
                                         }
                                         className="text-xs cursor-pointer"
                                       >
+                                        <Pencil className="h-3 w-3 mr-2" />
                                         Edit
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem 
+                                        onClick={() => handleDelete(order._id)}
+                                        className="text-xs cursor-pointer text-red-500"
+                                      >
+                                        <Trash className="h-3 w-3 mr-2" />
+                                        Delete
                                       </DropdownMenuItem>
                                     </DropdownMenuContent>
                                   </DropdownMenu>
@@ -1054,8 +1167,8 @@ export default function OrdersManagementPage() {
                     </Table>
                   </div>
                 </CardContent>
-                <div className="flex flex-wrap items-center justify-between border-t px-4 py-3 text-sm gap-2">
-                  <div className="text-muted-foreground">
+                <div className="flex flex-col sm:flex-row items-center justify-between border-t px-3 sm:px-4 py-3 text-sm gap-2">
+                  <div className="text-muted-foreground text-center sm:text-left">
                     Showing {indexOfFirstOrder + 1} to {Math.min(indexOfLastOrder, filteredOrders.length)} of {filteredOrders.length} orders
                   </div>
                   <div className="flex items-center gap-1">
@@ -1115,6 +1228,15 @@ export default function OrdersManagementPage() {
         <OrderDetailsModal 
           order={viewingOrder} 
           onClose={handleCloseDetails} 
+        />
+      )}
+      
+      {/* Delete Confirmation Modal */}
+      {deletingOrderId && (
+        <DeleteConfirmationModal
+          orderId={deletingOrderId}
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
         />
       )}
     </div>

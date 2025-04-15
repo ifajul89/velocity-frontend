@@ -183,6 +183,16 @@ const orderApi = baseApi.injectEndpoints({
         return response?.data;
       },
     }),
+    // Endpoint for deleting an order
+    deleteOrder: builder.mutation<{ success: boolean }, string>({
+      query: (orderId) => ({
+        url: `/orders/${orderId}`,
+        method: "DELETE",
+      }),
+      transformResponse: (response: { success: boolean }) => {
+        return response;
+      },
+    }),
   }),
 });
 
@@ -194,4 +204,5 @@ export const {
   useGetUserOrdersQuery,
   useTrackOrderQuery,
   useUpdateOrderTrackingMutation,
+  useDeleteOrderMutation,
 } = orderApi;

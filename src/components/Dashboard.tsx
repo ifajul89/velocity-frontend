@@ -48,10 +48,16 @@ export function AppSidebar() {
       icon: <MdOutlineProductionQuantityLimits className="h-4 w-4" />,
     },
     {
+      title: "Manage Products",
+      url: "/dashboard/manage-products",
+      icon: <MdOutlineProductionQuantityLimits className="h-4 w-4" />,
+    },
+    {
       title: "Manage Orders",
       url: "/admin/orders",
       icon: <Settings className="h-4 w-4" />,
     },
+   
     {
       title: "Manage User",
       url: "/admin/users",
@@ -61,16 +67,6 @@ export function AppSidebar() {
       title: "Manage Profile Settings",
       url: "/profile",
       icon: <User className="h-4 w-4" />,
-    },
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: <Settings className="h-4 w-4" />,
-    },
-    {
-      title: "Manage Products",
-      url: "/dashboard/manage-products",
-      icon: <MdOutlineProductionQuantityLimits className="h-4 w-4" />,
     },
   ];
 

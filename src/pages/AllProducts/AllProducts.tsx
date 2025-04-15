@@ -10,6 +10,7 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
+import { StatsWidget } from "@/components/StatsWidget";
 
 // Define Car interface
 interface Car {
@@ -20,28 +21,6 @@ interface Car {
   brand: string;
   _id: string;
 }
-
-// Standard vehicle categories
-const standardCategories = ["Sedan", "SUV", "Truck", "Coupe", "Convertible"];
-
-// Standard car brands
-const standardBrands = [
-  "Toyota", 
-  "Ford", 
-  "Honda", 
-  "Tesla", 
-  "Mazda", 
-  "Audi", 
-  "BMW", 
-  "Mercedes-Benz", 
-  "Chevrolet", 
-  "Hyundai", 
-  "Kia", 
-  "Nissan", 
-  "Volkswagen", 
-  "Subaru", 
-  "Lexus"
-];
 
 const AllProducts = () => {
   const { data: allCarsData, isLoading } = useGetCarsQuery([]);
@@ -150,6 +129,11 @@ const AllProducts = () => {
     <section className="container py-10">
       <SectionTitle title="All Cars" />
       
+      {/* Stats Widget with improved styling */}
+      <div className="mb-8">
+        <StatsWidget />
+      </div>
+      
       {/* Search and Filter Section */}
       <div className="mb-8 space-y-4 p-4 bg-gray-50 rounded-lg">
         <h3 className="text-lg font-semibold">Search & Filters</h3>
@@ -165,57 +149,40 @@ const AllProducts = () => {
           />
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Filters grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Brand Filter */}
           <div>
+            <label htmlFor="brandFilter" className="block mb-1 text-sm">Brand</label>
             <Select value={brandFilter} onValueChange={setBrandFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Brand" />
+              <SelectTrigger id="brandFilter" className="w-full">
+                <SelectValue placeholder="All Brands" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Brands</SelectItem>
-                {/* Standard brands */}
-                {standardBrands.map((brand, index) => (
-                  <SelectItem key={`standard-brand-${index}`} value={brand}>
+                {brands.sort().map((brand) => (
+                  <SelectItem key={brand} value={brand}>
                     {brand}
                   </SelectItem>
                 ))}
-                {/* Brands from data (if not already included in standard brands) */}
-                {brands
-                  .filter(brand => !standardBrands.includes(brand))
-                  .map((brand, index) => (
-                    <SelectItem key={`data-brand-${index}`} value={brand}>
-                      {brand}
-                    </SelectItem>
-                  ))
-                }
               </SelectContent>
             </Select>
           </div>
           
           {/* Category Filter */}
           <div>
+            <label htmlFor="categoryFilter" className="block mb-1 text-sm">Category</label>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select Category" />
+              <SelectTrigger id="categoryFilter" className="w-full">
+                <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {/* Standard categories */}
-                {standardCategories.map((category, index) => (
-                  <SelectItem key={`standard-category-${index}`} value={category}>
+                {categories.sort().map((category) => (
+                  <SelectItem key={category} value={category}>
                     {category}
                   </SelectItem>
                 ))}
-                {/* Categories from data (if not already included in standard categories) */}
-                {categories
-                  .filter(category => !standardCategories.includes(category))
-                  .map((category, index) => (
-                    <SelectItem key={`data-category-${index}`} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))
-                }
               </SelectContent>
             </Select>
           </div>
