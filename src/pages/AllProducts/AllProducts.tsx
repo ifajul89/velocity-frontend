@@ -227,25 +227,25 @@ const AllProducts = () => {
       <SectionTitle title="All Cars" />
 
       {/* Search and Filter Section */}
-      <Card className="mb-4 border border-gray-200 shadow-sm">
+      <Card className="bg-velo-white mb-4 border-0 py-0 shadow-none">
         <CardContent className="p-2">
           <div className="flex flex-wrap items-center gap-2">
             {/* Search Input */}
             <div className="relative w-full flex-shrink-0 md:w-[30%]">
-              <Search className="absolute top-1.5 left-2 h-4 w-4 text-gray-400" />
+              <Search className="absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
                 type="text"
                 placeholder="Search by brand, car name, or category..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="h-7 w-full pl-7 text-sm"
+                className="h-10 w-full bg-white pl-7 text-sm"
               />
             </div>
 
             {/* Brand Filter */}
             <div className="w-full flex-shrink-0 md:w-[15%]">
               <Select value={brandFilter} onValueChange={setBrandFilter}>
-                <SelectTrigger id="brandFilter" className="h-7 w-full text-sm">
+                <SelectTrigger id="brandFilter" className="h-10 w-full text-sm">
                   <SelectValue placeholder="All Brands" />
                 </SelectTrigger>
                 <SelectContent>
@@ -301,7 +301,7 @@ const AllProducts = () => {
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger
                   id="categoryFilter"
-                  className="h-7 w-full text-sm"
+                  className="h-10 w-full text-sm"
                 >
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
@@ -331,7 +331,7 @@ const AllProducts = () => {
                     e.target.value === "" ? 0 : Number(e.target.value);
                   setMinPrice(value);
                 }}
-                className="h-7 flex-1 text-xs"
+                className="h-10 flex-1 bg-white text-xs"
                 placeholder="Min"
               />
               <span className="flex-shrink-0 text-xs text-gray-500">to</span>
@@ -347,7 +347,7 @@ const AllProducts = () => {
                       : Number(e.target.value);
                   setMaxPrice(value);
                 }}
-                className="h-7 flex-1 text-xs"
+                className="h-10 flex-1 bg-white text-xs"
                 placeholder="Max"
               />
             </div>
@@ -356,7 +356,7 @@ const AllProducts = () => {
             <div className="w-full flex-shrink-0 md:w-[12%]">
               <Button
                 onClick={resetFilters}
-                className="bg-velo-red hover:bg-velo-maroon h-7 w-full text-xs font-medium"
+                className="bg-velo-red hover:bg-velo-maroon h-10 w-full text-xs font-medium"
               >
                 Reset Filters
               </Button>
@@ -366,7 +366,7 @@ const AllProducts = () => {
       </Card>
 
       {/* Results Summary */}
-      <div className="mb-4 flex items-center justify-between rounded bg-gray-50 px-4 py-1.5 text-xs">
+      <div className="bg-velo-white mb-4 flex items-center justify-between rounded px-4 py-1.5 text-xs md:py-2">
         <p className="text-gray-600">
           Showing{" "}
           <span className="font-semibold">
