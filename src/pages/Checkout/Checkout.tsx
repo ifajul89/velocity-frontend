@@ -3,7 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/ui/shared/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { createOrder, selectCheckoutUrl, selectOrderError, selectOrderLoading } from "@/redux/features/order/orderSlice";
+import {
+  createOrder,
+  selectCheckoutUrl,
+  selectOrderError,
+  selectOrderLoading,
+} from "@/redux/features/order/orderSlice";
 import { toast } from "sonner";
 import { AppDispatch } from "@/redux/store";
 import { useAppSelector } from "@/redux/hooks";
@@ -15,31 +20,29 @@ const Checkout = () => {
 
   // Get product and user data from state
   const { product, user: routeStateUser } = location.state || {};
-  
+
   // Get user data from Redux as fallback
   const reduxUser = useAppSelector((state) => state.auth.user);
-  
+
   // Use route state user if available, otherwise use Redux user
   const user = routeStateUser || reduxUser;
 
   // Check if user is admin - if so, redirect and show error
   useEffect(() => {
     if (user && user.role === "admin") {
-      toast.error(
-        "Admin Access Restricted",
-        {
-          description: "Please use a regular customer account.Administrators are not allowed to make purchases. ",
-          duration: 5000,
-          style: { 
-            fontSize: "1.2rem",
-            backgroundColor: "#FFE1E1",
-            borderLeft: "5px solid #FF0000",
-            padding: "16px",
-            width: "400px"
-          },
-          icon: "🛑"
-        }
-      );
+      toast.error("Admin Access Restricted", {
+        description:
+          "Please use a regular customer account.Administrators are not allowed to make purchases. ",
+        duration: 5000,
+        style: {
+          fontSize: "1.2rem",
+          backgroundColor: "#FFE1E1",
+          borderLeft: "5px solid #FF0000",
+          padding: "16px",
+          width: "400px",
+        },
+        icon: "🛑",
+      });
       navigate("/");
     }
   }, [user, navigate]);
@@ -64,19 +67,19 @@ const Checkout = () => {
   useEffect(() => {
     if (user) {
       // Split name into first and last name (assuming format is "First Last")
-      const nameParts = user.name ? user.name.split(' ') : ['', ''];
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
-      
-      setFormData(prev => ({
+      const nameParts = user.name ? user.name.split(" ") : ["", ""];
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+
+      setFormData((prev) => ({
         ...prev,
         firstName,
         lastName,
-        email: user.email || '',
-        phone: user.phone || '',
-        address: user.address || '',
-        city: user.city || '',
-        zipCode: user.zipCode || '',
+        email: user.email || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        city: user.city || "",
+        zipCode: user.zipCode || "",
       }));
     }
   }, [user]);
@@ -86,7 +89,7 @@ const Checkout = () => {
     if (checkoutUrl) {
       toast.success("Order created successfully! Redirecting to payment...");
       console.log("Redirecting to payment URL:", checkoutUrl);
-      
+
       // Force redirect to payment URL
       try {
         // Add small delay before redirecting to ensure toast is seen
@@ -95,14 +98,14 @@ const Checkout = () => {
           // Use window.open as a fallback if location.href doesn't work
           const result = window.location.replace(checkoutUrl);
           console.log("Redirect result:", result);
-          
+
           // Fallback to window.open if replace doesn't work
           setTimeout(() => {
             if (window.location.href === checkoutUrl) {
               console.log("Redirect successful");
             } else {
               console.log("Redirect failed, trying window.open");
-              window.open(checkoutUrl, '_self');
+              window.open(checkoutUrl, "_self");
             }
           }, 500);
         }, 1000);
@@ -178,7 +181,7 @@ const Checkout = () => {
       "phone",
       "address",
       "city",
-      "zipCode"
+      "zipCode",
     ];
     const missingFields = requiredFields.filter(
       (field) => !formData[field as keyof typeof formData],
@@ -191,7 +194,7 @@ const Checkout = () => {
 
     // Get product ID from product object
     const productId = product._id || product.id;
-    
+
     console.log("Product details:", product);
     console.log("Product ID being used:", productId);
     console.log("Total price calculated:", total);
@@ -215,9 +218,9 @@ const Checkout = () => {
       products: [
         {
           product: productId,
-          quantity: quantity
-        }
-      ]
+          quantity: quantity,
+        },
+      ],
     };
 
     console.log("Sending order data:", orderData);
@@ -263,7 +266,9 @@ const Checkout = () => {
                       className="h-4 w-4 rounded-full"
                       style={{ backgroundColor: product.selectedColor }}
                     ></div>
-                    <span className="text-sm text-gray-600">Selected Color</span>
+                    <span className="text-sm text-gray-600">
+                      Selected Color
+                    </span>
                   </div>
                 )}
               </div>
@@ -512,8 +517,8 @@ const Checkout = () => {
 
               <div className="mt-4 rounded-lg bg-gray-50 p-4">
                 <p className="text-sm">
-                  You will be redirected to SurjoPay to complete your
-                  payment securely.
+                  You will be redirected to SurjoPay to complete your payment
+                  securely.
                 </p>
               </div>
             </div>

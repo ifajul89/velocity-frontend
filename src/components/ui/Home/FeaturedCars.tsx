@@ -20,21 +20,25 @@ const FeaturedCars = () => {
   const { data: carsData, isLoading, isError } = useGetCarsQuery([]);
   const [dataLength] = useState(6);
   const navigate = useNavigate();
-  
+
   if (isLoading) {
     return <Loading />;
   }
-  
+
   if (isError || !carsData?.data) {
-    return <div className="container my-10 text-center">Failed to load cars. Please try again later.</div>;
+    return (
+      <div className="container my-10 text-center">
+        Failed to load cars. Please try again later.
+      </div>
+    );
   }
-  
+
   const cars: Car[] = carsData.data;
-  
+
   const handleViewAllCars = () => {
     navigate("/all-cars");
   };
-  
+
   return (
     <div className="container my-10 md:my-14">
       <SectionTitle title="Featured Cars" />

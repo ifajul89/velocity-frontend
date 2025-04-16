@@ -3,7 +3,7 @@ import { Home, User, Settings, ShoppingBag, LogOut } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/features/auth/authSlice";
 import { toast } from "sonner";
-
+import VeloV from "@/assets/velocity-logo.png";
 import {
   Sidebar,
   SidebarContent,
@@ -68,8 +68,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const handleLogout = async () => {
     // Remove token from localStorage if it exists
-    localStorage.removeItem('token');
-    
+    localStorage.removeItem("token");
+
     await dispatch(logout());
     toast.success("Successfully logged out", { duration: 1000 });
   };
@@ -78,9 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="flex items-center">
-          <div className="bg-primary mr-2 flex h-6 w-6 items-center justify-center rounded-md text-white">
-            V
-          </div>
+          <img src={VeloV} alt="Velocity Logo" className="h-6 w-6" />
           <span className="font-bold">Velocity</span>
           <Badge variant="outline" className="ml-auto">
             v1.0.0
@@ -135,7 +133,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter className="mt-auto border-t pt-2">
         <SidebarMenuItem>
-          <SidebarMenuButton 
+          <SidebarMenuButton
             onClick={handleLogout}
             className="flex w-full items-center gap-2 font-medium text-red-600 hover:text-red-700"
           >

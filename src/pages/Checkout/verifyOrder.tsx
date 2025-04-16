@@ -55,92 +55,114 @@ export default function OrderVerification() {
     searchParams.get("order_id"),
     {
       refetchOnMountOrArgChange: true,
-    }
+    },
   );
 
   // Access order data while handling different response formats
   const orderData: OrderData = data?.data?.[0];
-  
+
   // Function to find estimated delivery date in nested objects
   const findEstimatedDeliveryDate = (obj: unknown): string | undefined => {
     // If not an object or null, return undefined
-    if (!obj || typeof obj !== 'object') return undefined;
-    
+    if (!obj || typeof obj !== "object") return undefined;
+
     // Use type assertion after checking it's an object
     const dataObj = obj as Record<string, unknown>;
-    
+
     // Direct check for estimatedDeliveryDate property
-    if ('estimatedDeliveryDate' in dataObj && typeof dataObj.estimatedDeliveryDate === 'string') {
+    if (
+      "estimatedDeliveryDate" in dataObj &&
+      typeof dataObj.estimatedDeliveryDate === "string"
+    ) {
       return dataObj.estimatedDeliveryDate;
     }
-    
+
     // Check for nested order property
-    if ('order' in dataObj && dataObj.order && typeof dataObj.order === 'object') {
+    if (
+      "order" in dataObj &&
+      dataObj.order &&
+      typeof dataObj.order === "object"
+    ) {
       const order = dataObj.order as Record<string, unknown>;
-      if ('estimatedDeliveryDate' in order && typeof order.estimatedDeliveryDate === 'string') {
+      if (
+        "estimatedDeliveryDate" in order &&
+        typeof order.estimatedDeliveryDate === "string"
+      ) {
         return order.estimatedDeliveryDate;
       }
     }
-    
+
     // Also check in data property
-    if ('data' in dataObj && dataObj.data && typeof dataObj.data === 'object') {
+    if ("data" in dataObj && dataObj.data && typeof dataObj.data === "object") {
       const nestedData = dataObj.data as Record<string, unknown>;
-      
+
       // Check directly in data
-      if ('estimatedDeliveryDate' in nestedData && typeof nestedData.estimatedDeliveryDate === 'string') {
+      if (
+        "estimatedDeliveryDate" in nestedData &&
+        typeof nestedData.estimatedDeliveryDate === "string"
+      ) {
         return nestedData.estimatedDeliveryDate;
       }
-      
+
       // Check in data.order
-      if ('order' in nestedData && nestedData.order && typeof nestedData.order === 'object') {
+      if (
+        "order" in nestedData &&
+        nestedData.order &&
+        typeof nestedData.order === "object"
+      ) {
         const nestedOrder = nestedData.order as Record<string, unknown>;
-        if ('estimatedDeliveryDate' in nestedOrder && typeof nestedOrder.estimatedDeliveryDate === 'string') {
+        if (
+          "estimatedDeliveryDate" in nestedOrder &&
+          typeof nestedOrder.estimatedDeliveryDate === "string"
+        ) {
           return nestedOrder.estimatedDeliveryDate;
         }
       }
     }
-    
+
     return undefined;
   };
-  
+
   // Try to find estimated delivery date in the response
   const estimatedDeliveryDate = findEstimatedDeliveryDate(data);
-  
+
   // Create a fallback delivery date (7 days from now) if none is provided
   const fallbackDeliveryDate = new Date();
   fallbackDeliveryDate.setDate(fallbackDeliveryDate.getDate() + 7);
-  
+
   // Generate a tracking number if it doesn't exist
-  const trackingNumber = 
-    orderData?.tracking_number || 
+  const trackingNumber =
+    orderData?.tracking_number ||
     data?.data?.order?.trackingNumber ||
-    (orderData?.order_id ? `TRK-${orderData.order_id.substring(0, 8)}` : 'Not available');
-  
+    (orderData?.order_id
+      ? `TRK-${orderData.order_id.substring(0, 8)}`
+      : "Not available");
+
   // Format the estimated delivery date
   const formatEstimatedDelivery = (dateString?: string) => {
     if (!dateString) {
       // Return the fallback date if no date is provided
-      return fallbackDeliveryDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      return fallbackDeliveryDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
-    
+
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     } catch (error) {
-      console.error('Error formatting date:', error);
+      console.error("Error formatting date:", error);
       // Return the fallback date if there's an error
-      return fallbackDeliveryDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      return fallbackDeliveryDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     }
   };
@@ -152,16 +174,16 @@ export default function OrderVerification() {
   return isLoading ? (
     <div className="container mx-auto p-4">
       <div className="animate-pulse space-y-6">
-        <div className="h-8 w-64 bg-gray-200 rounded"></div>
+        <div className="h-8 w-64 rounded bg-gray-200"></div>
         <div className="grid gap-6 md:grid-cols-2">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="rounded-lg border p-4">
-              <div className="h-6 w-40 bg-gray-200 rounded mb-4"></div>
+              <div className="mb-4 h-6 w-40 rounded bg-gray-200"></div>
               <div className="space-y-3">
                 {[1, 2, 3, 4].map((j) => (
                   <div key={j} className="flex justify-between">
-                    <div className="h-4 w-24 bg-gray-200 rounded"></div>
-                    <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                    <div className="h-4 w-24 rounded bg-gray-200"></div>
+                    <div className="h-4 w-32 rounded bg-gray-200"></div>
                   </div>
                 ))}
               </div>
@@ -172,7 +194,7 @@ export default function OrderVerification() {
     </div>
   ) : (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Order Verification</h1>
+      <h1 className="mb-6 text-3xl font-bold">Order Verification</h1>
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
@@ -200,8 +222,12 @@ export default function OrderVerification() {
               </dd>
               <dt className="font-semibold">Date:</dt>
               <dd>{new Date(orderData?.date_time)?.toLocaleString()}</dd>
-              <dt className="font-semibold text-red-600">Estimated Delivery:</dt>
-              <dd className="text-red-600">{formatEstimatedDelivery(estimatedDeliveryDate)}</dd>
+              <dt className="font-semibold text-red-600">
+                Estimated Delivery:
+              </dt>
+              <dd className="text-red-600">
+                {formatEstimatedDelivery(estimatedDeliveryDate)}
+              </dd>
             </dl>
           </CardContent>
         </Card>
@@ -251,11 +277,14 @@ export default function OrderVerification() {
             <CardTitle>Track your Order</CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="grid grid-cols-2 gap-2 mb-4">
+            <dl className="mb-4 grid grid-cols-2 gap-2">
               <dt className="font-semibold">Tracking Number:</dt>
               <dd>{trackingNumber}</dd>
               <dt className="font-semibold">Estimated Delivery:</dt>
-              <dd className="text-velo-red">{formatEstimatedDelivery(estimatedDeliveryDate)}  (7days latter from Current date)</dd>
+              <dd className="text-velo-red">
+                {formatEstimatedDelivery(estimatedDeliveryDate)} (7days latter
+                from Current date)
+              </dd>
             </dl>
             <div className="flex items-center gap-2">
               {orderData?.bank_status === "Success" ? (

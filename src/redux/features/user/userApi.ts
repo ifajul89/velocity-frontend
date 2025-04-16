@@ -25,7 +25,12 @@ export const userApi = baseApi.injectEndpoints({
     // Regular user update (for updating own profile)
     updateCurrentUser: builder.mutation({
       query: ({ id, userData }) => {
-        console.log("User updating own profile with ID:", id, "Data:", userData);
+        console.log(
+          "User updating own profile with ID:",
+          id,
+          "Data:",
+          userData,
+        );
         return {
           url: `user/update/${id}`,
           method: "PATCH",
@@ -44,7 +49,12 @@ export const userApi = baseApi.injectEndpoints({
     }),
     changePassword: builder.mutation({
       query: ({ id, passwordData }) => {
-        console.log("Changing password for user ID:", id, "Data:", passwordData);
+        console.log(
+          "Changing password for user ID:",
+          id,
+          "Data:",
+          passwordData,
+        );
         return {
           url: `/user/change-password/${id}`,
           method: "PATCH",
@@ -64,8 +74,8 @@ export const userApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { 
-  useUpdateUserMutation, 
-  useUpdateCurrentUserMutation, 
-  useChangePasswordMutation 
-} = userApi; 
+export const {
+  useUpdateUserMutation,
+  useUpdateCurrentUserMutation,
+  useChangePasswordMutation,
+} = userApi;

@@ -58,7 +58,9 @@ interface Order {
   address?: string;
   city?: string;
   zipCode?: string;
-  products: OrderProduct[] | {product: string; quantity: number; _id: string}[];
+  products:
+    | OrderProduct[]
+    | { product: string; quantity: number; _id: string }[];
   subtotal?: number;
   tax: number;
   shipping: number;
@@ -163,7 +165,7 @@ const orderApi = baseApi.injectEndpoints({
       },
     }),
     // Endpoint for tracking an order by tracking number
-    trackOrder: builder.query<TrackOrderResponse['data'], string>({
+    trackOrder: builder.query<TrackOrderResponse["data"], string>({
       query: (trackingNumber) => ({
         url: `/orders/track/${trackingNumber}`,
         method: "GET",
@@ -173,7 +175,10 @@ const orderApi = baseApi.injectEndpoints({
       },
     }),
     // Endpoint for updating order tracking
-    updateOrderTracking: builder.mutation<ApiOrder, { orderId: string; data: Partial<ApiOrder> }>({
+    updateOrderTracking: builder.mutation<
+      ApiOrder,
+      { orderId: string; data: Partial<ApiOrder> }
+    >({
       query: ({ orderId, data }) => ({
         url: `/orders/track/${orderId}`,
         method: "PATCH",

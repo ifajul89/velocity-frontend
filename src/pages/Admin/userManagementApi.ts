@@ -5,57 +5,57 @@ export const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUsers: builder.query({
       query: () => ({
-        url: '/user',
-        method: 'GET',
+        url: "/user",
+        method: "GET",
       }),
-      providesTags: ['User'],
+      providesTags: ["User"],
     }),
     updateUserStatus: builder.mutation({
       query: ({ userId, status }) => ({
         url: `/user/${userId}/status`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { status },
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     adminUpdateUser: builder.mutation({
       query: ({ userId, userData }) => {
-        console.log('Admin Update user API call with ID:', userId);
-        
+        console.log("Admin Update user API call with ID:", userId);
+
         // Validate userId before making the request
         if (!userId) {
-          throw new Error('User ID is required for update');
+          throw new Error("User ID is required for update");
         }
-        
+
         // Return the full API configuration
         return {
           url: `user/admin-update/${userId}`,
-          method: 'PATCH',
+          method: "PATCH",
           body: userData,
-          credentials: 'include',
+          credentials: "include",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         };
       },
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
     deleteUser: builder.mutation({
       query: (userId) => {
-        console.log('Deleting user with ID:', userId);
-        
+        console.log("Deleting user with ID:", userId);
+
         // Validate userId before making the request
         if (!userId) {
-          throw new Error('User ID is required for delete operation');
+          throw new Error("User ID is required for delete operation");
         }
-        
+
         return {
           url: `/user/${userId}`,
-          method: 'DELETE',
-          credentials: 'include',
+          method: "DELETE",
+          credentials: "include",
         };
       },
-      invalidatesTags: ['User'],
+      invalidatesTags: ["User"],
     }),
   }),
 });
@@ -65,4 +65,4 @@ export const {
   useUpdateUserStatusMutation,
   useAdminUpdateUserMutation,
   useDeleteUserMutation,
-} = userManagementApi; 
+} = userManagementApi;

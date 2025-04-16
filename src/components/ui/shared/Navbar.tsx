@@ -33,8 +33,8 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     // Remove token from localStorage
-    localStorage.removeItem('token');
-    
+    localStorage.removeItem("token");
+
     await dispatch(logout());
     toast.success("Successful log out", { duration: 1000 });
   };

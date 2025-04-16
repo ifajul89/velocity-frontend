@@ -54,7 +54,14 @@ interface TooltipProps {
   }>;
 }
 
-const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+const COLORS = [
+  "#4F46E5",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#EC4899",
+];
 
 export const ProductChart = () => {
   // The auth token is automatically included via the baseApi prepareHeaders method
@@ -64,10 +71,10 @@ export const ProductChart = () => {
   const [totalProducts, setTotalProducts] = useState(0);
 
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
+    if (!user || user.role !== "admin") {
       return; // Only proceed if user is admin
     }
-    
+
     try {
       // Calculate product distribution
       const productCounts: Record<string, number> = {};
@@ -79,11 +86,11 @@ export const ProductChart = () => {
         if (order.products && Array.isArray(order.products)) {
           order.products.forEach((item) => {
             // Make sure we have access to the product name
-            const productName = item.product?.name || 'Unknown Product';
+            const productName = item.product?.name || "Unknown Product";
             const quantity = item.quantity || 1;
-            
+
             totalCount += quantity;
-            
+
             if (productCounts[productName]) {
               productCounts[productName] += quantity;
             } else {
@@ -105,30 +112,32 @@ export const ProductChart = () => {
 
       setProductData(productDataArray);
     } catch (error) {
-      console.error('Failed to process product data:', error);
+      console.error("Failed to process product data:", error);
       // Set default data if processing fails
       setProductData([
-        { name: 'Product A', value: 2 },
-        { name: 'Product B', value: 1 },
-        { name: 'Product C', value: 1 },
-        { name: 'Product D', value: 1 }
+        { name: "Product A", value: 2 },
+        { name: "Product B", value: 1 },
+        { name: "Product C", value: 1 },
+        { name: "Product D", value: 1 },
       ]);
       setTotalProducts(5);
     }
   }, [orders, user]);
 
-  const renderCustomizedLabel = ({ 
-    cx, 
-    cy, 
-    midAngle, 
-    innerRadius, 
-    outerRadius, 
-    percent 
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
   }: LabelProps) => {
-    if (!cx || !cy || !innerRadius || !outerRadius || !percent || !midAngle) return null;
-    
+    if (!cx || !cy || !innerRadius || !outerRadius || !percent || !midAngle)
+      return null;
+
     const RADIAN = Math.PI / 180;
-    const radius = Number(innerRadius) + (Number(outerRadius) - Number(innerRadius)) * 0.5;
+    const radius =
+      Number(innerRadius) + (Number(outerRadius) - Number(innerRadius)) * 0.5;
     const x = Number(cx) + radius * Math.cos(-Number(midAngle) * RADIAN);
     const y = Number(cy) + radius * Math.sin(-Number(midAngle) * RADIAN);
 
@@ -137,7 +146,7 @@ export const ProductChart = () => {
         x={x}
         y={y}
         fill="white"
-        textAnchor={x > Number(cx) ? 'start' : 'end'}
+        textAnchor={x > Number(cx) ? "start" : "end"}
         dominantBaseline="central"
         fontSize={12}
         fontWeight="bold"
@@ -152,14 +161,16 @@ export const ProductChart = () => {
       const item = payload[0];
       const totalValue = productData.reduce((sum, item) => sum + item.value, 0);
       const percent = totalValue > 0 ? (item.value / totalValue) * 100 : 0;
-      
+
       return (
-        <div className="bg-white p-3 shadow-sm rounded-lg border border-gray-100">
+        <div className="rounded-lg border border-gray-100 bg-white p-3 shadow-sm">
           <p className="font-medium text-gray-700">{item.name}</p>
-          <p className="text-gray-600 text-sm">
+          <p className="text-sm text-gray-600">
             <span className="font-medium">{item.value}</span> units
           </p>
-          <p className="text-xs text-gray-500 mt-1">{percent.toFixed(1)}% of total</p>
+          <p className="mt-1 text-xs text-gray-500">
+            {percent.toFixed(1)}% of total
+          </p>
         </div>
       );
     }
@@ -167,22 +178,40 @@ export const ProductChart = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="flex justify-between items-center mb-4">
+    <div className="flex h-full w-full flex-col">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center">
-          <div className="bg-purple-100 rounded-full p-1.5 mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          <div className="mr-2 rounded-full bg-purple-100 p-1.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 text-purple-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+              />
             </svg>
           </div>
-          <p className="text-sm font-medium text-gray-700">Total Items Sold: <span className="text-purple-700 font-semibold">{totalProducts}</span></p>
+          <p className="text-sm font-medium text-gray-700">
+            Total Items Sold:{" "}
+            <span className="font-semibold text-purple-700">
+              {totalProducts}
+            </span>
+          </p>
         </div>
-        <div className="text-xs font-medium px-2 py-1 bg-purple-50 text-purple-600 rounded-full">By Product</div>
+        <div className="rounded-full bg-purple-50 px-2 py-1 text-xs font-medium text-purple-600">
+          By Product
+        </div>
       </div>
-      <div className="flex-1 min-h-[200px]">
+      <div className="min-h-[200px] flex-1">
         {isLoading ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="h-24 w-24 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin"></div>
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="h-24 w-24 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600"></div>
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
@@ -198,23 +227,23 @@ export const ProductChart = () => {
                 paddingAngle={2}
                 dataKey="value"
               >
-                {productData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={COLORS[index % COLORS.length]} 
+                {productData.map((_: ProductData, index: number) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
                     stroke="#ffffff"
                     strokeWidth={2}
                   />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                layout="horizontal" 
-                verticalAlign="bottom" 
+              <Legend
+                layout="horizontal"
+                verticalAlign="bottom"
                 align="center"
-                wrapperStyle={{ 
-                  fontSize: '12px',
-                  paddingTop: '10px'
+                wrapperStyle={{
+                  fontSize: "12px",
+                  paddingTop: "10px",
                 }}
               />
             </PieChart>
@@ -223,4 +252,4 @@ export const ProductChart = () => {
       </div>
     </div>
   );
-}; 
+};

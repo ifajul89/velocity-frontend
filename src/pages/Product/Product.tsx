@@ -25,10 +25,12 @@ interface CarData {
   year?: number;
   price?: number;
   category?: string;
-  description: string | {
-    brief?: string;
-    extensive?: DescriptionSection[];
-  };
+  description:
+    | string
+    | {
+        brief?: string;
+        extensive?: DescriptionSection[];
+      };
   quantity?: number;
   inStock: boolean;
   brandNew?: boolean;
@@ -54,7 +56,7 @@ const Product = () => {
   useEffect(() => {
     if (loadedData) {
       setCars(loadedData);
-      
+
       // If there's a message, show a toast notification
       if (loadedData.message) {
         if (loadedData.error) {
@@ -76,10 +78,13 @@ const Product = () => {
     return (
       <div>
         <Navbar />
-        <div className="container my-6 mt-15 flex items-center justify-center min-h-[50vh]">
+        <div className="container my-6 mt-15 flex min-h-[50vh] items-center justify-center">
           <div className="text-center">
-            <p className="text-red-600 mb-4">Error loading product</p>
-            <Button onClick={() => navigate("/")} className="!bg-velo-red hover:!bg-velo-black">
+            <p className="mb-4 text-red-600">Error loading product</p>
+            <Button
+              onClick={() => navigate("/")}
+              className="!bg-velo-red hover:!bg-velo-black"
+            >
               Return to Home
             </Button>
           </div>
@@ -94,7 +99,7 @@ const Product = () => {
     return (
       <div>
         <Navbar />
-        <div className="container my-6 mt-15 flex items-center justify-center min-h-[50vh]">
+        <div className="container my-6 mt-15 flex min-h-[50vh] items-center justify-center">
           <p>Loading product information...</p>
         </div>
       </div>
@@ -114,7 +119,7 @@ const Product = () => {
     brandNew,
     carFeatures,
     colors,
-    category
+    category,
   } = carData;
 
   const handleBuyNow = () => {
@@ -126,21 +131,19 @@ const Product = () => {
 
     // Check if user is an admin
     if (user && user.role === "admin") {
-      toast.error(
-        "Admin Access Restricted",
-        {
-          description: " Please use a regular customer account. Administrators are not allowed to make purchases.",
-          duration: 5000,
-          style: { 
-            fontSize: "1.2rem",
-            backgroundColor: "#FFE1E1",
-            borderLeft: "5px solid #FF0000",
-            padding: "16px",
-            width: "400px"
-          },
-          icon: "🛑"
-        }
-      );
+      toast.error("Admin Access Restricted", {
+        description:
+          " Please use a regular customer account. Administrators are not allowed to make purchases.",
+        duration: 5000,
+        style: {
+          fontSize: "1.2rem",
+          backgroundColor: "#FFE1E1",
+          borderLeft: "5px solid #FF0000",
+          padding: "16px",
+          width: "400px",
+        },
+        icon: "🛑",
+      });
       return;
     }
 
@@ -150,7 +153,7 @@ const Product = () => {
       state: {
         product: {
           _id: carData._id, // Make sure to pass the MongoDB ID
-          id: carData._id,  // Fallback ID
+          id: carData._id, // Fallback ID
           name: name,
           price: price || 0,
           selectedColor: colors?.[0] || "#000000",
@@ -161,10 +164,13 @@ const Product = () => {
           model: model,
           year: year,
           category: category,
-          description: typeof description === 'string' ? description : description?.brief || ''
+          description:
+            typeof description === "string"
+              ? description
+              : description?.brief || "",
         },
-        user: user
-      }
+        user: user,
+      },
     });
   };
 
@@ -186,7 +192,7 @@ const Product = () => {
               {name}
             </h3>
 
-            <div className="grid grid-cols-2 gap-5 text-sm md:text-md xl:grid-cols-3">
+            <div className="md:text-md grid grid-cols-2 gap-5 text-sm xl:grid-cols-3">
               <div
                 className={`flex items-center gap-1 ${
                   inStock ? "text-green-600" : "text-red-700"
@@ -221,7 +227,7 @@ const Product = () => {
                   <span className="text-gray-500">{brand}</span>
                 </div>
               )}
-              
+
               {model && (
                 <div>
                   <div className="inline-block w-40">
@@ -230,7 +236,7 @@ const Product = () => {
                   <span className="text-gray-500">{model}</span>
                 </div>
               )}
-              
+
               {category && (
                 <div>
                   <div className="inline-block w-40">
@@ -239,7 +245,7 @@ const Product = () => {
                   <span className="text-gray-500">{category}</span>
                 </div>
               )}
-              
+
               {year && (
                 <div>
                   <div className="inline-block w-40">
@@ -248,16 +254,18 @@ const Product = () => {
                   <span className="text-gray-500">{year}</span>
                 </div>
               )}
-              
+
               {price !== undefined && (
                 <div>
                   <div className="inline-block w-40">
                     <p className="font-semibold">Price</p>
                   </div>
-                  <span className="text-gray-500">৳ {price?.toLocaleString()}</span>
+                  <span className="text-gray-500">
+                    ৳ {price?.toLocaleString()}
+                  </span>
                 </div>
               )}
-              
+
               {quantity !== undefined && (
                 <div>
                   <div className="inline-block w-40">

@@ -25,67 +25,75 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import OrderVerification from "@/pages/Checkout/verifyOrder";
 
 export const productLoader = async ({ params }: LoaderFunctionArgs) => {
-    interface User {
-        name?: string;
-        email?: string;
-        role?: string;
-        id?: string;
-        [key: string]: unknown;
+  interface User {
+    name?: string;
+    email?: string;
+    role?: string;
+    id?: string;
+    [key: string]: unknown;
+  }
+
+  const id = params.id;
+  console.log(`Fetching car with ID: ${id}`);
+  const state = store.getState();
+  const user = currentUser(state) as User;
+  console.log(user);
+
+  // Check Redux store first, then localStorage
+  let token = currentToken(state);
+
+  if (!token) {
+    // Try to get from localStorage
+    token = localStorage.getItem("token");
+    console.log("Using token from localStorage:", token);
+  }
+
+  console.log("token", token);
+
+  if (!token) {
+    console.log("No token found, redirecting to login");
+    // Return a redirect object with the proper format
+    return {
+      redirect: "/login",
+      message: "You must be logged in to view this product",
+    };
+  }
+
+  try {
+    const response = await fetch(
+      `https://velocity-backend.vercel.app/api/cars/${id}`,
+      {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        `Error ${response.status}: ${errorText || "Failed to fetch car details."}`,
+      );
+      return {
+        error: true,
+        message: errorText || "Failed to fetch car data",
+      };
     }
 
-    const id = params.id;
-    console.log(`Fetching car with ID: ${id}`);
-    const state = store.getState();
-    const user = currentUser(state) as User;
-    console.log(user)
-    
-    // Check Redux store first, then localStorage
-    let token = currentToken(state);
-    
-    if (!token) {
-        // Try to get from localStorage
-        token = localStorage.getItem('token');
-        console.log('Using token from localStorage:', token);
-    }
-    
-    console.log('token', token)
-
-    if (!token) {
-        console.log('No token found, redirecting to login');
-        // Return a redirect object with the proper format
-        return {
-            redirect: '/login',
-            message: 'You must be logged in to view this product'
-        };
-    }
-
-    try {
-        const response = await fetch(`https://velocity-backend.vercel.app/api/cars/${id}`, {
-            headers: {
-                Authorization: `${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Error ${response.status}: ${errorText || 'Failed to fetch car details.'}`);
-            return { 
-                error: true, 
-                message: errorText || "Failed to fetch car data"
-            };
-        }
-
-        const json = await response.json();
-        console.log("Car data successfully loaded:", json);
-        return { data: json.data }; // return only the car object
-    } catch (error) {
-        console.error("Loader Error:", error);
-        return { 
-            error: true, 
-            message: error instanceof Error ? error.message : "Something went wrong while fetching the product data."
-        };
-    }
+    const json = await response.json();
+    console.log("Car data successfully loaded:", json);
+    return { data: json.data }; // return only the car object
+  } catch (error) {
+    console.error("Loader Error:", error);
+    return {
+      error: true,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while fetching the product data.",
+    };
+  }
 };
 
 import Contact from "@/pages/Contact/Contact";
@@ -121,11 +129,19 @@ const routes = createBrowserRouter([
       },
       {
         path: "checkout",
-        element: <ProtectedRoute><Checkout /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "order/verify",
-        element: <ProtectedRoute><OrderVerification /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <OrderVerification />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "about",
@@ -133,7 +149,11 @@ const routes = createBrowserRouter([
       },
       {
         path: "carDetails/:id",
-        element: <ProtectedRoute><Product /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <Product />
+          </ProtectedRoute>
+        ),
         loader: productLoader,
       },
       {

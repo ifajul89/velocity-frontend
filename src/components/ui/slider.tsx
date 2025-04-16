@@ -1,7 +1,8 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-interface SliderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
+interface SliderProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "defaultValue"> {
   value?: number[];
   defaultValue?: number[];
   min?: number;
@@ -11,38 +12,53 @@ interface SliderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaul
 }
 
 const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
-  ({ className, value, defaultValue = [0, 100], min = 0, max = 100, step = 1, onValueChange, ...props }, ref) => {
+  (
+    {
+      className,
+      value,
+      defaultValue = [0, 100],
+      min = 0,
+      max = 100,
+      step = 1,
+      onValueChange,
+      ...props
+    },
+    ref,
+  ) => {
     const [values, setValues] = React.useState<number[]>(value || defaultValue);
-    
+
     const handleChange = (index: number, newValue: number) => {
       const updatedValues = [...values];
       updatedValues[index] = newValue;
       setValues(updatedValues);
       onValueChange?.(updatedValues);
     };
-    
+
     React.useEffect(() => {
       if (value) {
         setValues(value);
       }
     }, [value]);
-    
+
     return (
-      <div 
+      <div
         ref={ref}
-        className={cn("relative flex w-full touch-none select-none items-center py-4", className)}
+        className={cn(
+          "relative flex w-full touch-none items-center py-4 select-none",
+          className,
+        )}
         {...props}
       >
         <div className="relative h-2 w-full rounded-full bg-gray-200">
-          <div 
-            className="absolute h-full bg-blue-500" 
+          <div
+            className="absolute h-full bg-blue-500"
             style={{
               left: `${((values[0] - min) / (max - min)) * 100}%`,
-              right: `${100 - ((values[1] - min) / (max - min)) * 100}%`
+              right: `${100 - ((values[1] - min) / (max - min)) * 100}%`,
             }}
           />
         </div>
-        
+
         {values.map((val, index) => (
           <input
             key={index}
@@ -55,30 +71,40 @@ const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             className={cn(
               "absolute h-5 w-5 appearance-none",
               index === 0 ? "left-0" : "right-0",
-              "opacity-0 cursor-pointer z-10"
+              "z-10 cursor-pointer opacity-0",
             )}
             style={{
-              left: index === 0 ? `${((val - min) / (max - min)) * 100}%` : "auto",
-              right: index === 1 ? `${100 - ((val - min) / (max - min)) * 100}%` : "auto"
+              left:
+                index === 0 ? `${((val - min) / (max - min)) * 100}%` : "auto",
+              right:
+                index === 1
+                  ? `${100 - ((val - min) / (max - min)) * 100}%`
+                  : "auto",
             }}
           />
         ))}
-        
+
         {values.map((val, index) => (
           <div
             key={`thumb-${index}`}
-            className="absolute h-5 w-5 rounded-full bg-white border-2 border-blue-500 pointer-events-none"
+            className="pointer-events-none absolute h-5 w-5 rounded-full border-2 border-blue-500 bg-white"
             style={{
-              left: index === 0 ? `calc(${((val - min) / (max - min)) * 100}% - 10px)` : "auto",
-              right: index === 1 ? `calc(${100 - ((val - min) / (max - min)) * 100}% - 10px)` : "auto"
+              left:
+                index === 0
+                  ? `calc(${((val - min) / (max - min)) * 100}% - 10px)`
+                  : "auto",
+              right:
+                index === 1
+                  ? `calc(${100 - ((val - min) / (max - min)) * 100}% - 10px)`
+                  : "auto",
             }}
           />
         ))}
       </div>
     );
-  }
+  },
 );
 
 Slider.displayName = "Slider";
 
-export { Slider }; 
+export { Slider };

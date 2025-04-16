@@ -35,9 +35,9 @@ export const carApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { 
-  usePostCarMutation, 
-  useGetCarsQuery, 
+export const {
+  usePostCarMutation,
+  useGetCarsQuery,
   useUpdateCarMutation,
-  useDeleteCarMutation 
+  useDeleteCarMutation,
 } = carApi;

@@ -5,6 +5,7 @@ import { currentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { JSX } from "react";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import VeloV from "@/assets/velocity-logo.png";
 import {
   useSidebar,
   SidebarMenu,
@@ -57,7 +58,7 @@ export function AppSidebar() {
       url: "/admin/orders",
       icon: <Settings className="h-4 w-4" />,
     },
-   
+
     {
       title: "Manage User",
       url: "/admin/users",
@@ -82,7 +83,7 @@ export function AppSidebar() {
       url: "/dashboard/track-order",
       icon: <ShoppingBag className="h-4 w-4" />,
     },
-    
+
     {
       title: "Manage Profile Settings",
       url: "/profile",
@@ -105,10 +106,8 @@ export function AppSidebar() {
           <div className="flex w-full items-center">
             {!isCollapsed && (
               <>
-                <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-md bg-blue-600 text-white">
-                  V
-                </div>
-                <span className="font-bold">Velocity</span>
+                <img src={VeloV} alt="Velocity Logo" className="size-4" />
+                <span className="-ml-[0.7px] font-bold">elocity</span>
                 <span className="ml-auto rounded-full border px-2 py-0.5 text-xs">
                   v1.0.0
                 </span>
@@ -152,23 +151,23 @@ export function Dashboard() {
   const user = useAppSelector(currentUser) as UserType | null;
   const location = useLocation();
   const [isReady, setIsReady] = React.useState(false);
-  
+
   // Ensure the component is ready after mounting
   React.useEffect(() => {
     setIsReady(true);
   }, []);
-  
+
   // Use pathname from React Router instead of window.location
   const pathname = location.pathname;
-  
+
   if (!isReady) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
       </div>
     );
   }
-  
+
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
@@ -180,13 +179,11 @@ export function Dashboard() {
           ) : (
             <Outlet />
           )
+        ) : // If regular user, show user dashboard or outlet based on pathname
+        pathname === "/dashboard" ? (
+          <UserDashboard />
         ) : (
-          // If regular user, show user dashboard or outlet based on pathname
-          pathname === "/dashboard" ? (
-            <UserDashboard />
-          ) : (
-            <Outlet />
-          )
+          <Outlet />
         )}
       </SidebarInset>
     </SidebarProvider>

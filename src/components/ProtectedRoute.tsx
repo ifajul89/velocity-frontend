@@ -20,7 +20,7 @@ const ProtectedRoute: React.FC<{
   // Check localStorage for token if not in Redux
   useEffect(() => {
     if (!reduxToken) {
-      const localToken = localStorage.getItem('token');
+      const localToken = localStorage.getItem("token");
       if (localToken) {
         setToken(localToken);
       }
@@ -37,7 +37,9 @@ const ProtectedRoute: React.FC<{
 
   // If this route requires admin privileges and user is not admin, redirect to home
   if (requireAdmin && !isAdmin) {
-    console.log("Unauthorized access attempt: Regular user tried to access admin route");
+    console.log(
+      "Unauthorized access attempt: Regular user tried to access admin route",
+    );
     return <Navigate to="/" replace />;
   }
 

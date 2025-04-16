@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Pencil, Trash2, X, Menu, Upload } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useGetCarsQuery, useUpdateCarMutation, useDeleteCarMutation } from "@/redux/features/carPost/carApi";
+import {
+  useGetCarsQuery,
+  useUpdateCarMutation,
+  useDeleteCarMutation,
+} from "@/redux/features/carPost/carApi";
 import { toast } from "sonner";
 
 // Define Car type
@@ -18,7 +22,7 @@ interface Car {
 const ManageProduct = () => {
   // Fetch cars data using the API
   const { data: carsData, isLoading, isError } = useGetCarsQuery([]);
-  
+
   // RTK Query mutations
   const [updateCar, { isLoading: isUpdating }] = useUpdateCarMutation();
   const [deleteCar, { isLoading: isDeleting }] = useDeleteCarMutation();
@@ -51,18 +55,18 @@ const ManageProduct = () => {
               return true;
             },
             {
-              loading: 'Deleting car...',
-              success: 'Car deleted successfully',
-              error: 'Failed to delete car. Please try again.',
-            }
+              loading: "Deleting car...",
+              success: "Car deleted successfully",
+              error: "Failed to delete car. Please try again.",
+            },
           );
-        }
+        },
       },
       cancel: {
         label: "No",
         onClick: () => {
           // Do nothing when No is clicked
-        }
+        },
       },
       duration: 5000, // Show for 5 seconds
     });
@@ -97,7 +101,7 @@ const ManageProduct = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
       processImageFile(file);
@@ -117,7 +121,7 @@ const ManageProduct = () => {
     if (editingCar) {
       setEditingCar({
         ...editingCar,
-        image: 'new-image-to-be-uploaded'
+        image: "new-image-to-be-uploaded",
       });
     }
   };
@@ -128,14 +132,14 @@ const ManageProduct = () => {
         // Create a FormData object to handle the file upload
         const formData = new FormData();
 
-        // Create car data object 
+        // Create car data object
         const carData = {
           name: editingCar.name,
           brand: editingCar.brand,
           price: editingCar.price,
           category: editingCar.category,
           quantity: editingCar.quantity,
-          image: editingCar.image
+          image: editingCar.image,
         };
 
         // Add the car data as JSON
@@ -149,9 +153,9 @@ const ManageProduct = () => {
         // Make the API call to update the car
         await updateCar({
           id: editingCar._id,
-          data: formData
+          data: formData,
         }).unwrap();
-        
+
         toast.success("Car updated successfully");
 
         setIsEditModalOpen(false);
@@ -194,13 +198,13 @@ const ManageProduct = () => {
           car.category.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : [];
-    
+
   // Calculate pagination
   const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredCars.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   // Handle page changes
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -355,7 +359,7 @@ const ManageProduct = () => {
                     <th className="hidden px-4 py-3 sm:table-cell">#</th>
                     <th className="px-4 py-3">Car Name</th>
                     <th className="hidden px-4 py-3 md:table-cell">Brand</th>
-                    <th className="px-4 py-3">Price ($)</th>
+                    <th className="px-4 py-3">Price (৳)</th>
                     <th className="hidden px-4 py-3 lg:table-cell">Category</th>
                     <th className="hidden px-4 py-3 sm:table-cell">Status</th>
                     <th className="hidden px-4 py-3 md:table-cell">Quantity</th>
@@ -373,15 +377,13 @@ const ManageProduct = () => {
                         <td className="hidden px-4 py-3 md:table-cell">
                           {car.brand}
                         </td>
-                        <td className="px-4 py-3">${car.price}</td>
+                        <td className="px-4 py-3">৳{car.price}</td>
                         <td className="hidden px-4 py-3 lg:table-cell">
                           {car.category}
                         </td>
                         <td
                           className={`hidden px-4 py-3 sm:table-cell ${
-                            car.quantity > 0
-                              ? "text-green-600"
-                              : "text-red-500"
+                            car.quantity > 0 ? "text-green-600" : "text-red-500"
                           }`}
                         >
                           {car.quantity > 0 ? "In Stock" : "Out of Stock"}
@@ -421,7 +423,9 @@ const ManageProduct = () => {
                 <tfoot className="border-t bg-gray-50">
                   <tr>
                     <td colSpan={8} className="px-4 py-3 text-sm text-gray-500">
-                      Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredCars.length)} of {filteredCars.length} cars
+                      Showing {indexOfFirstItem + 1}-
+                      {Math.min(indexOfLastItem, filteredCars.length)} of{" "}
+                      {filteredCars.length} cars
                     </td>
                   </tr>
                   {totalPages > 1 && (
@@ -436,8 +440,11 @@ const ManageProduct = () => {
                             >
                               Previous
                             </button>
-                            
-                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+
+                            {Array.from(
+                              { length: totalPages },
+                              (_, i) => i + 1,
+                            ).map((page) => (
                               <button
                                 key={page}
                                 onClick={() => handlePageChange(page)}
@@ -450,7 +457,7 @@ const ManageProduct = () => {
                                 {page}
                               </button>
                             ))}
-                            
+
                             <button
                               onClick={() => handlePageChange(currentPage + 1)}
                               disabled={currentPage === totalPages}
@@ -472,10 +479,12 @@ const ManageProduct = () => {
 
       {/* Edit Modal */}
       {isEditModalOpen && editingCar && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl rounded-xl bg-white shadow-2xl transition-all animate-in fade-in duration-300">
+        <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black p-4 backdrop-blur-sm">
+          <div className="animate-in fade-in w-full max-w-2xl rounded-xl bg-white shadow-2xl transition-all duration-300">
             <div className="flex items-center justify-between border-b px-6 py-4">
-              <h3 className="text-xl font-semibold text-gray-800">Edit Car Details</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                Edit Car Details
+              </h3>
               <button
                 onClick={() => setIsEditModalOpen(false)}
                 className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-500"
@@ -492,7 +501,7 @@ const ManageProduct = () => {
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Car Image
                   </label>
-                  
+
                   {/* Image preview */}
                   {imagePreview ? (
                     <div className="relative mb-4 rounded-lg border border-gray-200 bg-gray-50 p-2 shadow-sm">
@@ -500,14 +509,14 @@ const ManageProduct = () => {
                         <img
                           src={imagePreview}
                           alt="Car preview"
-                          className="h-full w-full object-cover transition-all hover:scale-105 duration-300"
+                          className="h-full w-full object-cover transition-all duration-300 hover:scale-105"
                         />
                         <button
                           onClick={() => {
                             setImagePreview(null);
                             setImageFile(null);
                           }}
-                          className="absolute top-2 right-2 rounded-full bg-gray-800 bg-opacity-70 p-1.5 text-white hover:bg-opacity-90 transition-all"
+                          className="bg-opacity-70 hover:bg-opacity-90 absolute top-2 right-2 rounded-full bg-gray-800 p-1.5 text-white transition-all"
                           title="Remove image"
                         >
                           <X size={16} />
@@ -515,19 +524,21 @@ const ManageProduct = () => {
                       </div>
                     </div>
                   ) : (
-                    <div 
-                      className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors h-56 ${
-                        isDragging 
-                          ? 'border-blue-500 bg-blue-50' 
-                          : 'border-gray-300 hover:bg-gray-50'
+                    <div
+                      className={`flex h-56 flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors ${
+                        isDragging
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-300 hover:bg-gray-50"
                       }`}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
                       onDrop={handleDrop}
                     >
                       <Upload className="mb-3 h-10 w-10 text-gray-400" />
-                      <p className="mb-2 text-sm font-medium text-gray-700">Drag & drop an image here, or</p>
-                      <label className="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 shadow-sm">
+                      <p className="mb-2 text-sm font-medium text-gray-700">
+                        Drag & drop an image here, or
+                      </p>
+                      <label className="cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700">
                         Browse Files
                         <input
                           type="file"
@@ -536,7 +547,9 @@ const ManageProduct = () => {
                           className="hidden"
                         />
                       </label>
-                      <p className="mt-3 text-xs text-gray-500">PNG, JPG, or JPEG (max. 5MB)</p>
+                      <p className="mt-3 text-xs text-gray-500">
+                        PNG, JPG, or JPEG (max. 5MB)
+                      </p>
                     </div>
                   )}
                 </div>
@@ -550,7 +563,7 @@ const ManageProduct = () => {
                       name="name"
                       value={editingCar.name}
                       onChange={handleInputChange}
-                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm"
+                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                       placeholder="Enter car name"
                     />
                   </div>
@@ -563,7 +576,7 @@ const ManageProduct = () => {
                       name="brand"
                       value={editingCar.brand}
                       onChange={handleInputChange}
-                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm"
+                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                       placeholder="Enter brand"
                     />
                   </div>
@@ -572,16 +585,18 @@ const ManageProduct = () => {
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                   <div className="grid gap-2">
                     <label className="text-sm font-medium text-gray-700">
-                      Price ($)
+                      Price (৳)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                      <span className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500">
+                        ৳
+                      </span>
                       <input
                         name="price"
                         type="number"
                         value={editingCar.price}
                         onChange={handleInputChange}
-                        className="rounded-md border border-gray-300 pl-8 pr-3 py-2.5 text-sm w-full focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm"
+                        className="w-full rounded-md border border-gray-300 py-2.5 pr-3 pl-8 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                         placeholder="0.00"
                       />
                     </div>
@@ -596,7 +611,7 @@ const ManageProduct = () => {
                       type="number"
                       value={editingCar.quantity}
                       onChange={handleInputChange}
-                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm"
+                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                       placeholder="0"
                       min="0"
                     />
@@ -611,7 +626,7 @@ const ManageProduct = () => {
                     name="category"
                     value={editingCar.category}
                     onChange={handleInputChange}
-                    className="rounded-md border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm appearance-none bg-white"
+                    className="appearance-none rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                   >
                     <option value="">Select category</option>
                     <option value="Sedan">Sedan</option>
@@ -627,14 +642,14 @@ const ManageProduct = () => {
               <div className="mt-8 flex justify-end gap-3">
                 <button
                   onClick={() => setIsEditModalOpen(false)}
-                  className="rounded-md border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors"
+                  className="rounded-md border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={isUpdating}
-                  className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 transition-colors"
+                  className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-70"
                 >
                   {isUpdating ? "Saving..." : "Save Changes"}
                 </button>

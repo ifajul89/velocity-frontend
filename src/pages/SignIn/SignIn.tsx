@@ -36,7 +36,7 @@ export default function SignIn() {
   const onSubmit = async (data: SignInFormData) => {
     // Set loading state to true
     setIsLoading(true);
-    
+
     // Call your API or auth logic here
     const userData = {
       email: data.email,
@@ -44,12 +44,12 @@ export default function SignIn() {
     };
     try {
       const response = await SignIn(userData);
-      
+
       // Check if response has an error
-      if ('error' in response) {
+      if ("error" in response) {
         // Handle error response
         const errorResponse = response.error;
-        if (errorResponse && 'data' in errorResponse && errorResponse.data) {
+        if (errorResponse && "data" in errorResponse && errorResponse.data) {
           // Try to extract message from error data
           const errorData = errorResponse.data as ErrorData;
           if (errorData.message) {
@@ -63,7 +63,7 @@ export default function SignIn() {
         setIsLoading(false);
         return;
       }
-      
+
       // Handle successful response
       if (response.data) {
         const { data: responseData } = response;
@@ -71,19 +71,19 @@ export default function SignIn() {
         if (responseData.status) {
           // Save token to localStorage if available
           if (responseData.data && responseData.data.token) {
-            localStorage.setItem('token', responseData.data.token);
+            localStorage.setItem("token", responseData.data.token);
           }
-          
+
           // Pass the entire response to setUser
           dispatch(setUser(responseData));
-          
+
           // Show success message
           if (responseData.message) {
             toast.success(responseData.message, { duration: 1000 });
           } else {
             toast.success("Login successful", { duration: 1000 });
           }
-          
+
           navigate("/");
         } else if (responseData.message) {
           // Show error message from response
@@ -94,7 +94,7 @@ export default function SignIn() {
       }
     } catch (error: unknown) {
       console.error("Login error:", error);
-      
+
       // Generic error handling as fallback
       toast.error("An unexpected error occurred. Please try again.");
     } finally {

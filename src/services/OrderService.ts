@@ -277,7 +277,7 @@ const calculateEstimatedDelivery = (): string => {
   // Add 7 days to current date for estimated delivery
   const estimatedDate = new Date(now);
   estimatedDate.setDate(now.getDate() + 7);
-  
+
   // Format the date as "Month Day, Year"
   return estimatedDate.toLocaleDateString("en-US", {
     month: "long",
@@ -375,18 +375,18 @@ export const OrderService = {
   createOrder: (
     items: OrderItem[],
     shippingAddress: string,
-    contactInfo: ContactInfo
+    contactInfo: ContactInfo,
   ): Order => {
     const currentDateTime = formatDateTime();
     const orderId = `ORD-${Math.floor(10000 + Math.random() * 90000)}`; // Generate a random order ID
     const estimatedDelivery = calculateEstimatedDelivery();
-    
+
     // Calculate total
     const total = items.reduce((sum, item) => {
-      const price = parseFloat(item.price.replace('$', ''));
-      return sum + (price * item.quantity);
+      const price = parseFloat(item.price.replace("$", ""));
+      return sum + price * item.quantity;
     }, 0);
-    
+
     const newOrder: Order = {
       id: orderId,
       status: "Pending",
@@ -417,11 +417,11 @@ export const OrderService = {
           status: "Processed",
           completed: false,
         },
-        { 
-          date: "Pending", 
-          time: "Pending", 
-          status: "Shipped", 
-          completed: false 
+        {
+          date: "Pending",
+          time: "Pending",
+          status: "Shipped",
+          completed: false,
         },
         {
           date: "Pending",
@@ -433,10 +433,10 @@ export const OrderService = {
       shippingAddress: shippingAddress,
       contactInfo: contactInfo,
     };
-    
+
     // Add the new order to the orders array
     orders.push(newOrder);
-    
+
     return newOrder;
   },
 };

@@ -34,7 +34,7 @@ export default function SignUp() {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    
+
     const userInfo = {
       name: data.name,
       email: data.email,
@@ -46,12 +46,12 @@ export default function SignUp() {
     try {
       // Add your API logic here
       const response = await SignUp(userInfo);
-      
+
       // Check if response has an error
-      if ('error' in response) {
+      if ("error" in response) {
         // Handle error response
         const errorResponse = response.error;
-        if (errorResponse && 'data' in errorResponse && errorResponse.data) {
+        if (errorResponse && "data" in errorResponse && errorResponse.data) {
           // Try to extract message from error data
           const errorData = errorResponse.data as ErrorData;
           if (errorData.message) {
@@ -64,7 +64,7 @@ export default function SignUp() {
         }
         return;
       }
-      
+
       // Handle successful response
       if (response.data && response.data.status) {
         toast.success(response.data.message || "Registration successful!");
