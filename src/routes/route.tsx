@@ -61,7 +61,7 @@ export const productLoader = async ({ params }: LoaderFunctionArgs) => {
 
   try {
     const response = await fetch(
-      `https://velocity-backend.vercel.app/api/cars/${id}`,
+      `https://velocity-car-shop-backend.vercel.app/api/cars/${id}`,
       {
         headers: {
           Authorization: `${token}`,
@@ -113,7 +113,7 @@ const routes = createBrowserRouter([
         path: "/car/:id",
         element: <Product />,
         loader: ({ params }) =>
-          fetch(`https://velocity-backend.vercel.app/api/cars/${params.id}`),
+          fetch(`https://velocity-car-shop-backend.vercel.app/api/cars/${params.id}`),
       },
       {
         path: "/all-cars",
@@ -235,7 +235,7 @@ const routes = createBrowserRouter([
   {
     path: "/all-products/:id",
     element: <AllProducts />,
-    loader: () => fetch(`https://velocity-backend.vercel.app/api/cars/`),
+    loader: () => fetch(`https://velocity-car-shop-backend.vercel.app/api/cars/`),
   },
   // User protected routes
   {
