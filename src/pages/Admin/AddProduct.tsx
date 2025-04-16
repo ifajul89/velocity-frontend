@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { usePostCarMutation } from "@/redux/features/carPost/carApi";
 import { TCar } from "@/redux/features/carPost/carSlice";
 import { useState } from "react";
@@ -79,9 +80,9 @@ export default function AddProduct() {
 
   return (
     <div className="mx-auto my-8 max-w-4xl overflow-hidden rounded-xl bg-white shadow-xl">
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-6">
+      <div className="bg-velo-red px-8 py-6">
         <h2 className="flex items-center text-3xl font-bold text-white">
-          <span className="mr-3">🚗</span> Add New Car
+          Add New Car
         </h2>
       </div>
 
@@ -106,7 +107,7 @@ export default function AddProduct() {
               </label>
               <input
                 {...register("name", { required: "Car name is required" })}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               />
               {errors.name && (
                 <p className="mt-1 text-sm text-red-500">
@@ -122,7 +123,7 @@ export default function AddProduct() {
               </label>
               <select
                 {...register("brand", { required: "Brand is required" })}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               >
                 <option value="">Select a brand</option>
                 <option value="Toyota">Toyota</option>
@@ -155,7 +156,7 @@ export default function AddProduct() {
               </label>
               <input
                 {...register("model", { required: "Model is required" })}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               />
               {errors.model && (
                 <p className="mt-1 text-sm text-red-500">
@@ -180,7 +181,7 @@ export default function AddProduct() {
                   },
                   valueAsNumber: true,
                 })}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               />
               {errors.year && (
                 <p className="mt-1 text-sm text-red-500">
@@ -201,7 +202,7 @@ export default function AddProduct() {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               />
               {errors.image && (
                 <p className="mt-1 text-sm text-red-500">
@@ -233,7 +234,7 @@ export default function AddProduct() {
                   min: { value: 0, message: "Price cannot be negative" },
                   valueAsNumber: true,
                 })}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               />
               {errors.price && (
                 <p className="mt-1 text-sm text-red-500">
@@ -249,7 +250,7 @@ export default function AddProduct() {
               </label>
               <select
                 {...register("category", { required: "Category is required" })}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               >
                 <option value="Sedan">Sedan</option>
                 <option value="SUV">SUV</option>
@@ -276,7 +277,7 @@ export default function AddProduct() {
                   min: { value: 0, message: "Quantity cannot be negative" },
                   valueAsNumber: true,
                 })}
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
               />
               {errors.quantity && (
                 <p className="mt-1 text-sm text-red-500">
@@ -303,7 +304,7 @@ export default function AddProduct() {
                 },
               })}
               rows={4}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring-2"
             />
             {errors.description && (
               <p className="mt-1 text-sm text-red-500">
@@ -318,7 +319,7 @@ export default function AddProduct() {
               type="checkbox"
               id="inStock"
               {...register("inStock")}
-              className="h-5 w-5 rounded text-blue-600 focus:ring-blue-500"
+              className="bg-velo-red h-5 w-5 rounded"
             />
             <label htmlFor="inStock" className="ml-2 font-medium text-gray-700">
               Available in Stock
@@ -328,10 +329,10 @@ export default function AddProduct() {
 
         {/* Submit Button */}
         <div className="mt-8">
-          <button
+          <Button
             type="submit"
             disabled={isSubmitting}
-            className="flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-3 text-lg font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-70"
+            className="bg-velo-red hover:bg-velo-maroon h-12 w-full md:text-lg"
           >
             {isSubmitting ? (
               <>
@@ -360,7 +361,7 @@ export default function AddProduct() {
             ) : (
               "Add Car"
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

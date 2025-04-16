@@ -461,32 +461,32 @@ export default function TrackOrderPage() {
                                     </p>
                                   </div>
                                   <p className="text-lg font-medium">
-                                    ${item.price.toLocaleString()}
+                                    ৳{item.price.toLocaleString()}
                                   </p>
                                 </div>
                               ))}
                               <div className="bg-muted/50 flex justify-between p-4">
                                 <p className="text-lg font-medium">Subtotal</p>
                                 <p className="text-lg font-bold">
-                                  ${orderData.subtotal.toLocaleString()}
+                                  ৳{orderData.subtotal.toLocaleString()}
                                 </p>
                               </div>
                               <div className="bg-muted/50 flex justify-between p-4">
                                 <p className="text-lg font-medium">Tax</p>
                                 <p className="text-lg font-bold">
-                                  ${orderData.tax.toLocaleString()}
+                                  ৳{orderData.tax.toLocaleString()}
                                 </p>
                               </div>
                               <div className="bg-muted/50 flex justify-between p-4">
                                 <p className="text-lg font-medium">Shipping</p>
                                 <p className="text-lg font-bold">
-                                  ${orderData.shipping.toLocaleString()}
+                                  ৳{orderData.shipping.toLocaleString()}
                                 </p>
                               </div>
                               <div className="bg-muted/50 flex justify-between p-4">
                                 <p className="text-lg font-medium">Total</p>
                                 <p className="text-lg font-bold">
-                                  ${orderData.totalPrice.toLocaleString()}
+                                  ৳{orderData.totalPrice.toLocaleString()}
                                 </p>
                               </div>
                             </div>

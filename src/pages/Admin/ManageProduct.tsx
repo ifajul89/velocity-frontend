@@ -310,7 +310,7 @@ const ManageProduct = () => {
           <input
             type="text"
             placeholder="Search by name, brand, or category..."
-            className="w-full rounded-lg border border-gray-300 p-3 pl-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 p-3 pl-10 focus:ring-2   focus:outline-none"
             value={searchQuery}
             onChange={handleSearch}
           />
@@ -332,9 +332,8 @@ const ManageProduct = () => {
       </div>
 
       <Card className="overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-4">
+        <div className="bg-velo-red p-4">
           <h2 className="flex items-center gap-2 text-xl font-bold text-white">
-            <span className="rounded bg-yellow-400 p-1">🚗</span>
             Manage Cars
           </h2>
         </div>
@@ -563,7 +562,7 @@ const ManageProduct = () => {
                       name="name"
                       value={editingCar.name}
                       onChange={handleInputChange}
-                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1   focus:outline-none"
                       placeholder="Enter car name"
                     />
                   </div>
@@ -576,7 +575,7 @@ const ManageProduct = () => {
                       name="brand"
                       value={editingCar.brand}
                       onChange={handleInputChange}
-                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1   focus:outline-none"
                       placeholder="Enter brand"
                     />
                   </div>
@@ -596,7 +595,7 @@ const ManageProduct = () => {
                         type="number"
                         value={editingCar.price}
                         onChange={handleInputChange}
-                        className="w-full rounded-md border border-gray-300 py-2.5 pr-3 pl-8 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                        className="w-full rounded-md border border-gray-300 py-2.5 pr-3 pl-8 text-sm shadow-sm focus:border-blue-500 focus:ring-1   focus:outline-none"
                         placeholder="0.00"
                       />
                     </div>
@@ -611,7 +610,7 @@ const ManageProduct = () => {
                       type="number"
                       value={editingCar.quantity}
                       onChange={handleInputChange}
-                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                      className="rounded-md border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1   focus:outline-none"
                       placeholder="0"
                       min="0"
                     />
@@ -626,7 +625,7 @@ const ManageProduct = () => {
                     name="category"
                     value={editingCar.category}
                     onChange={handleInputChange}
-                    className="appearance-none rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                    className="appearance-none rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm shadow-sm focus:border-blue-500 focus:ring-1   focus:outline-none"
                   >
                     <option value="">Select category</option>
                     <option value="Sedan">Sedan</option>
@@ -649,7 +648,7 @@ const ManageProduct = () => {
                 <button
                   onClick={handleSave}
                   disabled={isUpdating}
-                  className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-70"
+                  className="rounded-md bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:ring-2   focus:ring-offset-2 focus:outline-none disabled:opacity-70"
                 >
                   {isUpdating ? "Saving..." : "Save Changes"}
                 </button>
