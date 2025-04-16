@@ -26,7 +26,7 @@ export const productLoader = async ({ params }: LoaderFunctionArgs) => {
     }
 
     try {
-        const response = await fetch(`http://localhost:5000/api/cars/${id}`, {
+        const response = await fetch(`https://velocity-backend.vercel.app/api/cars/${id}`, {
             headers: {
                 Authorization: `${token}`,
                 'Content-Type': 'application/json',
