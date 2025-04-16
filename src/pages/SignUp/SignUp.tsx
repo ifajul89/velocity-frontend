@@ -6,6 +6,7 @@ import { useSignUpMutation } from "@/redux/features/auth/authApi";
 import SignUpBG from "@/assets/register/register.jpeg";
 import { toast } from "sonner";
 import VeloV from "@/assets/velocity-logo.png";
+import { useState } from "react";
 
 type FormData = {
   name: string;
@@ -13,7 +14,15 @@ type FormData = {
   password: string;
 };
 
+// Define type for backend error response
+type ErrorData = {
+  message?: string;
+  status?: boolean;
+  error?: string;
+};
+
 export default function SignUp() {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -24,6 +33,8 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+
     const userInfo = {
       name: data.name,
       email: data.email,
@@ -32,12 +43,43 @@ export default function SignUp() {
       // city: "Dhaka"
     };
 
-    // Add your API logic here
-    const res = await SignUp(userInfo);
-    if (res.data.status) {
-      toast.success(res.data.message);
-      navigate("/login");
-      reset();
+    try {
+      // Add your API logic here
+      const response = await SignUp(userInfo);
+
+      // Check if response has an error
+      if ("error" in response) {
+        // Handle error response
+        const errorResponse = response.error;
+        if (errorResponse && "data" in errorResponse && errorResponse.data) {
+          // Try to extract message from error data
+          const errorData = errorResponse.data as ErrorData;
+          if (errorData.message) {
+            toast.error(errorData.message);
+          } else {
+            toast.error("Registration failed. Please try again.");
+          }
+        } else {
+          toast.error("Registration failed. Please try again.");
+        }
+        return;
+      }
+
+      // Handle successful response
+      if (response.data && response.data.status) {
+        toast.success(response.data.message || "Registration successful!");
+        navigate("/login");
+        reset();
+      } else if (response.data && response.data.message) {
+        toast.error(response.data.message);
+      } else {
+        toast.error("Registration failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,16 +173,17 @@ export default function SignUp() {
               <Button
                 type="submit"
                 className="bg-velo-red hover:bg-velo-maroon h-11 w-full md:text-lg"
+                disabled={isLoading}
               >
-                Sign Up
+                {isLoading ? "Signing Up..." : "Sign Up"}
               </Button>
             </form>
           </div>
 
           <p className="text-muted-foreground text-center text-sm md:text-base">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              to={"/register"}
+              to={"/login"}
               className="text-velo-red hover:text-velo-maroon font-semibold underline"
             >
               Sign In

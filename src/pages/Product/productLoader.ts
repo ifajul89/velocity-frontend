@@ -25,12 +25,15 @@ export const productLoader = async ({ params }: LoaderFunctionArgs) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/api/cars/${id}`, {
-      headers: {
-        Authorization: `${token}`,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://velocity-backend.vercel.app/api/cars/${id}`,
+      {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       const errorText = await response.text();

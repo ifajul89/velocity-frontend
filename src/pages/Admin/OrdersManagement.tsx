@@ -236,10 +236,10 @@ const OrderDetailsModal = ({
                         </TableCell>
                         <TableCell>{item.quantity || 1}</TableCell>
                         <TableCell className="text-right">
-                          ${(item.price || 0).toFixed(2)}
+                          ৳{(item.price || 0).toFixed(2)}
                         </TableCell>
                         <TableCell className="text-right">
-                          $
+                          ৳
                           {(
                             item.subtotal ||
                             (item.price ? item.price * item.quantity : 0)
@@ -261,19 +261,19 @@ const OrderDetailsModal = ({
               <div className="space-y-1 text-sm">
                 <div className="flex w-48 justify-between">
                   <span>Subtotal</span>
-                  <span>${(order.subtotal || 0).toFixed(2)}</span>
+                  <span>৳{(order.subtotal || 0).toFixed(2)}</span>
                 </div>
                 <div className="flex w-48 justify-between">
                   <span>Tax</span>
-                  <span>${(order.tax || 0).toFixed(2)}</span>
+                  <span>৳{(order.tax || 0).toFixed(2)}</span>
                 </div>
                 <div className="flex w-48 justify-between">
                   <span>Shipping</span>
-                  <span>${(order.shipping || 0).toFixed(2)}</span>
+                  <span>৳{(order.shipping || 0).toFixed(2)}</span>
                 </div>
                 <div className="flex w-48 justify-between font-bold">
                   <span>Total</span>
-                  <span>${(order.totalPrice || 0).toFixed(2)}</span>
+                  <span>৳{(order.totalPrice || 0).toFixed(2)}</span>
                 </div>
               </div>
             </CardFooter>
@@ -1260,7 +1260,7 @@ export default function OrdersManagementPage() {
                                       : "N/A"}
                                 </TableCell>
                                 <TableCell className="text-xs">
-                                  ${Number(order.totalPrice).toFixed(2)}
+                                  ৳{Number(order.totalPrice).toFixed(2)}
                                 </TableCell>
                                 <TableCell>
                                   <DropdownMenu>

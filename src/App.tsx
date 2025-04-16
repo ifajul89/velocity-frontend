@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/AppLayout";
 import ManageProduct from "./pages/Admin/ManageProduct";
-import { SidebarProvider } from "./components/context/SidebarContext";
+import { SidebarProvider } from "./components/context/SidebarProvider";
 // Import other pages as needed
 
 function App() {

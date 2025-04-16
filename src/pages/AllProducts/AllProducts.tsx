@@ -1,5 +1,5 @@
-import { useState, useEffect, Key } from "react";
-import CarCardSkeleton from "@/components/ui/CarCardSkeleton";
+import { useState, useEffect } from "react";
+import CarCard from "@/components/ui/CarCard";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { useGetCarsQuery } from "@/redux/features/carPost/carApi";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import CarCard from "@/components/ui/CarCard";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Search } from "lucide-react";
 
 // Define Car interface
 interface Car {
@@ -104,7 +106,99 @@ const AllProducts = () => {
     }
   }, [allCarsData, highestPrice]);
 
-  const skeletonCount = 6; // Number of skeletons you want to show
+  // Loading skeleton
+  if (isLoading) {
+    return (
+      <section className="container py-10">
+        {/* Skeleton Title */}
+        <div className="mb-8 animate-pulse">
+          <div className="h-10 w-48 rounded bg-gray-200"></div>
+        </div>
+
+        {/* Skeleton Search and Filter */}
+        <Card className="mb-4 border border-gray-200 shadow-sm">
+          <CardContent className="p-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Search Input Skeleton */}
+              <div className="w-full flex-shrink-0 md:w-[30%]">
+                <div className="h-7 w-full rounded bg-gray-200"></div>
+              </div>
+
+              {/* Brand Filter Skeleton */}
+              <div className="w-full flex-shrink-0 md:w-[15%]">
+                <div className="h-7 w-full rounded bg-gray-200"></div>
+              </div>
+
+              {/* Category Filter Skeleton */}
+              <div className="w-full flex-shrink-0 md:w-[15%]">
+                <div className="h-7 w-full rounded bg-gray-200"></div>
+              </div>
+
+              {/* Price Inputs Skeleton */}
+              <div className="flex w-full flex-shrink-0 items-center gap-1 md:w-[25%]">
+                <div className="h-7 w-full rounded bg-gray-200"></div>
+              </div>
+
+              {/* Reset Button Skeleton */}
+              <div className="w-full flex-shrink-0 md:w-[12%]">
+                <div className="h-7 w-full rounded bg-gray-200"></div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Skeleton Results Summary */}
+        <div className="mb-4 animate-pulse rounded bg-gray-50 px-4 py-1.5">
+          <div className="h-4 w-48 rounded bg-gray-200"></div>
+        </div>
+
+        {/* Skeleton Car Grid */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {Array(9)
+            .fill(0)
+            .map((_, index) => (
+              <div
+                key={index}
+                className="animate-pulse overflow-hidden rounded-lg border border-gray-200 shadow-sm"
+              >
+                {/* Skeleton Image */}
+                <div className="h-48 w-full bg-gray-200"></div>
+
+                {/* Skeleton Content */}
+                <div className="p-4">
+                  <div className="space-y-2">
+                    <div className="h-6 w-3/4 rounded bg-gray-200"></div>
+                    <div className="h-4 w-1/2 rounded bg-gray-200"></div>
+                    <div className="h-4 w-1/3 rounded bg-gray-200"></div>
+                    <div className="mt-4 h-10 w-full rounded bg-gray-200"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+
+        {/* Skeleton Pagination */}
+        <div className="mt-8 flex justify-center">
+          <div className="flex items-center space-x-2">
+            <div className="h-10 w-20 rounded bg-gray-200"></div>
+            <div className="flex space-x-1">
+              {Array(3)
+                .fill(0)
+                .map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-10 w-10 rounded bg-gray-200"
+                  ></div>
+                ))}
+            </div>
+            <div className="h-10 w-20 rounded bg-gray-200"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!allCarsData?.data) return <div>No cars found.</div>;
 
   // Reset all filters
   const resetFilters = () => {
@@ -120,7 +214,7 @@ const AllProducts = () => {
   const totalPages = Math.ceil(filteredCars.length / carsPerPage);
   const indexOfLastCar = currentPage * carsPerPage;
   const indexOfFirstCar = indexOfLastCar - carsPerPage;
-  // const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
+  const currentCars = filteredCars.slice(indexOfFirstCar, indexOfLastCar);
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -133,183 +227,185 @@ const AllProducts = () => {
       <SectionTitle title="All Cars" />
 
       {/* Search and Filter Section */}
-      <div className="mb-8 space-y-4 rounded-lg bg-gray-50 p-4">
-        <h3 className="text-lg font-semibold">Search & Filters</h3>
+      <Card className="mb-4 border border-gray-200 shadow-sm">
+        <CardContent className="p-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Search Input */}
+            <div className="relative w-full flex-shrink-0 md:w-[30%]">
+              <Search className="absolute top-1.5 left-2 h-4 w-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search by brand, car name, or category..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-7 w-full pl-7 text-sm"
+              />
+            </div>
 
-        {/* Search Input */}
-        <div className="mb-4">
-          <Input
-            type="text"
-            placeholder="Search by brand, car name, or category..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full"
-          />
-        </div>
+            {/* Brand Filter */}
+            <div className="w-full flex-shrink-0 md:w-[15%]">
+              <Select value={brandFilter} onValueChange={setBrandFilter}>
+                <SelectTrigger id="brandFilter" className="h-7 w-full text-sm">
+                  <SelectValue placeholder="All Brands" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Brands</SelectItem>
+                  <SelectItem value="Toyota">Toyota</SelectItem>
+                  <SelectItem value="Ford">Ford</SelectItem>
+                  <SelectItem value="Honda">Honda</SelectItem>
+                  <SelectItem value="Tesla">Tesla</SelectItem>
+                  <SelectItem value="Mazda">Mazda</SelectItem>
+                  <SelectItem value="Audi">Audi</SelectItem>
+                  <SelectItem value="BMW">BMW</SelectItem>
+                  <SelectItem value="Mercedes-Benz">Mercedes-Benz</SelectItem>
+                  <SelectItem value="Chevrolet">Chevrolet</SelectItem>
+                  <SelectItem value="Hyundai">Hyundai</SelectItem>
+                  <SelectItem value="Kia">Kia</SelectItem>
+                  <SelectItem value="Nissan">Nissan</SelectItem>
+                  <SelectItem value="Volkswagen">Volkswagen</SelectItem>
+                  <SelectItem value="Subaru">Subaru</SelectItem>
+                  <SelectItem value="Lexus">Lexus</SelectItem>
+                  {brands
+                    .filter(
+                      (brand) =>
+                        ![
+                          "Toyota",
+                          "Ford",
+                          "Honda",
+                          "Tesla",
+                          "Mazda",
+                          "Audi",
+                          "BMW",
+                          "Mercedes-Benz",
+                          "Chevrolet",
+                          "Hyundai",
+                          "Kia",
+                          "Nissan",
+                          "Volkswagen",
+                          "Subaru",
+                          "Lexus",
+                        ].includes(brand),
+                    )
+                    .sort()
+                    .map((brand) => (
+                      <SelectItem key={brand} value={brand}>
+                        {brand}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-        {/* Filters in a single row */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {/* Brand Filter */}
-          <div>
-            <label htmlFor="brandFilter" className="mb-1 block text-sm">
-              Brand
-            </label>
-            <Select value={brandFilter} onValueChange={setBrandFilter}>
-              <SelectTrigger id="brandFilter" className="w-full">
-                <SelectValue placeholder="All Brands" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Brands</SelectItem>
-                <SelectItem value="Toyota">Toyota</SelectItem>
-                <SelectItem value="Ford">Ford</SelectItem>
-                <SelectItem value="Honda">Honda</SelectItem>
-                <SelectItem value="Tesla">Tesla</SelectItem>
-                <SelectItem value="Mazda">Mazda</SelectItem>
-                <SelectItem value="Audi">Audi</SelectItem>
-                <SelectItem value="BMW">BMW</SelectItem>
-                <SelectItem value="Mercedes-Benz">Mercedes-Benz</SelectItem>
-                <SelectItem value="Chevrolet">Chevrolet</SelectItem>
-                <SelectItem value="Hyundai">Hyundai</SelectItem>
-                <SelectItem value="Kia">Kia</SelectItem>
-                <SelectItem value="Nissan">Nissan</SelectItem>
-                <SelectItem value="Volkswagen">Volkswagen</SelectItem>
-                <SelectItem value="Subaru">Subaru</SelectItem>
-                <SelectItem value="Lexus">Lexus</SelectItem>
-                {/* Keep dynamic brand options from database if needed */}
-                {brands
-                  .filter(
-                    (brand) =>
-                      ![
-                        "Toyota",
-                        "Ford",
-                        "Honda",
-                        "Tesla",
-                        "Mazda",
-                        "Audi",
-                        "BMW",
-                        "Mercedes-Benz",
-                        "Chevrolet",
-                        "Hyundai",
-                        "Kia",
-                        "Nissan",
-                        "Volkswagen",
-                        "Subaru",
-                        "Lexus",
-                      ].includes(brand),
-                  )
-                  .sort()
-                  .map((brand) => (
-                    <SelectItem key={brand} value={brand}>
-                      {brand}
+            {/* Category Filter */}
+            <div className="w-full flex-shrink-0 md:w-[15%]">
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger
+                  id="categoryFilter"
+                  className="h-7 w-full text-sm"
+                >
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories.sort().map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
                     </SelectItem>
                   ))}
-              </SelectContent>
-            </Select>
-          </div>
+                </SelectContent>
+              </Select>
+            </div>
 
-          {/* Category Filter */}
-          <div>
-            <label htmlFor="categoryFilter" className="mb-1 block text-sm">
-              Category
-            </label>
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger id="categoryFilter" className="w-full">
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.sort().map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            {/* Price Inputs */}
+            <div className="flex w-full flex-shrink-0 items-center gap-1 md:w-[25%]">
+              <span className="flex-shrink-0 text-xs text-gray-600">
+                Price:
+              </span>
+              <Input
+                type="number"
+                value={minPrice || ""}
+                min={0}
+                max={maxPrice}
+                onChange={(e) => {
+                  const value =
+                    e.target.value === "" ? 0 : Number(e.target.value);
+                  setMinPrice(value);
+                }}
+                className="h-7 flex-1 text-xs"
+                placeholder="Min"
+              />
+              <span className="flex-shrink-0 text-xs text-gray-500">to</span>
+              <Input
+                type="number"
+                value={maxPrice || ""}
+                min={minPrice}
+                max={highestPrice}
+                onChange={(e) => {
+                  const value =
+                    e.target.value === ""
+                      ? highestPrice
+                      : Number(e.target.value);
+                  setMaxPrice(value);
+                }}
+                className="h-7 flex-1 text-xs"
+                placeholder="Max"
+              />
+            </div>
 
-          {/* Reset Button - In the same row */}
-          <div className="flex items-end">
-            <button
-              onClick={resetFilters}
-              className="w-full rounded-md bg-red-600 px-4 py-2 text-white transition duration-200 hover:bg-red-700"
-            >
-              Reset Filters
-            </button>
+            {/* Reset Button */}
+            <div className="w-full flex-shrink-0 md:w-[12%]">
+              <Button
+                onClick={resetFilters}
+                className="bg-velo-red hover:bg-velo-maroon h-7 w-full text-xs font-medium"
+              >
+                Reset Filters
+              </Button>
+            </div>
           </div>
-        </div>
+        </CardContent>
+      </Card>
 
-        {/* Price Range Inputs */}
-        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <label htmlFor="minPrice" className="mb-1 block text-sm">
-              Min Price (USD)
-            </label>
-            <Input
-              id="minPrice"
-              type="number"
-              min={0}
-              max={maxPrice}
-              value={minPrice}
-              onChange={(e) => setMinPrice(Number(e.target.value))}
-              className="w-full"
-            />
-          </div>
-          <div>
-            <label htmlFor="maxPrice" className="mb-1 block text-sm">
-              Max Price (USD)
-            </label>
-            <Input
-              id="maxPrice"
-              type="number"
-              min={minPrice}
-              max={highestPrice}
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-              className="w-full"
-            />
-          </div>
-        </div>
+      {/* Results Summary */}
+      <div className="mb-4 flex items-center justify-between rounded bg-gray-50 px-4 py-1.5 text-xs">
+        <p className="text-gray-600">
+          Showing{" "}
+          <span className="font-semibold">
+            {indexOfFirstCar + 1}-
+            {Math.min(indexOfLastCar, filteredCars.length)}
+          </span>{" "}
+          of <span className="font-semibold">{filteredCars.length}</span> cars
+        </p>
+        {filteredCars.length > 0 && (
+          <p className="text-gray-600">
+            <span className="font-semibold">
+              {brandFilter !== "all" ? brandFilter : "All brands"}
+            </span>{" "}
+            •
+            <span className="ml-1 font-semibold">
+              {categoryFilter !== "all" ? categoryFilter : "All categories"}
+            </span>
+          </p>
+        )}
       </div>
 
-      {/* Results Count */}
-      <p className="mb-4">
-        Showing {indexOfFirstCar + 1}-
-        {Math.min(indexOfLastCar, filteredCars.length)} of {filteredCars.length}{" "}
-        cars
-      </p>
-
       {/* Car Grid */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {isLoading ? (
-          Array.from({ length: skeletonCount }).map((_, i) => (
-            <CarCardSkeleton key={i} />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {currentCars.length > 0 ? (
+          currentCars.map((car) => (
+            <CarCard
+              key={car._id}
+              carName={car.name}
+              image={car.image}
+              price={car.price}
+              category={car.category}
+              brand={car.brand}
+              _id={car._id}
+            />
           ))
-        ) : allCarsData?.data?.length ? (
-          allCarsData.data.map(
-            (
-              car: {
-                name: string;
-                image: string;
-                price: number;
-                category: string;
-                brand: string;
-                _id: string;
-              },
-              index: Key | null | undefined,
-            ) => (
-              <CarCard
-                key={index}
-                _id={car._id}
-                carName={car.name}
-                image={car.image}
-                price={car.price}
-                category={car.category}
-                brand={car.brand}
-              />
-            ),
-          )
         ) : (
-          <div>No cars found.</div>
+          <div className="col-span-3 py-8 text-center text-gray-500">
+            No cars match your search criteria. Try adjusting your filters.
+          </div>
         )}
       </div>
 

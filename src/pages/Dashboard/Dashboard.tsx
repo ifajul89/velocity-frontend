@@ -152,7 +152,7 @@ export default function Page() {
                 <div className="h-6 w-20 animate-pulse rounded bg-blue-100 sm:h-8 sm:w-24"></div>
               ) : (
                 <p className="text-2xl font-bold text-blue-900 sm:text-3xl">
-                  ${totalSales.toFixed(2)}
+                  ৳{totalSales.toFixed(2)}
                 </p>
               )}
               <p className="mt-1 text-xs text-blue-700">
@@ -228,7 +228,7 @@ export default function Page() {
                 <div className="h-6 w-16 animate-pulse rounded bg-emerald-100 sm:h-8 sm:w-20"></div>
               ) : (
                 <p className="text-xl font-bold text-emerald-900 sm:text-2xl">
-                  ${performanceMetrics.avgOrderValue.toFixed(2)}
+                  ৳{performanceMetrics.avgOrderValue.toFixed(2)}
                 </p>
               )}
               <p className="mt-1 text-xs text-emerald-600">

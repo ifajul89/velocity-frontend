@@ -1,5 +1,3 @@
-import React from "react";
-
 const Loading = () => {
   return (
     <div className="container my-10 flex items-center justify-center">

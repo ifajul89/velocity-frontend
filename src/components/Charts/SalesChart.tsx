@@ -135,7 +135,7 @@ export const SalesChart = () => {
           <div>
             <p className="text-sm font-medium text-blue-600">Total Sales</p>
             <p className="text-3xl font-bold text-blue-900">
-              ${totalSales.toFixed(2)}
+              ৳{totalSales.toFixed(2)}
             </p>
             <p className="mt-1 text-xs text-blue-700">
               Across all product categories

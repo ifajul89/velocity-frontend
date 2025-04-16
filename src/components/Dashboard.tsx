@@ -5,6 +5,7 @@ import { currentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { JSX } from "react";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import VeloV from "@/assets/velocity-logo.png";
 import {
   useSidebar,
   SidebarMenu,
@@ -105,10 +106,8 @@ export function AppSidebar() {
           <div className="flex w-full items-center">
             {!isCollapsed && (
               <>
-                <div className="mr-2 flex h-6 w-6 items-center justify-center rounded-md bg-blue-600 text-white">
-                  V
-                </div>
-                <span className="font-bold">Velocity</span>
+                <img src={VeloV} alt="Velocity Logo" className="size-4" />
+                <span className="-ml-[0.7px] font-bold">elocity</span>
                 <span className="ml-auto rounded-full border px-2 py-0.5 text-xs">
                   v1.0.0
                 </span>

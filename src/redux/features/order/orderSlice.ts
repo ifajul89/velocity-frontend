@@ -68,17 +68,23 @@ export const createOrder = createAsyncThunk(
         return rejectWithValue("Authentication required. Please log in.");
       }
 
-      console.log("Sending order data to API:", orderData);
+      console.log(
+        "Sending order data to API:",
+        JSON.stringify(orderData, null, 2),
+      );
       console.log("Using token:", token);
 
-      const response = await fetch("http://localhost:5000/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
+      const response = await fetch(
+        "https://velocity-backend.vercel.app/api/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify(orderData),
         },
-        body: JSON.stringify(orderData),
-      });
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -96,7 +102,10 @@ export const createOrder = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log("Order creation successful:", data);
+      console.log(
+        "Order creation successful - FULL response:",
+        JSON.stringify(data, null, 2),
+      );
 
       // Check structure of response to ensure we have the URL
       if (

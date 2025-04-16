@@ -227,7 +227,7 @@ export const ProductChart = () => {
                 paddingAngle={2}
                 dataKey="value"
               >
-                {productData.map((entry, index) => (
+                {productData.map((_: ProductData, index: number) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}

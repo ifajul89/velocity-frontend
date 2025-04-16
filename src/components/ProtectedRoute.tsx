@@ -30,11 +30,12 @@ const ProtectedRoute: React.FC<{
   const isAuthenticated = !!token;
   const isAdmin = user && (user as User).role === "admin";
 
+  // If not authenticated, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
-  // If admin route but user is not admin, redirect to user dashboard
+  // If this route requires admin privileges and user is not admin, redirect to home
   if (requireAdmin && !isAdmin) {
     console.log(
       "Unauthorized access attempt: Regular user tried to access admin route",
@@ -42,6 +43,7 @@ const ProtectedRoute: React.FC<{
     return <Navigate to="/" replace />;
   }
 
+  // Allow all authenticated users (including admins) to access non-admin routes
   return <>{children}</>;
 };
 

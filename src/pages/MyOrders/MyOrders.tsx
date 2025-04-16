@@ -190,9 +190,9 @@ export default function MyOrdersPage() {
 
       <main className="container mx-auto max-w-6xl flex-1 p-2">
         <h1 className="mb-3 text-2xl font-bold text-gray-900">My Orders</h1>
-        <p className="mb-5 text-gray-600">
-          Track Your Order Status using Tracking Number from Track status page.
-          View order status and delivery details.
+        <p className="mb-5 text-red-600">
+          Track Your Order Status using Tracking Number from Track Order status
+          page. View order status and delivery details.
         </p>
 
         {!hasOrders ? (
@@ -219,7 +219,10 @@ export default function MyOrdersPage() {
                 <div className="flex items-center justify-between border-b bg-gray-50 px-3 py-2">
                   <div className="flex items-center gap-2">
                     <span className="text-base font-medium text-gray-900">
-                      Tracking Number :{order.trackingNumber}
+                      Tracking Number :
+                      <span className="text-green-600">
+                        {order.trackingNumber}
+                      </span>
                     </span>
 
                     <span className="flex items-center text-sm text-gray-500">

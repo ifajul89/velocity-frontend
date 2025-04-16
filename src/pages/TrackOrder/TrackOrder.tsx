@@ -17,10 +17,21 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 
 // Helper function to get estimated delivery date from order data
+interface DeliveryDateData {
+  estimatedDelivery?: string;
+  estimatedDeliveryDate?: string;
+  shipping?: {
+    estimatedDelivery?: string;
+    estimatedDeliveryDate?: string;
+  };
+  estimated_delivery?: string;
+  createdAt?: string;
+}
+
 const getEstimatedDelivery = (orderData: unknown): string | undefined => {
   if (!orderData || typeof orderData !== "object") return undefined;
 
-  const data = orderData as Record<string, any>;
+  const data = orderData as DeliveryDateData;
 
   // Check direct properties first
   if (data.estimatedDelivery && typeof data.estimatedDelivery === "string") {
@@ -36,7 +47,7 @@ const getEstimatedDelivery = (orderData: unknown): string | undefined => {
 
   // Check for nested properties
   if (data.shipping && typeof data.shipping === "object") {
-    const shipping = data.shipping as Record<string, any>;
+    const shipping = data.shipping;
     if (shipping.estimatedDelivery) return shipping.estimatedDelivery;
     if (shipping.estimatedDeliveryDate) return shipping.estimatedDeliveryDate;
   }
@@ -134,7 +145,7 @@ export default function TrackOrderPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Order Tracking</CardTitle>
-                <CardDescription>
+                <CardDescription className="text-red-600">
                   Find your order by entering your tracking number (make sure no
                   space in front of your tracking number)
                 </CardDescription>
@@ -232,17 +243,33 @@ export default function TrackOrderPage() {
                                   </svg>
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-gray-900">
-                                    Estimated Delivery Date
-                                  </h4>
-                                  <p className="text-gray-600">
-                                    Your order is expected to be delivered on:
-                                  </p>
+                                  {orderData.trackingStages.delivered ? (
+                                    <>
+                                      <h4 className="font-semibold text-gray-900">
+                                        Order Delivered
+                                      </h4>
+                                      <p className="text-gray-600">
+                                        Your order was delivered successfully
+                                      </p>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <h4 className="font-semibold text-gray-900">
+                                        Estimated Delivery Date
+                                      </h4>
+                                      <p className="text-gray-600">
+                                        Your order is expected to be delivered
+                                        on:
+                                      </p>
+                                    </>
+                                  )}
                                 </div>
                               </div>
-                              <div className="text-xl font-bold text-blue-700">
-                                {getEstimatedDelivery(orderData)}
-                              </div>
+                              {!orderData.trackingStages.delivered && (
+                                <div className="text-xl font-bold text-blue-700">
+                                  {getEstimatedDelivery(orderData)}
+                                </div>
+                              )}
                             </div>
                           )}
 
@@ -348,21 +375,32 @@ export default function TrackOrderPage() {
                               </h3>
                             </div>
                             <div className="grid grid-cols-1 gap-4 p-6 pt-0 md:grid-cols-2">
-                              <div className="flex flex-col gap-2">
-                                <div className="text-muted-foreground text-sm">
-                                  Estimated Delivery Date
+                              {orderData.trackingStages.delivered ? (
+                                <div className="flex flex-col gap-2">
+                                  <div className="text-muted-foreground text-sm">
+                                    Status
+                                  </div>
+                                  <div className="text-xl font-bold text-green-600">
+                                    Order Delivered
+                                  </div>
                                 </div>
-                                <div className="text-xl font-bold">
-                                  {getEstimatedDelivery(orderData)}
+                              ) : (
+                                <div className="flex flex-col gap-2">
+                                  <div className="text-muted-foreground text-sm">
+                                    Estimated Delivery Date
+                                  </div>
+                                  <div className="text-xl font-bold">
+                                    {getEstimatedDelivery(orderData)}
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                               <div className="flex flex-col gap-2">
                                 <div className="text-muted-foreground text-sm">
                                   Current Location
                                 </div>
                                 <div className="font-medium">
-                                  {orderData.currentLocation ||
-                                    "Processing facility"}
+                                  {(orderData as { currentLocation?: string })
+                                    .currentLocation || "Processing facility"}
                                 </div>
                               </div>
                             </div>
@@ -480,14 +518,25 @@ export default function TrackOrderPage() {
                                 Delivery Information
                               </h3>
                               <div className="rounded-md border p-4">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-muted-foreground">
-                                    Estimated Delivery Date
-                                  </span>
-                                  <span className="font-medium">
-                                    {getEstimatedDelivery(orderData)}
-                                  </span>
-                                </div>
+                                {orderData.trackingStages.delivered ? (
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-muted-foreground">
+                                      Status
+                                    </span>
+                                    <span className="font-medium text-green-600">
+                                      Order Delivered
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-muted-foreground">
+                                      Estimated Delivery Date
+                                    </span>
+                                    <span className="font-medium">
+                                      {getEstimatedDelivery(orderData)}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}

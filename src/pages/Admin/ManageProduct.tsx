@@ -359,7 +359,7 @@ const ManageProduct = () => {
                     <th className="hidden px-4 py-3 sm:table-cell">#</th>
                     <th className="px-4 py-3">Car Name</th>
                     <th className="hidden px-4 py-3 md:table-cell">Brand</th>
-                    <th className="px-4 py-3">Price ($)</th>
+                    <th className="px-4 py-3">Price (৳)</th>
                     <th className="hidden px-4 py-3 lg:table-cell">Category</th>
                     <th className="hidden px-4 py-3 sm:table-cell">Status</th>
                     <th className="hidden px-4 py-3 md:table-cell">Quantity</th>
@@ -377,7 +377,7 @@ const ManageProduct = () => {
                         <td className="hidden px-4 py-3 md:table-cell">
                           {car.brand}
                         </td>
-                        <td className="px-4 py-3">${car.price}</td>
+                        <td className="px-4 py-3">৳{car.price}</td>
                         <td className="hidden px-4 py-3 lg:table-cell">
                           {car.category}
                         </td>
@@ -585,11 +585,11 @@ const ManageProduct = () => {
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                   <div className="grid gap-2">
                     <label className="text-sm font-medium text-gray-700">
-                      Price ($)
+                      Price (৳)
                     </label>
                     <div className="relative">
                       <span className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500">
-                        $
+                        ৳
                       </span>
                       <input
                         name="price"

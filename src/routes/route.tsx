@@ -15,7 +15,6 @@ import AllProducts from "@/pages/AllProducts/AllProducts";
 import Product from "@/pages/Product/Product";
 import ManageProduct from "@/pages/Admin/ManageProduct";
 import About from "@/pages/About/About";
-import Contact from "@/pages/Contact/Contact";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardPage from "@/pages/Dashboard/Dashboard";
 
@@ -61,12 +60,15 @@ export const productLoader = async ({ params }: LoaderFunctionArgs) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/api/cars/${id}`, {
-      headers: {
-        Authorization: `${token}`,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://velocity-backend.vercel.app/api/cars/${id}`,
+      {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -94,6 +96,8 @@ export const productLoader = async ({ params }: LoaderFunctionArgs) => {
   }
 };
 
+import Contact from "@/pages/Contact/Contact";
+
 const routes = createBrowserRouter([
   // Public routes
   {
@@ -109,7 +113,7 @@ const routes = createBrowserRouter([
         path: "/car/:id",
         element: <Product />,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/api/cars/${params.id}`),
+          fetch(`https://velocity-backend.vercel.app/api/cars/${params.id}`),
       },
       {
         path: "/all-cars",
@@ -187,11 +191,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "manage-products",
-        element: (
-          <ProtectedRoute requireAdmin={true}>
-            <ManageProduct />
-          </ProtectedRoute>
-        ),
+        element: <ManageProduct />,
       },
       {
         path: "my-orders",
@@ -225,9 +225,17 @@ const routes = createBrowserRouter([
   },
 
   {
+    path: "/login",
+    element: <SignIn />,
+  },
+  {
+    path: "register",
+    element: <SignUp />,
+  },
+  {
     path: "/all-products/:id",
     element: <AllProducts />,
-    loader: () => fetch(`http://localhost:5000/api/cars/`),
+    loader: () => fetch(`https://velocity-backend.vercel.app/api/cars/`),
   },
   // User protected routes
   {
