@@ -287,8 +287,8 @@ export default function MyOrdersPage() {
                               {typeof item.product === "object" &&
                               item.product?.image ? (
                                 <img
-                                  src={item.product.image}
-                                  alt={item.product.name}
+                                  src={item.product?.image}
+                                  alt={item.product?.name}
                                   className="h-10 w-10 rounded border border-gray-200 object-cover"
                                 />
                               ) : (
@@ -299,13 +299,13 @@ export default function MyOrdersPage() {
                               <div className="min-w-0 flex-1">
                                 <div className="truncate text-sm font-medium">
                                   {typeof item.product === "object"
-                                    ? item.product.name
+                                    ? item.product?.name
                                     : "Product"}
                                 </div>
                                 <div className="truncate text-xs text-gray-500">
                                   {typeof item.product === "object" ? (
                                     <>
-                                      {item.product.brand} {item.product.model}{" "}
+                                      {item.product?.brand} {item.product?.model}{" "}
                                       • {item.quantity} ×{" "}
                                       {formatCurrency(
                                         "price" in item ? (item.price ?? 0) : 0,
