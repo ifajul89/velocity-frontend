@@ -52,13 +52,13 @@ const CarCard: React.FC<CarCardProps> = ({
         {/* Price and Button in single row */}
         <div className="mt-auto">
           <div className="mt-4 flex items-center justify-between">
-            <p className="text-velo-red text-xl font-bold">
+            <p className="text-velo-red lg:text-xl font-bold">
               BDT {price.toLocaleString()}
             </p>
 
             <Link
               to={`/carDetails/${_id}`}
-              className="bg-velo-red hover:bg-velo-red/90 flex w-auto transform items-center justify-center gap-1 rounded-lg px-3 py-2 text-center font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow"
+              className="bg-velo-red hover:bg-velo-red/90 flex transform items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm md:text-base lg:text-lg text-center font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow"
             >
               View details
               <svg
