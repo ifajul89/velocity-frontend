@@ -1,4 +1,4 @@
-# 🚗 Velocity Car Shop — Frontend
+# 🚗 Velocity Car Shop
 
 A modern, responsive e-commerce car shop built with **React**, **TypeScript**, and **Redux Toolkit**. This frontend serves as the user interface for Velocity Car Shop, enabling users to browse, filter, and purchase cars, while admins can manage products and orders through a role-based dashboard.
 
