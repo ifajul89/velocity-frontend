@@ -51,8 +51,8 @@ A modern, responsive e-commerce car shop built with **React**, **TypeScript**, a
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/ifajul89/velocity-frontend.git
-cd velocity-frontend
+git clone https://github.com/ifajul89/velocity.git
+cd velocity
 ```
 
 ### 2. Install dependencies
